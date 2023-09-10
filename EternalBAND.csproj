@@ -10,10 +10,25 @@
     <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
     <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
     <ItemGroup>
+      <Compile Remove="Data\**" />
+      <Compile Remove="EternalBAND\**" />
       <Compile Remove="__MACOSX\**" />
+      <Content Remove="Data\**" />
+      <Content Remove="EternalBAND\**" />
       <Content Remove="__MACOSX\**" />
+      <EmbeddedResource Remove="Data\**" />
+      <EmbeddedResource Remove="EternalBAND\**" />
       <EmbeddedResource Remove="__MACOSX\**" />
+      <None Remove="Data\**" />
+      <None Remove="EternalBAND\**" />
       <None Remove="__MACOSX\**" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Remove="EternalBAND.zip" />
+      <None Remove="Proje.zip" />
+      <None Remove="sorular.txt" />
+      <None Remove="sorular.txt.bak" />
+      <None Remove="Yapılacaklar.txt" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.0" />
@@ -46,10 +61,6 @@
       <_ContentIncludedByDefault Remove="wwwroot\photo_uploader\css\main.css" />
       <_ContentIncludedByDefault Remove="wwwroot\photo_uploader\js\multiple-uploader.js" />
       <_ContentIncludedByDefault Remove="wwwroot\photo_uploader\js\util.js" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Data\Migrations\" />
     </ItemGroup>
 
 </Project>
