@@ -1,0 +1,204 @@
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using EternalBAND.Data
+@using Microsoft.EntityFrameworkCore
+@model EternalBAND.Models.ViewModel.ChatViewModel
+@inject UserManager<EternalBAND.Models.Users> UserManager
+@inject ApplicationDbContext _context
+@{
+    ViewData["Title"] = "Mesajlar";
+}
+<link href="~/css/chat.css" rel="stylesheet" type="text/css"/>
+<div class="main-content">
+
+    <div class="page-content">
+
+        <section class="page-title-box">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="text-center text-white">
+                            <h3 class="mb-4">@ViewData["Title"]</h3>
+                            <div class="page-next">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="position-relative" style="z-index: 1">
+            <div class="shape">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 250">
+                    <path fill="#FFFFFF" fill-opacity="1"
+                          d="M0,192L120,202.7C240,213,480,235,720,234.7C960,235,1200,213,1320,202.7L1440,192L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z">
+                    </path>
+                </svg>
+            </div>
+        </div>
+        <section class="section">
+            <div class="container p-0">
+
+                <div class="card">
+                    <div class="row g-0">
+                        <div class="col-12 col-lg-6 col-xl-4 border-right">
+
+                            @* <div class="px-4 d-none d-md-block"> *@
+                            @*     <div class="d-flex align-items-center"> *@
+                            @*         <div class="flex-grow-1"> *@
+                            @*             <input type="text" class="form-control my-3" placeholder="Ara..."> *@
+                            @*         </div> *@
+                            @*     </div> *@
+                            @* </div> *@
+
+                            @{
+                                List<string> chatIds = new();
+                                if (Model.AllChat != null)
+                                {
+                                    foreach (var chat in Model.AllChat)
+                                    {
+                                        if (!chatIds.Contains(chat.SenderUserId) || !chatIds.Contains(chat.ReceiverUserId))
+                                        {
+                                            chatIds.Add(chat.ReceiverUserId);
+                                            chatIds.Add(chat.SenderUserId);
+                                            var userInfo = chat.ReceiverUser;
+                                            if (ViewBag.LoginUserId == chat.ReceiverUserId)
+                                            {
+                                                userInfo = chat.SenderUser;
+                                            }
+
+                                            string nameSurname = userInfo.Name == null ? userInfo.Email : userInfo.Name + " " + userInfo.Surname;
+
+                                            <a href="/mesajlar/@userInfo.Id" class="list-group-item list-group-item-action border-0">
+                                                @if (Model.AllChat.Count(n => n.SenderUserId==userInfo.Id && n.ReceiverUserId == ViewBag.LoginUserId && n.IsRead ==false) > 0)
+                                                {
+                                                    <div class="badge bg-success float-end"> </div>
+                                                }
+                                                <div class="d-flex align-items-start">
+                                                    <img src="@userInfo.PhotoPath" class="rounded-circle mr-1" alt="@nameSurname" width="40" height="40">
+                                                    <div class="flex-grow-1 ms-3 mt-2">
+                                                        @nameSurname
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        }
+                                    }
+                                }
+                            }
+
+
+                            <hr class="d-block d-lg-none mt-1 mb-0">
+                        </div>
+                        <div class="col-12 col-lg-6 col-xl-8">
+                            <div class="py-2 px-4 border-bottom d-none d-lg-block">
+                                <div class="d-flex align-items-center py-1">
+                                    @{
+                                        var userId = "";
+                                    }
+                                    @if (ViewBag.UserId != null)
+                                    {
+                                        userId = (string) ViewBag.UserId;
+                                        var user = await _context.Users.FirstOrDefaultAsync(n => n.Id == userId);
+                                        if (user != null)
+                                        {
+                                            <div class="position-relative">
+                                                <img src="@user.PhotoPath" class="rounded-circle mr-1" alt="@user.Name @user.Surname" width="40" height="40">
+                                            </div>
+                                            <div class="flex-grow-1 ps-3">
+                                                <strong>@user.Name @user.Surname</strong>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="position-relative">
+                                <div class="chat-messages p-4">
+                                    @if (Model.Chat != null)
+                                    {
+                                        foreach (var chat in Model.Chat.OrderBy(n => n.Date))
+                                        {
+                                            var user = await _context.Users.FirstOrDefaultAsync(n => n.Id == userId);
+
+                                            var senderUserId = await _context.Users.FirstOrDefaultAsync(n => n.Id == chat.SenderUserId);
+                                            if (chat.SenderUserId == userId)
+                                            {
+                                                <div class="chat-message-left pb-4">
+                                                    <div>
+                                                        <img src="@user.PhotoPath" class="rounded-circle mr-1" alt="@user.Name @user.Surname" width="40" height="40">
+                                                        <div class="text-muted small text-nowrap mt-2">@chat.Date.ToString("dd/MM/yyyy HH:mm")</div>
+                                                    </div>
+                                                    <div class="flex-shrink-1 bg-light rounded py-2 px-3 ms-3">
+                                                        <div class="fw-bold mb-1">@user.Name @user.Surname</div>
+                                                        @chat.Message
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="chat-message-right pb-4">
+                                                    <div>
+                                                        <img src="@senderUserId.PhotoPath" class="rounded-circle mr-1" alt="@senderUserId.Name @senderUserId.Surname" width="40" height="40">
+                                                        <div class="text-muted small text-nowrap mt-2">@chat.Date.ToString("dd/MM/yyyy HH:mm")</div>
+                                                    </div>
+                                                    <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                                                        <div class="fw-bold mb-1">Sen</div>
+                                                        @chat.Message
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                    }
+
+                                </div>
+                            </div>
+
+                            <div class="flex-grow-0 py-3 px-4 border-top">
+                                <div class="input-group">
+                                    <input type="text" id="messageText" class="form-control" placeholder="Mesajınızı buraya yazabilirsiniz.">
+                                    <button class="btn btn-primary" onclick="SendMessage('@ViewBag.UserId')">Gönder</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <partial name="PartialViews/_SwitcherAndTopPartial"/>
+</div>
+<script>
+function SendMessage(id){
+    var text = $("#messageText").val();
+Swal.fire({
+  title: 'Mesaj gönderilecektir emin misiniz?',
+  showDenyButton: true,
+  confirmButtonText: 'Gönder',
+  denyButtonText: `Gönderme`,
+}).then((result) => {
+  if (result.isConfirmed) {
+      $.post( "/User/SendMessage/"+id,{message:text}, function( data ) {
+          var message = "";
+          if (data.includes('gönderildi')){
+              message = 'success';
+          }
+          else
+              {
+                  message ='info';
+                  }
+          Swal.fire({
+            title: data,confirmButtonText: 'Kapat'}).then((result) => {
+                                                        if (result['isConfirmed']){
+                                                              setTimeout( location.reload(), 2000);
+                                                        }
+                                                      });
+  
+      });
+  } 
+})
+}
+
+</script>

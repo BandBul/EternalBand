@@ -1,0 +1,47 @@
+﻿<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="userdropdown">
+    <li>
+        <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">Profil</a>
+    </li>
+    <li>
+        <a class="dropdown-item" asp-action="PostIndex" asp-controller="User">İlanlarım</a>
+    </li>
+       <li>
+                <a class="dropdown-item" asp-action="ChatIndex" asp-controller="User">Mesajlar</a>
+            </li>
+
+    @{
+        if (User.IsInRole("Admin"))
+        {
+            <div class="dropdown-divider"></div>
+            <li>
+                <a class="dropdown-item" href="#">&laquo; ADMIN</a>
+                <ul class="submenu submenu-left dropdown-menu">
+                  <li class="nav-item">
+                                 <a asp-controller="Admin" asp-action="BlogsIndex" class="nav-link">Blog Yazıları</a>
+                             </li>
+                             <li class="nav-item">
+                                 <a asp-controller="Admin" asp-action="ContactsIndex" class="nav-link">İletişim Sayfası</a>
+                             </li>
+                    <li class="nav-item">
+                        <a asp-controller="Admin" asp-action="PostTypesIndex" class="nav-link">İlan Tipleri</a>
+                    </li>
+                    <li class="nav-item">
+                                                     <a asp-controller="Admin" asp-action="InstrumentsIndex" class="nav-link">Enstrüman Tipleri</a>
+                                                 </li>
+                             <li class="nav-item">
+                                 <a asp-controller="Admin" asp-action="SystemInfoIndex" class="nav-link">Sistem Bilgileri</a>
+                             </li>
+
+                </ul>
+            </li>
+            <div class="dropdown-divider"></div>
+        }
+    }
+   
+  
+    <form style="display: inline-block;border: none" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Anasayfa", "Home", new {area = ""})">
+        <button type="submit" class="dropdown-item">
+            <b style="font-weight: bold">Çıkış Yap</b>
+        </button>
+    </form>
+</ul>

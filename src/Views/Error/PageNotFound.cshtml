@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Sayfa Bulunamadı";
+}
+
+
+  <div class="main-content">
+
+                <div class="page-content">
+
+                    <section class="bg-error bg-auth text-dark">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-6">
+                                    <div class="text-center">
+                                        <img src="~/images/404.png" alt="" class="img-fluid">
+                                        <div class="mt-5">
+                                            <h1 class="fw-bold display-1">404</h1>
+                                            <h4 class="text-uppercase mt-3">Üzgünüz, Sayfa Bulunamadı!</h4>
+                                            <div class="mt-4">
+                                                <a class="btn btn-primary waves-effect waves-light" asp-action="Anasayfa" asp-controller="Home"><i class="mdi mdi-home"></i> Anasayfa</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    
+                </div>
+<partial name="PartialViews/_SwitcherandTopPartial"/>
+            </div>

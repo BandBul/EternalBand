@@ -1,0 +1,135 @@
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common
+@model X.PagedList.IPagedList<EternalBAND.Models.Notification>
+
+@{
+    ViewData["Title"] = "Bildirimler";
+}
+
+<div class="main-content">
+
+    <div class="page-content">
+
+        <section class="page-title-box">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="text-center text-white">
+                            <h3 class="mb-4">@ViewData["Title"]</h3>
+                            <div class="page-next">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="position-relative" style="z-index: 1">
+            <div class="shape">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 250">
+                    <path fill="#FFFFFF" fill-opacity="1"
+                          d="M0,192L120,202.7C240,213,480,235,720,234.7C960,235,1200,213,1320,202.7L1440,192L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z">
+                    </path>
+                </svg>
+            </div>
+        </div>
+        <section class="section">
+            <div class="container">
+                <div class="row text-end">
+                                   <h4>
+                                       <a id="allRead" onclick="AllRead()" >Tümünü Okundu Yap</a>
+                                   </h4>
+                               </div>
+                <div class="row">
+                    @{
+                        if (Model.Count != 0)
+                        {
+                            foreach (var noti in Model)
+                            {
+                                <div class="candidate-list-box card mt-4">
+                                  
+                                    <div class="card-body p-4">
+                                        <a href="@noti.RedirectLink">
+                                            <div class="row align-items-center">
+                                              
+               
+                                                <div class="col-lg-5">
+                                                    <div class="candidate-list-content mt-3 mt-lg-0">
+                                                        <h5 class="fs-19 mb-0">@noti.Message</h5>
+                                                      
+                                                    </div>
+                                                </div><!--end col-->
+               
+                                            </div><!--end row-->
+                                        </a>
+                                           
+                                    </div>
+                                 
+                                </div>
+                                <!--end card-->
+                            }
+                        }
+                        else
+                        {
+                            <h3 class="text-center">Bildiriminiz bulunmuyor.</h3>
+                        }
+                    }
+                </div>
+                <div class="row mt-5 pt-2">
+                    <div class="col-lg-12">
+                        <nav aria-label="Navigation">
+                            <ul class="pagination job-pagination mb-0 justify-content-center">
+                               
+                             
+                                @{
+                                                            @Html.PagedListPager((IPagedList) Model, pId => Url.Action("NotificationIndex", new {@pId = pId}),
+                                                                new PagedListRenderOptions
+                                                                {
+                                                                    LiElementClasses = new string[] {"page-item"},
+                                                                    PageClasses = new string[] {"page-link"},
+                                                                })
+                                                        }
+                              
+                            </ul>
+                        </nav>
+                    </div><!--end col-->
+                </div><!-- end row -->
+            </div>
+        </section>
+
+    </div>
+
+    <partial name="PartialViews/_SwitcherAndTopPartial"/>
+</div>
+<script>
+function AllRead(){
+Swal.fire({
+  title: 'Tümü okundu yapılacaktır emin misiniz?',
+  showDenyButton: true,
+  confirmButtonText: 'Evet',
+  denyButtonText: `Hayır`,
+}).then((result) => {
+  if (result.isConfirmed) {
+      $.post( "/User/AllReadNotification", function( data ) {
+          var message = "";
+          if (data.includes('başarılı')){
+              message = 'success';
+          }
+          else
+              {
+                  message ='info';
+                  }
+          Swal.fire({
+            title: data,confirmButtonText: 'Kapat'}).then((result) => {
+                                                        if (result['isConfirmed']){
+                                                              setTimeout( location.reload(), 2000);
+                                                        }
+                                                      });
+  
+      });
+  } 
+})
+}
+
+</script>

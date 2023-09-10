@@ -1,0 +1,148 @@
+@model IEnumerable<EternalBAND.Models.Posts>
+
+@{
+    ViewData["Title"] = "İlanlarım";
+}
+
+<div class="main-content">
+
+    <div class="page-content">
+
+        <section class="page-title-box">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="text-center text-white">
+                            <h3 class="mb-4">@ViewData["Title"]</h3>
+                            <div class="page-next">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="position-relative" style="z-index: 1">
+            <div class="shape">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 250">
+                    <path fill="#FFFFFF" fill-opacity="1"
+                          d="M0,192L120,202.7C240,213,480,235,720,234.7C960,235,1200,213,1320,202.7L1440,192L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z">
+                    </path>
+                </svg>
+            </div>
+        </div>
+        <section class="section">
+            <div class="container">
+                <div class="row text-end">
+                    <h4>
+                        <a asp-controller="User" asp-action="PostCreate">Yeni İlan Oluştur</a>
+                    </h4>
+                </div>
+                <div class="row">
+                    @if (Model.Count() != 0)
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <div class="col-lg-4 col-md-6 mt-4">
+
+
+                                <div class="card job-grid-box bookmark-post">
+                                    <div class="card-body p-4">
+                                        <div class="favorite-icon">
+                                            <a onclick="DeletePost(this.id)" id="@item.Guid">
+                                                <i class="uil uil-trash-alt"></i>
+                                            </a>
+                                        </div>
+                                        @* <div> *@
+                                        @*     <a href="company-details.html"> *@
+                                        @*         <img src="~/images/featured-job/img-01.png" alt="" class="img-fluid rounded-3"> *@
+                                        @*     </a> *@
+                                        @* </div> *@
+                                        <div class="mt-4">
+                                            <a href="job-details.html" class="primary-link">
+                                                <h5 class="fs-17 mb-1">@item.Title</h5>
+                                            </a>
+                                            @* <p class="text-link">Görüntüle</p> *@
+                                            <ul class="list-inline">
+                                                @if (item.PostTypes != null)
+                                                {
+                                                    <li class="list-inline-item">
+                                                        <span class="badge bg-soft-success fs-13 mt-1">@item.PostTypes.Type</span>
+                                                    </li>
+                                                }
+                                                @if (item.Instruments != null)
+                                                {
+                                                    <li class="list-inline-item">
+                                                        <span class="badge bg-soft-danger fs-13 mt-1">@item.Instruments.Instrument</span>
+                                                    </li>
+                                                }
+
+                                            </ul>
+                                        </div>
+                                        <div class="job-grid-content mt-3">
+                                            <p class="text-muted">
+                                                @{
+                                                    var text = item.HTMLText.Replace("<p>", "").Replace("</p>", "");
+                                                    if (text.Length >= 30)
+                                                    {
+                                                        text = text.Substring(0, 30) + "...";
+                                                    }
+                                                }
+                                                @text
+                                            </p>
+                                            <div class="d-flex align-items-center justify-content-between mt-4 border-top pt-3">
+                                                <p class="text-muted float-start mb-0">Eklenme Tarihi: @item.AddedDate.ToString("dd.MM.yyyy")</p>
+                                                <div class="text-end">
+                                                    <a asp-action="PostEdit" asp-route-id="@item.Guid" class="btn btn-sm btn-primary">Düzenle <i class="uil uil-angle-right-b"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div><!--end card-body-->
+                                </div><!--end job-grid-box-->
+
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <h3 class="text-center">İlanınız bulunmuyor.</h3>
+                    }
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <partial name="PartialViews/_SwitcherAndTopPartial"/>
+</div>
+<script>
+function DeletePost(id){
+Swal.fire({
+  title: 'İlan silinecektir emin misiniz?',
+  showDenyButton: true,
+  confirmButtonText: 'Sil',
+  denyButtonText: `Silme`,
+}).then((result) => {
+  if (result.isConfirmed) {
+      $.post( "/User/PostDelete/"+id, function( data ) {
+          var message = "";
+          if (data.includes('silindi')){
+              message = 'success';
+          }
+          else
+              {
+                  message ='info';
+                  }
+          Swal.fire({
+            title: data,confirmButtonText: 'Kapat'}).then((result) => {
+                                                        if (result['isConfirmed']){
+                                                              setTimeout( location.reload(), 2000);
+                                                        }
+                                                      });
+  
+      });
+  } 
+})
+}
+
+</script>

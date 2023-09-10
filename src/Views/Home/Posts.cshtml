@@ -1,0 +1,324 @@
+﻿@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Web.Common;
+@using Cities = EternalBAND.Business.Cities
+@using EternalBAND.Data
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@model X.PagedList.IPagedList<EternalBAND.Models.Posts>
+@inject ApplicationDbContext _context
+@{
+    ViewData["Title"] = "İlanlar";
+}
+
+<div class="main-content">
+
+<div class="page-content">
+
+<!-- Start home -->
+<section class="page-title-box">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="text-center text-white">
+                    <h3 class="mb-4">@ViewData["Title"]</h3>
+
+                </div>
+            </div>
+            <!--end col-->
+        </div>
+        <!--end row-->
+    </div>
+    <!--end container-->
+</section>
+<!-- end home -->
+
+<!-- START SHAPE -->
+<div class="position-relative" style="z-index: 1">
+    <div class="shape">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 250">
+            <path fill="#FFFFFF" fill-opacity="1"
+                  d="M0,192L120,202.7C240,213,480,235,720,234.7C960,235,1200,213,1320,202.7L1440,192L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z">
+            </path>
+        </svg>
+    </div>
+</div>
+<!-- END SHAPE -->
+
+
+<!-- START CANDIDATE-GRID -->
+<section class="section">
+<div class="container">
+<div class="row justify-content-center">
+    <div class="col-lg-12">
+        <div class="candidate-list-widgets mb-4">
+            <form asp-action="Posts" asp-controller="Home">
+                <div class="row g-2">
+                    <div class="col-lg-3">
+                        <div class="filler-job-form">
+                            <i class="uil uil-briefcase-alt"></i>
+                            <select class="form-select filter-input-box" data-trigger name="s" id="choices-single-locationn" aria-label="Default select example" placeholder="NE ARIYORSUN?">
+                                <option disabled="disabled" selected="" value="0">NE ARIYORSUN</option>
+                                @foreach (var i in _context.PostTypes.Where(n => n.Active))
+                                {
+                                    <option value="@i.TypeShort">@i.Type</option>
+                                }
+                            </select>
+                        </div>
+                    </div><!--end col-->
+                    <div class="col-lg-3">
+                        <div class="filler-job-form">
+                            <i class="uil uil-clipboard-notes"></i>
+                            <select class="form-select filter-input-box" data-trigger name="e" id="choices-single-categories" aria-label="Default select example" placeholder="ENSTRÜMAN?">
+                                <option disabled="disabled" selected="" value="0">ENSTRÜMAN</option>
+                                @foreach (var i in _context.Instruments.Where(n => n.IsActive))
+                                {
+                                    <option value="@i.InstrumentShort">@i.Instrument</option>
+                                }
+                            </select>
+                        </div>
+                    </div><!--end col-->
+                    <div class="col-lg-3">
+                        <div class="filler-job-form">
+                            <i class="uil uil-location-point"></i>
+                            <select class="form-select filter-input-box" data-trigger name="c" id="choices-single-locationn" aria-label="Default select example" placeholder="ŞEHİR?">
+
+                                <option disabled="disabled" selected="">ŞEHİR</option>
+                                @foreach (var city in Cities.GetCities())
+                                {
+                                    <option value="@city.Key">@city.Value</option>
+                                }
+                            </select>
+                        </div>
+                    </div><!--end col-->
+
+                    <div class="col-lg-3">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button class="btn btn-primary form-control" type="submit"><i class="uil uil-filter"></i> Filtrele</button>
+                            </div>
+                        </div>
+                    </div>
+                </div><!--end row-->
+            </form><!--end form-->
+        </div>
+    </div><!--end col-->
+</div><!--end row-->
+
+@* <div class="row justify-content-end"> *@
+@* *@
+@* *@
+@*     <div class="col-lg-3 col-md-5 "> *@
+@*         <div class="candidate-list-widgets"> *@
+@*             <div class="row"> *@
+@*                 <div class="col-md-12"> *@
+@*                     <div class="selection-widget mt-3 mt-md-0"> *@
+@*                         <select class="form-select filter-input-box" data-trigger name="choices-single-filter-orderby" id="choices-single-filter-orderby" aria-label="Default select example"> *@
+@*                             <option value="df">Default</option> *@
+@*                             <option value="ne">Newest</option> *@
+@*                             <option value="od">Oldest</option> *@
+@*                             <option value="rd">Random</option> *@
+@*                         </select> *@
+@*                     </div> *@
+@*                 </div><!--end col--> *@
+@* *@
+@*             </div><!--end row--> *@
+@*         </div><!--end candidate-list-widgets--> *@
+@*     </div><!--end col--> *@
+@* </div><!--end row--> *@
+
+<div class="candidate-list">
+    <div class="row">
+        @{
+            if (Model.Count != 0)
+            {
+                foreach (var post in Model)
+                {
+                    string photoPath = post.Photo1 != null ? post.Photo1 :
+                        (post.Photo2 != null ? post.Photo2 : ((post.Photo3 != null ? post.Photo3 : ((post.Photo4 != null ? post.Photo4 : ((post.Photo5 != null ? post.Photo5 : "~/images/hazirlaniyor.jpg")))))));
+                    @* <div class="col-lg-4 col-md-6"> *@
+                    @*     <div class="candidate-grid-box bookmark-post card mt-4"> *@
+                    @*         <div class="card-body p-3 pt-4"> *@
+                    @*             <div class="featured-label"> *@
+                    @*                 <span class="featured">Acil</span> *@
+                    @*                 $1$ <ul class="list-inline d-flex justify-content-between align-items-center"> #1# *@
+                    @*                 $1$ #1# *@
+                    @*                 $1$     <li class="list-inline-item"> #1# *@
+                    @*                 $1$         <div class="favorite-icon"> #1# *@
+                    @*                 $1$             <a href="javascript:void(0)"> #1# *@
+                    @*                 $1$                 <i class="uil uil-heart-alt fs-18"></i> #1# *@
+                    @*                 $1$             </a> #1# *@
+                    @*                 $1$         </div> #1# *@
+                    @*                 $1$     </li> #1# *@
+                    @*                 $1$ </ul> #1# *@
+                    @*             </div> *@
+                    @*             <div class="d-flex mb-4"> *@
+                    @*                 <div class="flex-shrink-0 position-relative"> *@
+                    @*                     <img src="@photoPath" alt="" class="avatar-md rounded"> *@
+                    @*                     <span class="profile-active position-absolute badge rounded-circle bg-success"> *@
+                    @*                         <span class="visually-hidden">active</span> *@
+                    @*                     </span> *@
+                    @*                 </div> *@
+                    @*                 <div class="ms-3"> *@
+                    @*                     <a href="candidate-details.html" class="primary-link"> *@
+                    @*                         <h5 class="fs-15">@post.Title</h5> *@
+                    @*                     </a> *@
+                    @*                     <span class="badge bg-soft-info fs-13">$800/month</span> *@
+                    @*                 </div> *@
+                    @*             </div> *@
+                    @* *@
+                    @*             <div class="border rounded mb-4"> *@
+                    @*                 <div class="row g-0"> *@
+                    @*                     @if (post.PostTypes != null) *@
+                    @*                     { *@
+                    @*                         <div class="col-lg-6"> *@
+                    @*                             <div class="border-end px-3 py-2"> *@
+                    @*                                 <p class="text-muted mb-0">İlan Tipi</p> *@
+                    @*                             </div> *@
+                    @*                         </div> *@
+                    @*                         <!--end col--> *@
+                    @*                         <div class="col-lg-6"> *@
+                    @*                             <div class="px-3 py-2"> *@
+                    @*                                 <p class="text-muted mb-0">@post.PostTypes.Type</p> *@
+                    @*                             </div> *@
+                    @*                         </div> *@
+                    @*                         <!--end col--> *@
+                    @*                     } *@
+                    @*                     @if (post.Instruments != null) *@
+                    @*                     { *@
+                    @*                         <div class="col-lg-6"> *@
+                    @*                             <div class="border-end px-3 py-2"> *@
+                    @*                                 <p class="text-muted mb-0">Enstrüman</p> *@
+                    @*                             </div> *@
+                    @*                         </div> *@
+                    @*                         <!--end col--> *@
+                    @*                         <div class="col-lg-6"> *@
+                    @*                             <div class="px-3 py-2"> *@
+                    @*                                 <p class="text-muted mb-0">@post.Instruments.Instrument</p> *@
+                    @*                             </div> *@
+                    @*                         </div> *@
+                    @*                         <!--end col--> *@
+                    @*                     } *@
+                    @*                     @if (post.CityId != null) *@
+                    @*                     { *@
+                    @*                         <div class="col-lg-6"> *@
+                    @*                             <div class="border-end px-3 py-2"> *@
+                    @*                                 <p class="text-muted mb-0">Şehir</p> *@
+                    @*                             </div> *@
+                    @*                         </div> *@
+                    @*                         <!--end col--> *@
+                    @*                         <div class="col-lg-6"> *@
+                    @*                             <div class="px-3 py-2"> *@
+                    @*                                 <p class="text-muted mb-0">@Cities.GetCities().FirstOrDefault(n => n.Key == post.CityId).Value</p> *@
+                    @*                             </div> *@
+                    @*                         </div> *@
+                    @*                         <!--end col--> *@
+                    @*                     } *@
+                    @*                 </div><!--end row--> *@
+                    @*             </div> *@
+                    @*             <div class="mt-3"> *@
+                    @*                 <a asp-action="Post" asp-route-s="@post.SeoLink" class="btn btn-success btn-hover w-100 mt-2"><i class="mdi mdi-eye"></i> Detaylar</a> *@
+                    @*                 <a href="#hireNow" data-bs-toggle="modal" class="btn btn-primary btn-hover w-100 mt-2"><i class="mdi mdi-message-processing-outline"></i> Mesaj Gönder</a> *@
+                    @* *@
+                    @*             </div> *@
+                    @*         </div> *@
+                    @*     </div> <!--end card--> *@
+                    @* </div> *@
+
+                    <div class="candidate-list-box card mt-4">
+                   
+                        <div class="card-body p-4">
+                                 <a asp-action="Post" asp-route-s="@post.SeoLink">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <div class="candidate-list-images">
+                                        <img src="@photoPath" alt="" class="avatar-md img-thumbnail rounded-circle">
+                                    </div>
+                                </div><!--end col-->
+
+                                <div class="col-lg-5">
+                                    <div class="candidate-list-content mt-3 mt-lg-0">
+                                        <h5 class="fs-19 mb-0">@post.Title</h5>
+                                        <ul class="list-inline mb-0 text-muted">
+                                            @if (post.PostTypes != null)
+                                            {
+                                                <li class="list-inline-item">
+                                                    <i class="uil uil-map-marker-question"></i> @post.PostTypes.Type
+                                                </li>
+                                            }
+                                            @if (post.Instruments != null)
+                                            {
+                                                <li class="list-inline-item">
+                                                    <i class="uil uil-music"></i> @post.Instruments.Instrument
+                                                </li>
+                                            }
+                                            @if (post.CityId != null && post.CityId != 0)
+                                            {
+                                                <li class="list-inline-item">
+                                                    <i class="uil uil-location-pin-alt"></i> @Cities.GetCities().FirstOrDefault(n => n.Key == post.CityId).Value
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </div><!--end col-->
+
+                            </div><!--end row-->
+                            </a>
+                            
+                        </div>
+                  
+                    </div>
+                    <!--end card-->
+                }
+            }
+            else
+            {
+                <h3 class="text-center">İlan bulunmuyor.</h3>
+            }
+        }
+
+
+    </div><!--end row-->
+</div><!--end candidate-list-->
+
+<div class="row mt-5 pt-2">
+    <div class="col-lg-12">
+        <nav aria-label="Navigation">
+            <ul class="pagination job-pagination mb-0 justify-content-center">
+               
+             
+                @{
+                                            @Html.PagedListPager((IPagedList) Model, pId => GetLink(pId),
+                                                new PagedListRenderOptions
+                                                {
+                                                    LiElementClasses = new string[] {"page-item"},
+                                                    PageClasses = new string[] {"page-link"},
+                                                })
+                                        }
+              
+            </ul>
+        </nav>
+    </div><!--end col-->
+</div><!-- end row -->
+
+</div><!--end container-->
+</section>
+<!-- END CANDIDATE-GRID -->
+
+
+</div>
+<!-- End Page-content -->
+
+<!--end back-to-top-->
+</div>
+@functions {
+
+    string GetLink(int pId)
+    {
+        var city = ViewBag.CityId;
+        var type = ViewBag.TypeShort;
+        var inst = ViewBag.Instrument;
+        var link = $"/ilanlar?c={city}&e={inst}&s={type}&pId={pId}";
+        return link;
+    }
+
+}
