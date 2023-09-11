@@ -1,4 +1,6 @@
+using EternalBAND.Common;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 
 namespace EternalBAND.Models;
 
@@ -40,4 +42,5 @@ public class Posts
     public Guid? Guid { get; set; }
     [Display(Name = "Şehir")]
     public int CityId { get; set; }
+    public PostStatus Status { get; set; }
 }

@@ -46,7 +46,7 @@ public class HomeController : Controller
         ViewBag.CityId = c;
         ViewBag.TypeShort = s;
         ViewBag.Instrument = e;
-        var r = await _context.Posts.Include(n => n.PostTypes).Include(n => n.Instruments).ToListAsync();
+        var r = await _context.Posts.Where(p => p.Status == Common.PostStatus.Active).Include(n => n.PostTypes).Include(n => n.Instruments).ToListAsync();
         if (c != 0 || e != "" || s != "")
         {
             if(e != "0" && s!= "0")

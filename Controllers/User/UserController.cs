@@ -66,6 +66,8 @@ public class UserController : Controller
             posts.AddedByUserId = getUser?.Id;
             posts.AddedDate = DateTime.Now;
             posts.Guid = Guid.NewGuid();
+            // TO DO need to check if the currentUser is Admin Credential, otherwise status will be Active directly
+            posts.Status = Common.PostStatus.PendingApproval;
             _context.Add(posts);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(PostIndex));
