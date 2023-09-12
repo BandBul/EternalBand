@@ -1,4 +1,5 @@
 using EternalBAND.Business;
+using EternalBAND.Common;
 using EternalBAND.Data;
 using EternalBAND.Helpers;
 using EternalBAND.Models;
@@ -13,18 +14,20 @@ using X.PagedList;
 
 namespace EternalBAND.Controllers.User;
 
-// [Authorize(Roles = "User,Admin")]
 public class UserController : Controller
 {
     private readonly ApplicationDbContext _context;
+    
     private readonly UserManager<Users> _userManager;
+    private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IWebHostEnvironment _environment;
 
-    public UserController(ApplicationDbContext context, UserManager<Users> userManager, IWebHostEnvironment environment)
+    public UserController(ApplicationDbContext context, UserManager<Users> userManager, RoleManager<IdentityRole> roleManager, IWebHostEnvironment environment)
     {
         _context = context;
         _userManager = userManager;
         _environment = environment;
+        _roleManager = roleManager;
     }
 
     // GET: Posts
@@ -62,12 +65,25 @@ public class UserController : Controller
         {
             PostAddPhoto(posts, images);
             PostAddSeoLink(posts);
-            var getUser = await _userManager.GetUserAsync(User);
-            posts.AddedByUserId = getUser?.Id;
+            var currentUser = await _userManager.GetUserAsync(User);
+            posts.AddedByUserId = currentUser?.Id;
             posts.AddedDate = DateTime.Now;
             posts.Guid = Guid.NewGuid();
-            // TO DO need to check if the currentUser is Admin Credential, otherwise status will be Active directly
-            posts.Status = Common.PostStatus.PendingApproval;
+            var isUserAdmin = await _userManager.IsInRoleAsync(currentUser, Constants.AdminRoleName);
+            if(!isUserAdmin)
+            {
+                var adminUsers = await _userManager.GetUsersInRoleAsync(Constants.AdminRoleName);
+                // TODO-Engin need a new Notification object that for approval specific
+                await _context.Notification.AddAsync(new Notification()
+                {
+                    IsRead = false,
+                    AddedDate = DateTime.Now,
+                    Message = $"{currentUser?.Name} yeni bir ilan paylaştı.",
+                    ReceiveUserId = adminUsers.ElementAt(0).Id,
+                    RedirectLink = currentUser?.Id
+                });
+                posts.Status = Common.PostStatus.PendingApproval;
+            }
             _context.Add(posts);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(PostIndex));

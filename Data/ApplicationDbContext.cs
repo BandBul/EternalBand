@@ -1,4 +1,5 @@
-﻿using EternalBAND.Models;
+﻿using EternalBAND.Common;
+using EternalBAND.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -28,29 +29,25 @@ public class ApplicationDbContext : IdentityDbContext<Users>
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        string adminRoleId = "39d321fc-0911-4412-a19e-98fb7d068440";
-        string adminUserId = "248feb45-0294-450c-afd2-9c6de89023b9";
-        string normalUserId = "a3641119-ff91-4eca-aa32-120c36d61d1a";
-        
         builder.Entity<IdentityRole>().HasData(
             new IdentityRole
             {
-                Id = adminRoleId,
-                Name = "Admin",
-                NormalizedName = "Admin",
+                Id = Constants.AdminRoleId,
+                Name = Constants.AdminRoleName,
+                NormalizedName = Constants.AdminRoleName.ToUpperInvariant(),
             },
             new IdentityRole
             {
-                Id = normalUserId,
-                Name = "User",
-                NormalizedName = "User",
+                Id = Constants.NormalUserId,
+                Name = Constants.NormalUserRoleName,
+                NormalizedName = Constants.NormalUserRoleName.ToUpperInvariant(),
             }
         );
         
         
         builder.Entity<EternalBAND.Models.Users>().HasData(new EternalBAND.Models.Users // Pass Af9CCdzXYYxLQSXR
         {
-            Id = adminUserId,
+            Id = Constants.AdminUserId,
             UserName = "admin@bandbul.com",
             NormalizedUserName = "ADMIN@BANDBUL.COM",
             Email = "admin@bandbul.com",
@@ -71,8 +68,8 @@ public class ApplicationDbContext : IdentityDbContext<Users>
         });
         builder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
         {
-            RoleId = adminRoleId,
-            UserId = adminUserId
+            RoleId = Constants.AdminRoleId,
+            UserId = Constants.AdminUserId
         });
         builder.Entity<SystemInfo>().HasData(
             new SystemInfo

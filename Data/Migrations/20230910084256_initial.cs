@@ -411,8 +411,8 @@ namespace EternalBAND.Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "39d321fc-0911-4412-a19e-98fb7d068440", null, "Admin", "Admin" },
-                    { "a3641119-ff91-4eca-aa32-120c36d61d1a", null, "User", "User" }
+                    { "39d321fc-0911-4412-a19e-98fb7d068440", null, "Admin", "ADMIN" },
+                    { "a3641119-ff91-4eca-aa32-120c36d61d1a", null, "User", "USER" }
                 });
 
             migrationBuilder.InsertData(

@@ -24,9 +24,9 @@ public class NotificationProcess
                 ReceiveUserId = receiverUserId,
                 RedirectLink = redirectLink
             });
-           await _context.SaveChangesAsync();
-           var user = await _context.Users.FirstOrDefaultAsync(n => n.Id == receiverUserId);
-          await new MailSender(_context).SendEmailAsync(user.Email, "Yeni Bir Bildirimin Var", message);
+            await _context.SaveChangesAsync();
+            var user = await _context.Users.FirstOrDefaultAsync(n => n.Id == receiverUserId);
+            await new MailSender(_context).SendEmailAsync(user.Email, "Yeni Bir Bildirimin Var", message);
             return true;
         }
         catch(Exception ex)//TODO:log
