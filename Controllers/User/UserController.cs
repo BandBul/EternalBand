@@ -73,14 +73,15 @@ public class UserController : Controller
             if(!isUserAdmin)
             {
                 var adminUsers = await _userManager.GetUsersInRoleAsync(Constants.AdminRoleName);
-                // TODO-Engin need a new Notification object that for approval specific
+                // Engin-TODO need to send all admins
                 await _context.Notification.AddAsync(new Notification()
                 {
                     IsRead = false,
                     AddedDate = DateTime.Now,
                     Message = $"{currentUser?.Name} yeni bir ilan paylaştı.",
                     ReceiveUserId = adminUsers.ElementAt(0).Id,
-                    RedirectLink = currentUser?.Id
+                    RedirectLink = $"ilan?s={posts.SeoLink}&approvalPurpose=true",
+                    RelatedElementId = posts.SeoLink
                 });
                 posts.Status = Common.PostStatus.PendingApproval;
             }

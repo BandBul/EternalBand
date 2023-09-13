@@ -1,7 +1,9 @@
+using EternalBAND.Common;
 using EternalBAND.Data;
 using EternalBAND.Helpers;
 using EternalBAND.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using X.PagedList;
@@ -12,12 +14,14 @@ namespace EternalBAND.Controllers.Admin;
 public class AdminController : Controller
 {
     private readonly ApplicationDbContext _context;
+    private readonly UserManager<Users> _userManager;
     private readonly IWebHostEnvironment _environment;
 
-    public AdminController(ApplicationDbContext context, IWebHostEnvironment environment)
+    public AdminController(ApplicationDbContext context, UserManager<Users> userManager, IWebHostEnvironment environment)
     {
         _context = context;
         _environment = environment;
+        _userManager = userManager;
     }
 
     // GET: Blogs
@@ -756,6 +760,27 @@ public class AdminController : Controller
 
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(InstrumentsIndex));
+    }
+
+    [ActionName("ApprovePost")]
+    // TODO-Engin check token validation
+    //[ValidateAntiForgeryToken]
+    public async Task<IActionResult> ApprovePost( string postSeoLink)
+    {
+        var post = _context.Posts.Where(p => p.SeoLink.Equals(postSeoLink)).FirstOrDefault();
+        post.Status = PostStatus.Active;
+        _context.Update(post);
+
+        // TODO-Engin getting all seolink of current post we need to add an check also received user is admin or not
+        var allNotifOnAdmin = _context.Notification.Where(not => not.RelatedElementId.Equals(postSeoLink) && not.IsRead == false).ToList();
+        allNotifOnAdmin.ForEach(n =>
+        {
+            n.IsRead = true;
+        });
+
+        _context.UpdateRange(allNotifOnAdmin);
+        await _context.SaveChangesAsync();
+        return RedirectToAction(actionName: Constants.MainPage, controllerName: "Home");
     }
 
     private bool InstrumentsExists(int id)
