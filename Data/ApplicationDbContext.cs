@@ -29,6 +29,99 @@ public class ApplicationDbContext : IdentityDbContext<Users>
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        builder.Entity<PostTypes>().HasData(
+            new PostTypes
+            {
+                Id = 1,
+                Type = "Müzisyen Arıyorum",
+                TypeShort = "Musician",
+                Active = true,
+                AddedDate = DateTime.Now
+            },
+            new PostTypes
+            {
+                Id = 2,
+                Type = "Grup Arıyorum",
+                TypeShort = "Group",
+                Active = true,
+                AddedDate = DateTime.Now
+            },
+            new PostTypes
+            {
+                Id = 3,
+                Type = "Ders Vermek İstiyorum",
+                TypeShort = "Lesson",
+                Active = true,
+                AddedDate = DateTime.Now
+            }
+        );
+
+        builder.Entity<Instruments>().HasData(
+            new Instruments
+            {
+                Id = 1,
+                Instrument = "Gitar",
+                InstrumentShort = "Guitar",
+                IsActive = true,
+            },
+            new Instruments
+            {
+                Id = 2,
+                Instrument = "Bas Gitar",
+                InstrumentShort = "Bass Guitar",
+                IsActive = true,
+            },
+            new Instruments
+            {
+                Id = 3,
+                Instrument = "Davul",
+                InstrumentShort = "Drum",
+                IsActive = true,
+            },
+            new Instruments
+            {
+                Id = 4,
+                Instrument = "Piano",
+                InstrumentShort = "Piano",
+                IsActive = true,
+            },
+            new Instruments
+            {
+                Id = 5,
+                Instrument = "Klavye",
+                InstrumentShort = "Keyboard",
+                IsActive = true,
+            },
+            new Instruments
+            {
+                Id = 6,
+                Instrument = "Saksafon",
+                InstrumentShort = "Saxophone",
+                IsActive = true,
+            },
+            new Instruments
+            {
+                Id = 7,
+                Instrument = "Keman",
+                InstrumentShort = "Violin",
+                IsActive = true,
+            },
+            new Instruments
+            {
+                Id = 8,
+                Instrument = "Vokal",
+                InstrumentShort = "Vocal",
+                IsActive = true,
+            },
+            new Instruments
+            {
+                Id = 9,
+                Instrument = "Kontrabas",
+                InstrumentShort = "Kontrabas",
+                IsActive = true,
+            }
+        );
+
         builder.Entity<IdentityRole>().HasData(
             new IdentityRole
             {
