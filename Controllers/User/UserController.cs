@@ -1,4 +1,5 @@
 using EternalBAND.Business;
+using EternalBAND.Common;
 using EternalBAND.Data;
 using EternalBAND.Helpers;
 using EternalBAND.Models;
@@ -13,18 +14,20 @@ using X.PagedList;
 
 namespace EternalBAND.Controllers.User;
 
-// [Authorize(Roles = "User,Admin")]
 public class UserController : Controller
 {
     private readonly ApplicationDbContext _context;
+    
     private readonly UserManager<Users> _userManager;
+    private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IWebHostEnvironment _environment;
 
-    public UserController(ApplicationDbContext context, UserManager<Users> userManager, IWebHostEnvironment environment)
+    public UserController(ApplicationDbContext context, UserManager<Users> userManager, RoleManager<IdentityRole> roleManager, IWebHostEnvironment environment)
     {
         _context = context;
         _userManager = userManager;
         _environment = environment;
+        _roleManager = roleManager;
     }
 
     // GET: Posts
@@ -62,10 +65,26 @@ public class UserController : Controller
         {
             PostAddPhoto(posts, images);
             PostAddSeoLink(posts);
-            var getUser = await _userManager.GetUserAsync(User);
-            posts.AddedByUserId = getUser?.Id;
+            var currentUser = await _userManager.GetUserAsync(User);
+            posts.AddedByUserId = currentUser?.Id;
             posts.AddedDate = DateTime.Now;
             posts.Guid = Guid.NewGuid();
+            var isUserAdmin = await _userManager.IsInRoleAsync(currentUser, Constants.AdminRoleName);
+            if(!isUserAdmin)
+            {
+                var adminUsers = await _userManager.GetUsersInRoleAsync(Constants.AdminRoleName);
+                // Engin-TODO need to send all admins
+                await _context.Notification.AddAsync(new Notification()
+                {
+                    IsRead = false,
+                    AddedDate = DateTime.Now,
+                    Message = $"{currentUser?.Name} yeni bir ilan paylaştı.",
+                    ReceiveUserId = adminUsers.ElementAt(0).Id,
+                    RedirectLink = $"ilan?s={posts.SeoLink}&approvalPurpose=true",
+                    RelatedElementId = posts.SeoLink
+                });
+                posts.Status = Common.PostStatus.PendingApproval;
+            }
             _context.Add(posts);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(PostIndex));

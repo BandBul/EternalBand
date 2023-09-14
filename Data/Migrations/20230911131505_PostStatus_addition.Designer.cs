@@ -4,6 +4,7 @@ using EternalBAND.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EternalBAND.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230911131505_PostStatus_addition")]
+    partial class PostStatus_addition
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -242,10 +245,6 @@ namespace EternalBAND.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("RedirectLink")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RelatedElementId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -687,13 +686,13 @@ namespace EternalBAND.Data.Migrations
                         {
                             Id = "39d321fc-0911-4412-a19e-98fb7d068440",
                             Name = "Admin",
-                            NormalizedName = "ADMIN"
+                            NormalizedName = "Admin"
                         },
                         new
                         {
                             Id = "a3641119-ff91-4eca-aa32-120c36d61d1a",
                             Name = "User",
-                            NormalizedName = "USER"
+                            NormalizedName = "User"
                         });
                 });
 

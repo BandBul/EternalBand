@@ -24,6 +24,13 @@ public class HomeController : Controller
         return View();
     }
 
+
+    [Route("Anasayfa")]
+    public IActionResult MainPage()
+    {
+        return View();
+    }
+
     [Route("blog-yazilari")]
     public async Task<IActionResult> Blogs(int pId = 1, string? s = "")
     {
@@ -46,7 +53,7 @@ public class HomeController : Controller
         ViewBag.CityId = c;
         ViewBag.TypeShort = s;
         ViewBag.Instrument = e;
-        var r = await _context.Posts.Include(n => n.PostTypes).Include(n => n.Instruments).ToListAsync();
+        var r = await _context.Posts.Where(p => p.Status == Common.PostStatus.Active).Include(n => n.PostTypes).Include(n => n.Instruments).ToListAsync();
         if (c != 0 || e != "" || s != "")
         {
             if(e != "0" && s!= "0")
@@ -75,11 +82,11 @@ public class HomeController : Controller
     }
 
     [Route("ilan")]
-    public async Task<IActionResult> Post(string? s = "")
+    public async Task<IActionResult> Post(string? s = "", bool approvalPurpose = false)
     {
         if (s == null)
             return RedirectToAction(nameof(Anasayfa));
-
+        ViewBag.ApprovalPurpose = approvalPurpose;
         return View(await _context.Posts.Include(n => n.PostTypes).Include(n => n.Instruments)
             .FirstOrDefaultAsync(n => n.SeoLink == s));
     }
