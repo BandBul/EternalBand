@@ -50,4 +50,8 @@
       <_ContentIncludedByDefault Remove="wwwroot\photo_uploader\js\util.js" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Include="wwwroot\css\NavMenu.css" />
+    </ItemGroup>
+
 </Project>
