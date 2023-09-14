@@ -85,6 +85,10 @@ public class UserController : Controller
                 });
                 posts.Status = Common.PostStatus.PendingApproval;
             }
+            else
+            {
+                posts.Status = Common.PostStatus.Active;
+            }
             _context.Add(posts);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(PostIndex));

@@ -1,5 +1,12 @@
-﻿<div class="collapse navbar-collapse" id="navbarCollapse">
+﻿<link href="~/Css/NavMenu.css" rel="stylesheet" type="text/css">
+<div class="collapse navbar-collapse" id="navbarCollapse">
     <ul class="navbar-nav mx-auto navbar-center">
+        <li class="nav-item">
+            <a asp-controller="User" asp-action="PostCreate">
+                <button class="btn btn-primary posting_button" type="button">İlan Ver</button>
+            </a>
+        </li>
+
         <li class="nav-item">
             <a asp-action="Anasayfa" asp-controller="Home" class="nav-link">Anasayfa</a>
         </li>
@@ -10,15 +17,12 @@
             <a asp-action="Posts" asp-controller="Home" asp-route-s="grup-arayan" class="nav-link">Grup Arıyorum</a>
         </li>
         <li class="nav-item">
-            <a asp-action="PostCreate" asp-controller="User" class="nav-link">İlan Ver</a>
-        </li>
-        <li class="nav-item">
             <a asp-action="Posts" asp-controller="Home" asp-route-s="ders-almak-istiyorum" class="nav-link">Ders Almak İstiyorum</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" hidden>
             <a asp-action="Posts" asp-controller="Home" asp-route-s="2.-el-enstruman" class="nav-link">2. El Enstrüman</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" hidden>
             <a asp-action="Posts" asp-controller="Home" asp-route-s="produksiyon" class="nav-link">Prodüksiyon</a>
         </li>
         <li class="nav-item">
