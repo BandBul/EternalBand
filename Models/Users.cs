@@ -12,7 +12,7 @@ public class Users:IdentityUser
     [DisplayName("Ad Soyad")]
     public string? FullName { get; set; }
     [DisplayName("Fotoğraf")]
-    public string PhotoPath {get; set; }
+    public string? PhotoPath {get; set; }
     [DisplayName("Şehir")]
     public int City {get; set; }
     [DisplayName("Yaş")]

@@ -20,6 +20,9 @@
       <None Remove="__MACOSX\**" />
     </ItemGroup>
     <ItemGroup>
+      <Content Remove="wwwroot\css\Login-page.css" />
+    </ItemGroup>
+    <ItemGroup>
       <None Remove="EternalBAND.zip" />
       <None Remove="Proje.zip" />
       <None Remove="sorular.txt" />
@@ -27,6 +30,7 @@
       <None Remove="Yapılacaklar.txt" />
     </ItemGroup>
     <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="7.0.11" />
         <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.0" />
@@ -51,7 +55,15 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Include="wwwroot\css\NavMenu.css" />
+      <Content Include="Css\NavMenu.css">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Css\Login-page.css">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

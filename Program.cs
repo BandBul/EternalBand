@@ -4,6 +4,13 @@ using EternalBAND.Data;
 using EternalBAND.Hubs;
 using EternalBAND.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.CodeAnalysis.Emit;
+using EternalBAND.Business.Options;
+using System.Configuration;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,6 +50,18 @@ builder.Services.AddRazorPages(options =>
     options.Conventions.AddAreaPageRoute("Identity", "/Account/ForgotPasswordConfirmation",
         "/mail-gonderildi"); 
 });
+var googleApiKey = new GoogleApiKeyOptions();
+builder.Configuration.GetSection(GoogleApiKeyOptions.GoogleApiKey).Bind(googleApiKey);
+builder.Services.AddAuthentication(opt =>
+{
+    opt.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+})
+.AddGoogle(opt =>
+{
+    opt.ClientId = googleApiKey.ClientId;
+    opt.ClientSecret = googleApiKey.ClientSecret;
+});
+
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/giris-yap";
@@ -68,11 +87,16 @@ else
 app.UseStatusCodePagesWithRedirects("/hata-olustu/{0}");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+           Path.Combine(builder.Environment.ContentRootPath, "Css")),
+    RequestPath = "/Css"
+});
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Anasayfa}/{id?}");

@@ -4,9 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using EternalBAND.Models;
 using Microsoft.EntityFrameworkCore;
 using X.PagedList;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EternalBAND.Controllers;
-
+[Authorize]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
@@ -17,14 +18,14 @@ public class HomeController : Controller
         _logger = logger;
         _context = context;
     }
-
+    [AllowAnonymous]
     [Route("")]
     public IActionResult Anasayfa()
     {
         return View();
     }
 
-
+    [AllowAnonymous]
     [Route("Anasayfa")]
     public IActionResult MainPage()
     {

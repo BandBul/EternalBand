@@ -4,6 +4,7 @@
 
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,10 @@ namespace EternalBAND.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
+            // Sign out of the standard user-password Identity
             await _signInManager.SignOutAsync();
+            // Sign out of the External authentication scheme
+            await HttpContext.SignOutAsync();
             _logger.LogInformation("User logged out.");
             if (returnUrl != null)
             {
