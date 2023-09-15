@@ -55,7 +55,15 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="Css\NavMenu.css" />
+      <Content Include="Css\NavMenu.css">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Css\Login-page.css">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>
