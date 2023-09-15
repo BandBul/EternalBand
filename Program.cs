@@ -10,6 +10,7 @@ using System.Configuration;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -86,6 +87,12 @@ else
 app.UseStatusCodePagesWithRedirects("/hata-olustu/{0}");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+           Path.Combine(builder.Environment.ContentRootPath, "Css")),
+    RequestPath = "/Css"
+});
 
 app.UseRouting();
 app.UseAuthentication();

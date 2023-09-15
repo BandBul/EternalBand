@@ -55,8 +55,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Include="wwwroot\css\Login-page.css" />
-      <None Include="wwwroot\css\NavMenu.css" />
+      <Content Include="Css\NavMenu.css" />
     </ItemGroup>
 
 </Project>
