@@ -5,6 +5,9 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>aspnet-EternalBAND-AFE04FF2-064D-42BD-B856-6C36194DCDBF</UserSecretsId>
+		<GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+		<GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+		<GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
@@ -25,6 +28,7 @@
     <ItemGroup>
       <None Remove="EternalBAND.zip" />
       <None Remove="Proje.zip" />
+      <None Remove="Scripts\Version-Update.ps1" />
       <None Remove="sorular.txt" />
       <None Remove="sorular.txt.bak" />
       <None Remove="Yapılacaklar.txt" />
@@ -58,6 +62,10 @@
       <Content Include="Css\NavMenu.css">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <TypeScriptCompile Include="Scripts\Version-Update.ps1" />
     </ItemGroup>
 
     <ItemGroup>
