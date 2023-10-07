@@ -26,6 +26,7 @@
       <Content Remove="wwwroot\css\Login-page.css" />
     </ItemGroup>
     <ItemGroup>
+      <None Remove="Css\SiteLogo.css" />
       <None Remove="EternalBAND.zip" />
       <None Remove="Proje.zip" />
       <None Remove="Scripts\Version-Update.ps1" />
@@ -59,6 +60,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Content Include="Css\SiteLogo.css">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
       <Content Include="Css\NavMenu.css">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
@@ -70,6 +74,9 @@
 
     <ItemGroup>
       <None Update="Css\Login-page.css">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Properties\launchSettings.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
