@@ -14,6 +14,7 @@ using X.PagedList;
 
 namespace EternalBAND.Controllers.User;
 
+[Authorize]
 public class UserController : Controller
 {
     private readonly ApplicationDbContext _context;
