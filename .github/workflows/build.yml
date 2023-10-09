@@ -46,10 +46,13 @@ jobs:
           # Update the AssemblyInfo.cs file with the incremented patch version
           incremented_version="${INCREMENTED_VERSION}"
           branch_name="${BRANCH_NAME}"
+          echo "DEBUG 1"
           sed -i "s/\[assembly: AssemblyMetadata(\"Git.BranchName\", \"\")]/[assembly: AssemblyMetadata(\"Git.BranchName\", \"$branch_name\")]/" Properties/AssemblyInfo.cs
+          echo "DEBUG 2"
           sed -i "s/\[assembly: AssemblyVersion(\".*\"\)\]/[assembly: AssemblyVersion(\"$incremented_version\")]/" Properties/AssemblyInfo.cs
+          echo "DEBUG 3"
           sed -i "s/\[assembly: AssemblyFileVersion(\".*\"\)\]/[assembly: AssemblyFileVersion(\"$incremented_version\")]/" Properties/AssemblyInfo.cs
-
+          echo "DEBUG 4"
       - name: Commit and Push Version Update
         run: |
           # git config user.name "Your Git Username"
