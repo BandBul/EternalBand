@@ -28,13 +28,18 @@ jobs:
         run: |
           # Increment the patch component of the version
           current_version="${CURRENT_VERSION}"
+          echo "Debug 1"
           IFS='.' read -ra version_components <<< "$current_version"
+          echo "Debug 2"
           major="${version_components[0]}"
           minor="${version_components[1]}"
           patch="${version_components[2]}"
           revision="${version_components[3]}"
+          echo "Debug 3"
           ((revision++))
+          echo "Debug 4"
           incremented_version="$major.$minor.$patch.$revision"
+          echo "Debug 5"
           echo "INCREMENTED_VERSION=$incremented_version" >> $GITHUB_ENV
 
       - name: Get Current Branch Name
