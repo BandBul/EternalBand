@@ -29,7 +29,7 @@ jobs:
           # Increment the patch component of the version
           current_version="${CURRENT_VERSION}"
           echo "Debug 1"
-          IFS='.' read -ra version_components <<< "$current_version"
+          version_components = current_version.split(".")
           echo "Debug 2"
           major="${version_components[0]}"
           minor="${version_components[1]}"
