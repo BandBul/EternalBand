@@ -47,8 +47,8 @@ jobs:
           incremented_version="${INCREMENTED_VERSION}"
           branch_name="${BRANCH_NAME}"
           sed -i "s/\[assembly: AssemblyMetadata(\"Git.BranchName\", \"\")]/[assembly: AssemblyMetadata(\"Git.BranchName\", \"$branch_name\")]/" Properties/AssemblyInfo.cs
-          sed -i "s/\[assembly: AssemblyVersion(\"[0-9.]*\")\]/[assembly: AssemblyVersion(\"$new_version\")]/" Properties/AssemblyInfo.cs
-          sed -i "s/\[assembly: AssemblyFileVersion(\"[0-9.]*\")\]/[assembly: AssemblyFileVersion(\"$new_version\")]/" Properties/AssemblyInfo.cs
+          sed -i "s/\[assembly: AssemblyVersion(\"[0-9.]*\")\]/[assembly: AssemblyVersion(\"$incremented_version\")]/" Properties/AssemblyInfo.cs
+          sed -i "s/\[assembly: AssemblyFileVersion(\"[0-9.]*\")\]/[assembly: AssemblyFileVersion(\"$incremented_version\")]/" Properties/AssemblyInfo.cs
 
       - name: Commit and Push Version Update
         run: |
