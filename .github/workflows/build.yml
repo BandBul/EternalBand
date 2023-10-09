@@ -20,7 +20,7 @@ jobs:
         id: read-version
         run: |
           # Read the current version from AssemblyInfo.cs and store it as an output
-          current_version=$(grep -oP '(?<=AssemblyVersion\("[0-9]+\.[0-9]+\.[0-9]+)(\.[0-9]+)?' Band/Properties/AssemblyInfo.cs)
+          current_version=$(awk -F '"' '/AssemblyVersion/ {print $2}' YourProject/Properties/AssemblyInfo.cs)
           echo "::set-output name=current_version::$current_version"
 
       - name: Increment Patch Version
