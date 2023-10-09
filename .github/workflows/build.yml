@@ -19,15 +19,15 @@ jobs:
       - name: Read Current Version
         id: read-version
         run: |
-          # Read the current version from AssemblyInfo.cs and store it as an output
+          # Read the current version from AssemblyInfo.cs and store it as an environment variable
           current_version=$(awk -F '"' '/AssemblyVersion/ {print $2}' Properties/AssemblyInfo.cs)
-          echo "::set-output name=current_version::$current_version"
+          echo "CURRENT_VERSION=$current_version" >> $GITHUB_ENV
 
       - name: Increment Patch Version
         id: increment-patch-version
         run: |
           # Increment the patch component of the version
-          current_version="${{ steps.read-version.outputs.current_version }}"
+          current_version="${CURRENT_VERSION}"
           IFS='.' read -ra version_components <<< "$current_version"
           major="${version_components[0]}"
           minor="${version_components[1]}"
@@ -35,17 +35,17 @@ jobs:
           revision="${version_components[3]}"
           ((revision++))
           incremented_version="$major.$minor.$patch.$revision"
-          echo "::set-output name=incremented_version::$incremented_version"
+          echo "INCREMENTED_VERSION=$incremented_version" >> $GITHUB_ENV
 
       - name: Get Current Branch Name
         id: branch-name
-        run: echo "::set-output name=branch_name::${GITHUB_REF#refs/heads/}"
+        run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
         
       - name: Update AssemblyInfo.cs
         run: |
           # Update the AssemblyInfo.cs file with the incremented patch version
-          incremented_version="${{ steps.increment-patch-version.outputs.incremented_version }}"
-          branch_name="${{ steps.branch-name.outputs.branch_name }}"
+          incremented_version="${INCREMENTED_VERSION}"
+          branch_name="${BRANCH_NAME}"
           sed -i "s/\[assembly: AssemblyMetadata(\"Git.BranchName\", \"\")]/[assembly: AssemblyMetadata(\"Git.BranchName\", \"$branch_name\")]/" YourProject/Properties/AssemblyInfo.cs
           sed -i "s/\[assembly: AssemblyVersion(\".*\"\)\]/[assembly: AssemblyVersion(\"$incremented_version\")]/" Band/Properties/AssemblyInfo.cs
           sed -i "s/\[assembly: AssemblyFileVersion(\".*\"\)\]/[assembly: AssemblyFileVersion(\"$incremented_version\")]/" Band/Properties/AssemblyInfo.cs
@@ -55,5 +55,5 @@ jobs:
           # git config user.name "Your Git Username"
           # git config user.email "your@email.com"
           git add Band/Properties/AssemblyInfo.cs
-          git commit -m "Bump patch version to ${{ steps.increment-patch-version.outputs.incremented_version }}" --no-verify
+          git commit -m "Bump patch version to ${INCREMENTED_VERSION}" --no-verify
           git push origin HEAD
