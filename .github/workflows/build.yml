@@ -36,10 +36,12 @@ jobs:
           patch="${version_components[2]}"
           revision="${version_components[3]}"
           echo "Debug 3 - ${major}.${minor}.${patch}.${revision}"
+          ((patch++))
+          echo "Debug 4 - ${major}.${minor}.${patch}.${revision}"
           ((revision++))
-          echo "Debug 4"
+          echo "Debug 5 - ${major}.${minor}.${patch}.${revision}"
           incremented_version="$major.$minor.$patch.$revision"
-          echo "Debug 5"
+          echo "Debug 6"
           echo "INCREMENTED_VERSION=$incremented_version" >> $GITHUB_ENV
 
       - name: Get Current Branch Name
