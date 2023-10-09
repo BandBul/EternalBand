@@ -49,9 +49,9 @@ jobs:
           echo "DEBUG 1"
           sed -i "s/\[assembly: AssemblyMetadata(\"Git.BranchName\", \"\")]/[assembly: AssemblyMetadata(\"Git.BranchName\", \"$branch_name\")]/" Properties/AssemblyInfo.cs
           echo "DEBUG 2"
-          sed -i "s/\[assembly: AssemblyVersion(\".*\"\)\]/[assembly: AssemblyVersion(\"$incremented_version\")]/" Properties/AssemblyInfo.cs
+          sed -i "s/\[assembly: AssemblyVersion(\"[0-9].[0-9].[0-9].[0-9]\"\)\]/[assembly: AssemblyVersion(\"$incremented_version\")]/" Properties/AssemblyInfo.cs
           echo "DEBUG 3"
-          sed -i "s/\[assembly: AssemblyFileVersion(\".*\"\)\]/[assembly: AssemblyFileVersion(\"$incremented_version\")]/" Properties/AssemblyInfo.cs
+          sed -i "s/\[assembly: AssemblyFileVersion(\"[0-9].[0-9].[0-9].[0-9]\"\)\]/[assembly: AssemblyFileVersion(\"$incremented_version\")]/" Properties/AssemblyInfo.cs
           echo "DEBUG 4"
       - name: Commit and Push Version Update
         run: |
