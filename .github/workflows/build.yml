@@ -28,18 +28,13 @@ jobs:
         run: |
           # Increment the patch component of the version
           current_version="${CURRENT_VERSION}"
-          echo "Debug 1"
           IFS='.' read -ra version_components <<< "$current_version"
-          echo "Debug 2"
           major="${version_components[0]}"
           minor="${version_components[1]}"
           patch="${version_components[2]}"
           revision="${version_components[3]}"
-          echo "Debug 4 - ${major}.${minor}.${patch}.${revision}"
           ((revision = revision + 1))
-          echo "Debug 5 - ${major}.${minor}.${patch}.${revision}"
           incremented_version="$major.$minor.$patch.$revision"
-          echo "Debug 6"
           echo "INCREMENTED_VERSION=$incremented_version" >> $GITHUB_ENV
 
       - name: Get Current Branch Name
@@ -51,14 +46,14 @@ jobs:
           # Update the AssemblyInfo.cs file with the incremented patch version
           incremented_version="${INCREMENTED_VERSION}"
           branch_name="${BRANCH_NAME}"
-          sed -i "s/\[assembly: AssemblyMetadata(\"Git.BranchName\", \"\")]/[assembly: AssemblyMetadata(\"Git.BranchName\", \"$branch_name\")]/" YourProject/Properties/AssemblyInfo.cs
-          sed -i "s/\[assembly: AssemblyVersion(\".*\"\)\]/[assembly: AssemblyVersion(\"$incremented_version\")]/" Band/Properties/AssemblyInfo.cs
-          sed -i "s/\[assembly: AssemblyFileVersion(\".*\"\)\]/[assembly: AssemblyFileVersion(\"$incremented_version\")]/" Band/Properties/AssemblyInfo.cs
+          sed -i "s/\[assembly: AssemblyMetadata(\"Git.BranchName\", \"\")]/[assembly: AssemblyMetadata(\"Git.BranchName\", \"$branch_name\")]/" Properties/AssemblyInfo.cs
+          sed -i "s/\[assembly: AssemblyVersion(\".*\"\)\]/[assembly: AssemblyVersion(\"$incremented_version\")]/" Properties/AssemblyInfo.cs
+          sed -i "s/\[assembly: AssemblyFileVersion(\".*\"\)\]/[assembly: AssemblyFileVersion(\"$incremented_version\")]/" Properties/AssemblyInfo.cs
 
       - name: Commit and Push Version Update
         run: |
           # git config user.name "Your Git Username"
           # git config user.email "your@email.com"
-          git add Band/Properties/AssemblyInfo.cs
+          git add Properties/AssemblyInfo.cs
           git commit -m "Bump patch version to ${INCREMENTED_VERSION}" --no-verify
           git push origin HEAD
