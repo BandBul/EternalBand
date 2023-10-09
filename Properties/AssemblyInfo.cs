@@ -16,6 +16,6 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("")]
-[assembly: AssemblyFileVersion("")]
+[assembly: AssemblyVersion("...1")]
+[assembly: AssemblyFileVersion("...1")]
 [assembly: AssemblyMetadata("Git.BranchName", "test")]
