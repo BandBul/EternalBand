@@ -1,0 +1,6 @@
+mode: ContinuousDeployment
+branches:
+  test:
+    increment: Patch
+ignore:
+  sha: []
