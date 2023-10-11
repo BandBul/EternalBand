@@ -1,6 +1,9 @@
 mode: ContinuousDeployment
 branches:
   test:
+    source-branches: 
+      - main
+    regex: ^test
     increment: Patch
 ignore:
   sha: []
