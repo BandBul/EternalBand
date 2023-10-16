@@ -1,0 +1,13 @@
+﻿.activeAllRead
+{
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+}
+
+.disabledAllRead
+{
+    cursor: not-allowed;
+    color: #888;
+    pointer-events: none
+}
