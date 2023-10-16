@@ -1,10 +1,21 @@
+@using EternalBAND.Data;
+@using Microsoft.AspNetCore.Identity;
 @using X.PagedList
 @using X.PagedList.Mvc.Core
 @using X.PagedList.Web.Common
+<link href="/Css/NotificationIndex.css" rel="stylesheet" type="text/css">
+@inject UserManager<EternalBAND.Models.Users> _userManager
+@inject ApplicationDbContext _context
 @model X.PagedList.IPagedList<EternalBAND.Models.Notification>
 
 @{
     ViewData["Title"] = "Bildirimler";
+}
+
+@{
+    var user = await _userManager.GetUserAsync(User);
+    var notAllReaded = _context.Notification.Where(n => n.ReceiveUserId == user.Id).Any(s => !s.IsRead);
+    var classAllReaded = notAllReaded ? "activeAllRead" : "disabledAllRead";
 }
 
 <div class="main-content">
@@ -38,7 +49,7 @@
             <div class="container">
                 <div class="row text-end">
                                    <h4>
-                                       <a id="allRead" onclick="AllRead()" >Tümünü Okundu Yap</a>
+                        <a id="allRead" onclick="AllRead()" class="@classAllReaded">Tümünü Okundu Yap</a>
                                    </h4>
                                </div>
                 <div class="row">
