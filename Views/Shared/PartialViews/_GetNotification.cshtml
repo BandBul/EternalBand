@@ -1,6 +1,7 @@
 @using EternalBAND.Data
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.EntityFrameworkCore
+<link href="/Css/NotificationPopUp.css" rel="stylesheet" type="text/css">
 @inject ApplicationDbContext _context 
 @inject UserManager<EternalBAND.Models.Users> UserManager
 @inject SignInManager<EternalBAND.Models.Users> SignInManager 
@@ -30,9 +31,9 @@
             }
         </div>
         <div class="notification-wrapper dropdown-scroll">
-            @foreach (var noti in notifications.OrderByDescending(n => n.IsRead).ThenByDescending(n => n.AddedDate).ToList())
+            @foreach (var noti in notifications.OrderBy(n => n.IsRead).ThenByDescending(n => n.AddedDate).ToList())
             {
-                <a href="@noti.RedirectLink" class="text-dark notification-item d-block active">
+                <a href="@noti.RedirectLink" class="text-dark notification-item d-block active @(noti.IsRead ? "" : "notReaded") ">
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0 me-3">
                             <div class="avatar-xs bg-primary text-white rounded-circle text-center">

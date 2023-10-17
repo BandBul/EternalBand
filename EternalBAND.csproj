@@ -27,6 +27,7 @@
     </ItemGroup>
     <ItemGroup>
       <None Remove="Css\NotificationIndex.css" />
+      <None Remove="Css\NotificationPopUp.css" />
       <None Remove="Css\SiteLogo.css" />
       <None Remove="EternalBAND.zip" />
       <None Remove="Proje.zip" />
@@ -61,6 +62,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Content Include="Css\NotificationPopUp.css">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
       <Content Include="Css\NotificationIndex.css">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
