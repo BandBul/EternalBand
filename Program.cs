@@ -52,6 +52,8 @@ builder.Services.AddRazorPages(options =>
 });
 var googleApiKey = new GoogleApiKeyOptions();
 builder.Configuration.GetSection(GoogleApiKeyOptions.GoogleApiKey).Bind(googleApiKey);
+builder.Services.Configure<NotificationOptions>(
+    builder.Configuration.GetSection(NotificationOptions.NotificationOptionKey));
 builder.Services.AddAuthentication(opt =>
 {
     opt.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
