@@ -79,7 +79,7 @@ public class UserController : Controller
                 {
                     IsRead = false,
                     AddedDate = DateTime.Now,
-                    Message = $"{currentUser?.Name} yeni bir ilan paylaştı.",
+                    Message = $"{currentUser?.Name} '{posts.SeoLink}' id li yeni bir ilan paylaştı.",
                     ReceiveUserId = adminUsers.ElementAt(0).Id,
                     RedirectLink = $"ilan?s={posts.SeoLink}&approvalPurpose=true",
                     RelatedElementId = posts.SeoLink
