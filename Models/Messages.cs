@@ -11,4 +11,8 @@ public class Messages
     public string? Message { get; set; }
     public bool IsRead { get; set; }
     public Guid MessageGuid { get; set; }
+    public Posts? RelatedPost { get; set; }
+    public  int RelatedPostId { get; set; }
+
+
 }
