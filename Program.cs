@@ -104,7 +104,7 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Anasayfa}/{id?}");
 app.MapControllers();
 app.MapRazorPages();
-app.MapHub<ChatHub>("/chathub");
+app.MapHub<ChatHub>("/chatHub");
 
 
 app.Run();

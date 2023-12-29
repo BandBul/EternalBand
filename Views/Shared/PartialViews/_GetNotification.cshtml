@@ -38,7 +38,7 @@
                 var pagination = notifications.OrderBy(n => n.IsRead).ThenByDescending(n => n.AddedDate).Take(_notifSettings.Value.MaxNotificationCountInPopup).ToList();
                 foreach (var noti in pagination)
                 {
-                    <a href="@noti.RedirectLink" class="text-dark notification-item d-block active @(noti.IsRead ? "" : "notReaded") ">
+                    <a href="~/@noti.RedirectLink" class="text-dark notification-item d-block active @(noti.IsRead ? "" : "notReaded") ">
                         <div class="d-flex align-items-center">
                             <div class="flex-shrink-0 me-3">
                                 <div class="avatar-xs bg-primary text-white rounded-circle text-center">

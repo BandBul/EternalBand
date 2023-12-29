@@ -1,5 +1,8 @@
 using EternalBAND.Data;
+using EternalBAND.Models;
+using EternalBAND.Models.ViewModel;
 using Microsoft.AspNetCore.SignalR;
+using System.Text.Json;
 
 namespace EternalBAND.Hubs;
 
@@ -10,8 +13,9 @@ public class ChatHub:Hub
     {
         _context = context;
     }
-    public async Task SendMessage(string username, string message)
+    public async Task SendMessage(Messages message)
     {
-      await Clients.All.SendAsync("ReceiveMessage", username, message);
+        var jsonMessage = JsonSerializer.Serialize(message);
+        await Clients.All.SendAsync("ReceiveMessage", jsonMessage);
     }
 }
