@@ -44,15 +44,6 @@
                 <div class="card">
                     <div class="row g-0">
                         <div class="col-12 col-lg-6 col-xl-4 border-right">
-
-                            @* <div class="px-4 d-none d-md-block"> *@
-                            @*     <div class="d-flex align-items-center"> *@
-                            @*         <div class="flex-grow-1"> *@
-                            @*             <input type="text" class="form-control my-3" placeholder="Ara..."> *@
-                            @*         </div> *@
-                            @*     </div> *@
-                            @* </div> *@
-
                             @{
                                 List<MessageMetadata> chatMetadata = new();
                                 if (Model.AllChat != null)
@@ -68,7 +59,6 @@
                                         var userInfo = senderUser;
                                         if (ViewBag.LoginUserId == senderUser.Id)
                                         {
-                                            // currentUser is sender and title should have receıver user
                                             userInfo = receiverUser;
                                         }
 
@@ -132,8 +122,6 @@
                                         {
                                             var receiverUser = chat.ReceiverUser;
                                             var senderUser = chat.SenderUser;
-                                            // sender is user
-                                            // receiver is another user
                                             if (senderUser.Id == currentUser.Id)
                                             {
                                                 <div class="chat-message-right pb-4">
@@ -147,8 +135,6 @@
                                                     </div>
                                                 </div>
                                             }
-                                            // sender is another user
-                                            // receiver is current user
                                             else
                                             {
                                                 <div class="chat-message-left pb-4">
@@ -174,8 +160,7 @@
                                     <div class="input-group">
                                         <input type="text" id="messageText" class="form-control" placeholder="Mesajınızı buraya yazabilirsiniz.">
                                         @*TODO : use asp-action and route rather than custom JS call*@
-                                        @*<button class="btn btn-primary" onclick="Send('@ViewBag.ReceiverUserId','@ViewBag.PostId')">Gönder</button>*@
-                                        <button class="btn btn-primary" onclick="Send('@userinfo','@Model.CurrentChat.MessageMetadata.PostId')">Gönder</button>
+                                        <button class="btn btn-primary" id="messageSendButton" onclick="Send('@userinfo','@Model.CurrentChat.MessageMetadata.PostId')">Gönder</button>
                                     </div>
                                 </div>
                             }
@@ -190,17 +175,93 @@
 
     <partial name="PartialViews/_SwitcherAndTopPartial"/>
 </div>
-
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script>
-function Send(id,postId){
-    var text = $("#messageText").val();
-    $.post("/Message/SendMessage/",
-    {
-        id: id,
-        message: text,
-        postId: postId
-    },
-    function (data) {});
-}
+    
+
+    var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+
+    // receives broadcasted message from server side
+    connection.on("ReceiveMessage", function (signalRMessageContract) {
+
+        var chat = JSON.parse(signalRMessageContract);
+        var senderUser = chat.SenderUser;
+        var receiverUserId = chat.ReceiverUserId;
+        var currentUserId = @Html.Raw(Json.Serialize(ViewBag.LoginUserId));
+        if (receiverUserId != currentUserId && senderUser.Id != currentUserId)
+        {
+            // we will pass signalR if current user is not a recipent for message box
+            return;
+        }
+
+        var correctDate = formatDate(new Date(chat.Date));
+
+        if (senderUser.Id == currentUserId)
+        {
+            // Logic for messages sent by the current user
+            var div = document.createElement("div");
+            div.innerHTML = `
+                <div class="chat-message-right pb-4">
+                    <div>
+                        <img src="${senderUser.PhotoPath}" class="rounded-circle mr-1" alt="${senderUser.Name} ${senderUser.Surname}" width="40" height="40">
+                            <div class="text-muted small text-nowrap mt-2">${correctDate}</div>
+                    </div>
+                    <div class="flex-shrink-1 bg-light rounded py-2 px-3 ms-3">
+                        <div class="fw-bold mb-1">Sen</div>
+                        ${chat.Message}
+                    </div>
+                </div>`;
+        
+        } 
+            
+        else {
+                    // Logic for messages sent by other users
+            var div = document.createElement("div");
+            div.innerHTML = `
+            <div class="chat-message-left pb-4">
+                <div>
+                    <img src="${senderUser.PhotoPath}" class="rounded-circle mr-1" alt="${senderUser.Name} ${senderUser.Surname}" width="40" height="40">
+                        <div class="text-muted small text-nowrap mt-2">${correctDate}</div>
+                </div>
+                <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                    <div class="fw-bold mb-1">${senderUser.Name} ${senderUser.Surname}</div>
+                    ${chat.Message}
+                </div>
+            </div>`;
+        }
+        document.getElementsByClassName("chat-messages")[0].appendChild(div);
+    });
+
+
+
+    connection.start().catch(function (err) {
+        return console.error(err.toString());
+    });
+
+    function Send(id,postId){
+        var text = $("#messageText").val();
+        $.post("/Message/SendMessage/",
+        {
+            id: id,
+            message: text,
+            postId: postId
+        },
+        function (data) {});
+    }
+
+    function formatDate(date) {
+        var day = padZero(date.getDate());
+        var month = padZero(date.getMonth() + 1); // Month is zero-based
+        var year = date.getFullYear();
+        var hours = padZero(date.getHours());
+        var minutes = padZero(date.getMinutes());
+
+        return day + '/' + month + '/' + year + ' ' + hours + ':' + minutes;
+    }
+
+    // Function to pad single-digit numbers with a leading zero
+    function padZero(number) {
+        return (number < 10 ? '0' : '') + number;
+    }
 
 </script>

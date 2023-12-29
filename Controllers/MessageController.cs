@@ -1,11 +1,14 @@
 using EternalBAND.Data;
+using EternalBAND.Hubs;
 using EternalBAND.Models;
 using EternalBAND.Models.ViewModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Text.Json;
 
 namespace EternalBAND.Controllers;
 
@@ -13,11 +16,14 @@ public class MessageController : Controller
 {
     private ApplicationDbContext _context;
     private readonly UserManager<Users> _userManager;
+    private readonly IHubContext<ChatHub> _hubContext;
 
-    public MessageController(ApplicationDbContext context, UserManager<Users> userManager)
+
+    public MessageController(ApplicationDbContext context, UserManager<Users> userManager, IHubContext<ChatHub> hubContext)
     {
         _context = context;
         _userManager = userManager;
+        _hubContext = hubContext;
     }
 
     private IEnumerable<MessageBox> GetAllMessageBoxes(string userId)
@@ -80,7 +86,7 @@ public class MessageController : Controller
             return Redirect("/giris-yap");
         }
     }
-
+    // TODO : add logging before each return
     [HttpPost, ActionName("SendMessage")]
     public async Task<JsonResult> SendMessage(Guid id, string message, int postId)
     {
@@ -89,7 +95,6 @@ public class MessageController : Controller
         {
             return Json("Kayýt bulunamadý.");
         }
-
         var getUser = await _userManager.GetUserAsync(User);
         if (id.ToString().Equals(getUser.Id))
         {
@@ -97,7 +102,7 @@ public class MessageController : Controller
         }
         try
         {
-            await _context.Messages.AddAsync(new Messages()
+            var messages = new Messages()
             {
                 SenderUserId = getUser.Id,
                 IsRead = false,
@@ -106,12 +111,18 @@ public class MessageController : Controller
                 MessageGuid = Guid.NewGuid(),
                 ReceiverUserId = id.ToString(),
                 RelatedPostId = postId
-            });
+            };
+
+            await _context.Messages.AddAsync(messages);
+            messages.SenderUser = getUser;
+            await _hubContext.Clients.All.SendAsync("ReceiveMessage", JsonSerializer.Serialize(messages));
+
             // TODO embed this to IOC level
             await new Business.NotificationProcess(_context).SaveNotification($"{getUser.Name} sana bir mesaj gönderdi.", id.ToString(),
                  $"mesajlar/{getUser.Id}?postId={postId}" , seo);
 
             await _context.SaveChangesAsync();
+            
             return Json("Mesaj gönderildi.");
         }
         catch (Exception ex)
