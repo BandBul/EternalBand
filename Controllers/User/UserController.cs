@@ -3,7 +3,6 @@ using EternalBAND.Common;
 using EternalBAND.Data;
 using EternalBAND.Helpers;
 using EternalBAND.Models;
-using EternalBAND.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,20 +13,18 @@ using X.PagedList;
 
 namespace EternalBAND.Controllers.User;
 
+[Authorize]
 public class UserController : Controller
 {
     private readonly ApplicationDbContext _context;
-    
     private readonly UserManager<Users> _userManager;
-    private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IWebHostEnvironment _environment;
 
-    public UserController(ApplicationDbContext context, UserManager<Users> userManager, RoleManager<IdentityRole> roleManager, IWebHostEnvironment environment)
+    public UserController(ApplicationDbContext context, UserManager<Users> userManager, IWebHostEnvironment environment)
     {
         _context = context;
         _userManager = userManager;
         _environment = environment;
-        _roleManager = roleManager;
     }
 
     // GET: Posts
@@ -78,7 +75,7 @@ public class UserController : Controller
                 {
                     IsRead = false,
                     AddedDate = DateTime.Now,
-                    Message = $"{currentUser?.Name} yeni bir ilan paylaştı.",
+                    Message = $"{currentUser?.Name} '{posts.SeoLink}' id li yeni bir ilan paylaştı.",
                     ReceiveUserId = adminUsers.ElementAt(0).Id,
                     RedirectLink = $"ilan?s={posts.SeoLink}&approvalPurpose=true",
                     RelatedElementId = posts.SeoLink
@@ -286,71 +283,7 @@ public class UserController : Controller
             }
         }
     }
-    [Route("mesajlar/{u?}")]
-    public async Task<ActionResult> ChatIndex(string? u)
-    {
-        var user = await _userManager.GetUserAsync(User);
-        if (user != null)
-        {
-            var chats = _context.Messages.Include(n=> n.ReceiverUser).Include(n=> n.SenderUser).Where(n => n.SenderUserId == user.Id || n.ReceiverUserId == user.Id).ToList();
-            ChatViewModel viewModel = new(){AllChat = chats};
-            ViewBag.UserId = u;
-            ViewBag.LoginUserId = user.Id;
-            if (u != null) // mesaja tıklandıysa göster
-            {
-                var chat = _context.Messages.Include(n=> n.ReceiverUser).Include(n=> n.SenderUser).Where(n => (n.ReceiverUserId == u||n.ReceiverUserId == user.Id) && (n.SenderUserId == user.Id || n.SenderUserId ==u)).ToList();
-                foreach (var isread in chat.Where(n=> !n.IsRead).ToList())
-                {
-                    isread.IsRead = true;
-                  await  _context.SaveChangesAsync();
-                }
-                viewModel.Chat = chat;
-                return View(viewModel);
-            }
-            else // mesaj için gelmediyse sağ boş sol mesajlar göster
-            {
-               
-                return View(viewModel);
-            }
-        }
-        else
-        {
-            return Redirect("/giris-yap");
-        }
-    }
-    [HttpPost, ActionName("SendMessage")]
-    public async Task<JsonResult> SendMessage(Guid id,string message)
-    {
-        if (!_context.Users.Any(n=> n.Id ==id.ToString()))
-        {
-            return Json("Kayıt bulunamadı.");
-        }
 
-        var getUser = await _userManager.GetUserAsync(User);
-
-        try
-        {
-            await _context.Messages.AddAsync(new Messages()
-            {
-                SenderUserId = getUser.Id,
-                IsRead = false,
-                Date = DateTime.Now,
-                Message = message,
-                MessageGuid = Guid.NewGuid(),
-                ReceiverUserId = id.ToString(),
-            });
-           await new Business.NotificationProcess(_context).SaveNotification($"{getUser.Name} sana bir mesaj gönderdi.", id.ToString(),
-                "mesajlar/" + getUser.Id);
-            
-            await _context.SaveChangesAsync();
-            return Json("Mesaj gönderildi.");
-        }
-        catch(Exception ex)
-        {
-            return Json("Mesaj gönderilemedi.");
-        }
-    
-    }
     [HttpPost, ActionName("AllReadNotification")]
     public async Task<JsonResult> AllReadNotification()
     {

@@ -12,7 +12,7 @@ public class NotificationProcess
     {
         _context = context;
     }
-    public async Task<bool> SaveNotification(string message, string receiverUserId,string redirectLink)
+    public async Task<bool> SaveNotification(string message, string receiverUserId,string redirectLink, string seo)
     {
         try
         {
@@ -22,7 +22,10 @@ public class NotificationProcess
                 AddedDate = DateTime.Now,
                 Message = message,
                 ReceiveUserId = receiverUserId,
-                RedirectLink = redirectLink
+                RedirectLink = redirectLink,
+                // TODO : message's related id is just post now maybe better to give user + post on following time
+                RelatedElementId = seo
+
             });
             await _context.SaveChangesAsync();
             var user = await _context.Users.FirstOrDefaultAsync(n => n.Id == receiverUserId);

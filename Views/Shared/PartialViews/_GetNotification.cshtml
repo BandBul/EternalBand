@@ -1,9 +1,13 @@
+@using EternalBAND.Business.Options;
 @using EternalBAND.Data
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.EntityFrameworkCore
+@using Microsoft.Extensions.Options;
+<link href="/Css/NotificationPopUp.css" rel="stylesheet" type="text/css">
 @inject ApplicationDbContext _context 
 @inject UserManager<EternalBAND.Models.Users> UserManager
 @inject SignInManager<EternalBAND.Models.Users> SignInManager 
+@inject IOptions<NotificationOptions> _notifSettings
 @{
     var user = await UserManager.GetUserAsync(User);
     var notifications = await _context.Notification.Where(n => n.ReceiveUserId == user.Id).ToListAsync();
@@ -30,21 +34,24 @@
             }
         </div>
         <div class="notification-wrapper dropdown-scroll">
-            @foreach (var noti in notifications.OrderByDescending(n => n.IsRead).ThenByDescending(n => n.AddedDate).ToList())
-            {
-                <a href="@noti.RedirectLink" class="text-dark notification-item d-block active">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-shrink-0 me-3">
-                            <div class="avatar-xs bg-primary text-white rounded-circle text-center">
-                                <i class="uil uil-bell"></i>
+            @{
+                var pagination = notifications.OrderBy(n => n.IsRead).ThenByDescending(n => n.AddedDate).Take(_notifSettings.Value.MaxNotificationCountInPopup).ToList();
+                foreach (var noti in pagination)
+                {
+                    <a href="~/@noti.RedirectLink" class="text-dark notification-item d-block active @(noti.IsRead ? "" : "notReaded") ">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="avatar-xs bg-primary text-white rounded-circle text-center">
+                                    <i class="uil uil-bell"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="mt-0 mb-1 fs-14">@noti.Message</h6>
+
                             </div>
                         </div>
-                        <div class="flex-grow-1">
-                            <h6 class="mt-0 mb-1 fs-14">@noti.Message</h6>
-
-                        </div>
-                    </div>
-                </a>
+                    </a>
+                }
             }
         </div><!--end notification-wrapper-->
         <div class="notification-footer border-top text-center">

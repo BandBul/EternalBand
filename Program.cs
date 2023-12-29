@@ -52,6 +52,8 @@ builder.Services.AddRazorPages(options =>
 });
 var googleApiKey = new GoogleApiKeyOptions();
 builder.Configuration.GetSection(GoogleApiKeyOptions.GoogleApiKey).Bind(googleApiKey);
+builder.Services.Configure<NotificationOptions>(
+    builder.Configuration.GetSection(NotificationOptions.NotificationOptionKey));
 builder.Services.AddAuthentication(opt =>
 {
     opt.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -102,7 +104,7 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Anasayfa}/{id?}");
 app.MapControllers();
 app.MapRazorPages();
-app.MapHub<ChatHub>("/chathub");
+app.MapHub<ChatHub>("/chatHub");
 
 
 app.Run();
