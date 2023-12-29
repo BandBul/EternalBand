@@ -190,6 +190,8 @@
         var currentUserId = @Html.Raw(Json.Serialize(ViewBag.LoginUserId));
         if (receiverUserId != currentUserId && senderUser.Id != currentUserId)
         {
+            // TODO we should manage this by connectionID of client in ChatHub we can create a collection like List<MessageMetadata,ConnectionID>
+            // when update receives we can choose which clients will get this connection
             // we will pass signalR if current user is not a recipent for message box
             return;
         }
