@@ -1,4 +1,5 @@
 @using EternalBAND.Business.Options;
+@using EternalBAND.Common;
 @using EternalBAND.Data
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.EntityFrameworkCore
@@ -10,7 +11,7 @@
 @inject IOptions<NotificationOptions> _notifSettings
 @{
     var user = await UserManager.GetUserAsync(User);
-    var notifications = await _context.Notification.Where(n => n.ReceiveUserId == user.Id).ToListAsync();
+    var notifications = await _context.Notification.Where(n => n.ReceiveUserId == user.Id && n.NotificationType == NotificationType.PostSharing).ToListAsync();
 }
 @if (SignInManager.IsSignedIn(User))
 {

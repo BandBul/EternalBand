@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.FileProviders;
+using EternalBAND.Business;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,6 +51,10 @@ builder.Services.AddRazorPages(options =>
     options.Conventions.AddAreaPageRoute("Identity", "/Account/ForgotPasswordConfirmation",
         "/mail-gonderildi"); 
 });
+
+builder.Services.AddScoped<IEmailSender, MailSender>();
+builder.Services.AddScoped<MessageService>();
+
 var googleApiKey = new GoogleApiKeyOptions();
 builder.Configuration.GetSection(GoogleApiKeyOptions.GoogleApiKey).Bind(googleApiKey);
 builder.Services.Configure<NotificationOptions>(
@@ -71,7 +76,6 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LogoutPath = "/cikis-yap";
     options.ExpireTimeSpan = TimeSpan.FromHours(3);
 });
-builder.Services.AddScoped<IEmailSender, EternalBAND.Business.MailSender>();
 builder.Services.AddSignalR();
 var app = builder.Build();
 

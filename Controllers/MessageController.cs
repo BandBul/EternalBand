@@ -1,3 +1,5 @@
+using EternalBAND.Business;
+using EternalBAND.Business.Options;
 using EternalBAND.Data;
 using EternalBAND.Hubs;
 using EternalBAND.Models;
@@ -7,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System;
 using System.Text.Json;
 
@@ -17,13 +20,15 @@ public class MessageController : Controller
     private ApplicationDbContext _context;
     private readonly UserManager<Users> _userManager;
     private readonly IHubContext<ChatHub> _hubContext;
+    private readonly MessageService _notificationProcess;
 
 
-    public MessageController(ApplicationDbContext context, UserManager<Users> userManager, IHubContext<ChatHub> hubContext)
+    public MessageController(ApplicationDbContext context, UserManager<Users> userManager, IHubContext<ChatHub> hubContext, MessageService notificationProcess)
     {
         _context = context;
         _userManager = userManager;
         _hubContext = hubContext;
+        _notificationProcess = notificationProcess;
     }
 
     private IEnumerable<MessageBox> GetAllMessageBoxes(string userId)
@@ -116,11 +121,11 @@ public class MessageController : Controller
             await _context.Messages.AddAsync(messages);
             messages.SenderUser = getUser;
             await _hubContext.Clients.All.SendAsync("ReceiveMessage", JsonSerializer.Serialize(messages));
-
+            var notifMessage = $"{getUser.Name} sana bir mesaj gönderdi.";
             // TODO embed this to IOC level
-            await new Business.NotificationProcess(_context).SaveNotification($"{getUser.Name} sana bir mesaj gönderdi.", id.ToString(),
-                 $"mesajlar/{getUser.Id}?postId={postId}" , seo);
-
+            await _notificationProcess.CreateMessageNotification(notifMessage, id.ToString(),
+                 messages.RedirectLink , seo);
+            await _notificationProcess.SendMessageAsync(notifMessage, id.ToString());
             await _context.SaveChangesAsync();
             
             return Json("Mesaj gönderildi.");
