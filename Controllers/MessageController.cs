@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.Extensions.Options;
 using System;
 using System.Text.Json;
@@ -20,7 +21,7 @@ public class MessageController : Controller
     private ApplicationDbContext _context;
     private readonly UserManager<Users> _userManager;
     private readonly IHubContext<ChatHub> _hubContext;
-    private readonly MessageService _notificationProcess;
+    private readonly MessageService _messageService;
 
 
     public MessageController(ApplicationDbContext context, UserManager<Users> userManager, IHubContext<ChatHub> hubContext, MessageService notificationProcess)
@@ -28,7 +29,7 @@ public class MessageController : Controller
         _context = context;
         _userManager = userManager;
         _hubContext = hubContext;
-        _notificationProcess = notificationProcess;
+        _messageService = notificationProcess;
     }
 
     private IEnumerable<MessageBox> GetAllMessageBoxes(string userId)
@@ -68,20 +69,30 @@ public class MessageController : Controller
             var chats = GetAllMessageBoxes(user.Id).ToList();
             ChatViewModel viewModel = new() { AllChat = chats };
             ViewBag.LoginUserId = user.Id;
-            
+
             if (userId != null)
             {
                 ViewBag.ReceiverUserId = userId;
                 ViewBag.PostId = postId;
-                var chat = GetMessageBox(userId, user.Id, postId);
-                // TO DO implement isRead
-                //foreach (var isread in chat.Where(n => !n.IsRead).ToList())
-                //{
-                //    isread.IsRead = true;
-                //    await _context.SaveChangesAsync();
-                //}
-                viewModel.CurrentChat = chat;
+                var messageBox = GetMessageBox(userId, user.Id, postId);
+                foreach (var isread in messageBox.Messages.Where(n => !n.IsRead).ToList())
+                {
+                    isread.IsRead = true;
+
+                    var notifs = _context.Notification.Where(s =>
+                        s.NotificationType == Common.NotificationType.Message &&
+                        s.RelatedElementId == isread.Id.ToString() &&
+                        !s.IsRead
+                    );
+                    foreach(var not in notifs)
+                    {
+                        not.IsRead = true;
+                    }
+                    await _context.SaveChangesAsync();
+                }
                 
+                viewModel.CurrentChat = messageBox;
+
             }
             // coming from My messages
             return View(viewModel);
@@ -93,9 +104,8 @@ public class MessageController : Controller
     }
     // TODO : add logging before each return
     [HttpPost, ActionName("SendMessage")]
-    public async Task<JsonResult> SendMessage(Guid id, string message, int postId)
+    public async Task<ActionResult> SendMessage(Guid id, string message, int postId)
     {
-        var seo = _context.Posts.Where(s => s.Id == postId).Select(s => s.SeoLink).FirstOrDefault();
         if (!_context.Users.Any(n => n.Id == id.ToString()))
         {
             return Json("Kayýt bulunamadý.");
@@ -107,32 +117,12 @@ public class MessageController : Controller
         }
         try
         {
-            var messages = new Messages()
-            {
-                SenderUserId = getUser.Id,
-                IsRead = false,
-                Date = DateTime.Now,
-                Message = message,
-                MessageGuid = Guid.NewGuid(),
-                ReceiverUserId = id.ToString(),
-                RelatedPostId = postId
-            };
-
-            await _context.Messages.AddAsync(messages);
-            messages.SenderUser = getUser;
-            await _hubContext.Clients.All.SendAsync("ReceiveMessage", JsonSerializer.Serialize(messages));
-            var notifMessage = $"{getUser.Name} sana bir mesaj gönderdi.";
-            // TODO embed this to IOC level
-            await _notificationProcess.CreateMessageNotification(notifMessage, id.ToString(),
-                 messages.RedirectLink , seo);
-            await _notificationProcess.SendMessageAsync(notifMessage, id.ToString());
-            await _context.SaveChangesAsync();
-            
-            return Json("Mesaj gönderildi.");
+            await _messageService.SendMessageAsync(getUser, id, message, postId);
+            return Ok();
         }
         catch (Exception ex)
         {
-            return Json("Mesaj gönderilemedi.");
+            return Problem(ex.Message);
         }
     }
 

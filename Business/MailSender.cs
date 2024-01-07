@@ -31,6 +31,7 @@ namespace EternalBAND.Business;
                     SmtpClient smtpClient = new SmtpClient();
                     smtpClient.Timeout = 10000;
                     smtpClient.Credentials = new System.Net.NetworkCredential(senderMail, senderMailPassword);
+                    smtpClient.UseDefaultCredentials = false;
                     smtpClient.Port = int.Parse(systemInfos.FirstOrDefault(n => n.Type == "mail-sender-port").Value);
                     smtpClient.Host = systemInfos.FirstOrDefault(n => n.Type == "mail-sender-host").Value;
                     smtpClient.EnableSsl = bool.Parse(systemInfos.FirstOrDefault(n => n.Type == "mail-sender-enable-ssl").Value);
