@@ -8,6 +8,8 @@
         public static string? AdminRoleName = "Admin";
         public static string? NormalUserRoleName = "User";
         public static string MainPage = "Anasayfa";
-        
+        public static string MessagesQueryParameter = "mesajlar";
+        public static string PostIdQueryParameter = "postid";
+
     }
 }

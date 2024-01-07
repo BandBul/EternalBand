@@ -1,3 +1,5 @@
+using EternalBAND.Common;
+
 namespace EternalBAND.Models;
 
 public class Messages
@@ -12,7 +14,10 @@ public class Messages
     public bool IsRead { get; set; }
     public Guid MessageGuid { get; set; }
     public Posts? RelatedPost { get; set; }
-    public  int RelatedPostId { get; set; }
+    public int RelatedPostId { get; set; }
+    // "mesajlar/id?postid=postid"
+    public string RedirectLink => 
+        $"{Constants.MessagesQueryParameter}/{SenderUserId}?{Constants.PostIdQueryParameter}={RelatedPostId}";
 
 
 }

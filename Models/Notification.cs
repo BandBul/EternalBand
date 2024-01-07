@@ -1,3 +1,4 @@
+using EternalBAND.Common;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EternalBAND.Models;
@@ -13,4 +14,5 @@ public class Notification
     public string ReceiveUserId { get; set; }
     public DateTime AddedDate { get; set; } = DateTime.Now;
     public bool IsRead { get; set; } = false;
+    public NotificationType NotificationType{ get; set; }
 }

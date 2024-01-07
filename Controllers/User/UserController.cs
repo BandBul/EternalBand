@@ -71,6 +71,7 @@ public class UserController : Controller
             {
                 var adminUsers = await _userManager.GetUsersInRoleAsync(Constants.AdminRoleName);
                 // Engin-TODO need to send all admins
+                // Engin-TODO pass SignalR hub and use ReceiveNotification broadcasting title to send message to front end
                 await _context.Notification.AddAsync(new Notification()
                 {
                     IsRead = false,

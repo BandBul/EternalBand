@@ -18,4 +18,10 @@ public class ChatHub:Hub
         var jsonMessage = JsonSerializer.Serialize(message);
         await Clients.All.SendAsync("ReceiveMessage", jsonMessage);
     }
+
+    public async Task SendNotification(Notification notif)
+    {
+        var jsonMessage = JsonSerializer.Serialize(notif);
+        await Clients.All.SendAsync("ReceiveNotification", jsonMessage);
+    }
 }
