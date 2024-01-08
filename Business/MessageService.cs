@@ -23,7 +23,7 @@ public class MessageService
     }
 
 
-    public async Task SendMessageAsync(Users currentUser, Guid receiverUserId, string? message, int postId)
+    public async Task SendAndBroadCastMessageAsync(Users currentUser, Guid receiverUserId, string? message, int postId)
     {
         var msg = await SaveMessage(currentUser, receiverUserId, message, postId);
         await _hubContext.Clients.All.SendAsync("ReceiveMessage", JsonSerializer.Serialize(msg));

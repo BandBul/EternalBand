@@ -110,14 +110,14 @@ public class MessageController : Controller
         {
             return Json("Kayýt bulunamadý.");
         }
-        var getUser = await _userManager.GetUserAsync(User);
-        if (id.ToString().Equals(getUser.Id))
+        var currentUser = await _userManager.GetUserAsync(User);
+        if (id.ToString().Equals(currentUser.Id))
         {
             return Json("User can not send message to yourself");
         }
         try
         {
-            await _messageService.SendMessageAsync(getUser, id, message, postId);
+            await _messageService.SendAndBroadCastMessageAsync(currentUser, id, message, postId);
             return Ok();
         }
         catch (Exception ex)
