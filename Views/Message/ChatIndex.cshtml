@@ -43,36 +43,57 @@
 
                 <div class="card">
                     <div class="row g-0">
+                        @{
+                            MessageTitleModel GetMessageTitle(MessageBox msBox)
+                            {
+                                Users userInfo = null;
+                                string messageTitle = "";
+                                Posts relatedPost = null;
+                                if (msBox.Messages.Any())
+                                {
+                                    var message = msBox.Messages.First();
+                                    var senderUser = message.SenderUser;
+                                    var receiverUser = message.ReceiverUser;
+                                    relatedPost = message.RelatedPost;
+                                    userInfo = ViewBag.LoginUserId == senderUser.Id ? receiverUser : senderUser;
+                                }
+                                else
+                                {
+                                    var postId = msBox.MessageMetadata.PostId;
+                                    relatedPost = _context.Posts.FirstOrDefault(s => s.Id == postId);
+                                    var senderUserId = msBox.MessageMetadata.RecipientIds.First(s => s != ViewBag.LoginUserId);
+                                    userInfo = _context.Users.FirstOrDefault(s => s.Id == senderUserId);
+                                }
+
+                                messageTitle = userInfo.Name == null ? userInfo.Email : userInfo.Name + " " + userInfo.Surname + " - " + relatedPost.Title;
+                                return new MessageTitleModel()
+                                {
+                                    MessageBoxTitle = messageTitle,
+                                    ReceiverUser = userInfo
+                                };
+                            }
+                        }
                         <div class="col-12 col-lg-6 col-xl-4 border-right">
                             @{
                                 List<MessageMetadata> chatMetadata = new();
-                                if (Model.AllChat != null)
+                                if (Model.AllChat != null && Model.AllChat.Any())
                                 {
                                     var allChatMetaData = Model.AllChat.Select(s => s.MessageMetadata);
                                     foreach (var chat in Model.AllChat)
                                     {
 
-                                        var messageSample = chat.Messages.First();
-                                        var senderUser = messageSample.SenderUser;
-                                        var receiverUser = messageSample.ReceiverUser;
-                                        var relatedPost = messageSample.RelatedPost;
-                                        var userInfo = senderUser;
-                                        if (ViewBag.LoginUserId == senderUser.Id)
-                                        {
-                                            userInfo = receiverUser;
-                                        }
+                                        var messageTitleModel = GetMessageTitle(chat);
+                                        var userInfo = messageTitleModel.ReceiverUser;
+                                        var messageTitle = messageTitleModel.MessageBoxTitle;
 
-                                        string messageTitle = userInfo.Name == null ? userInfo.Email : userInfo.Name + " " + userInfo.Surname + " - " + relatedPost.Title;
+                                        <a href="@Url.Action("ChatIndex","Message",new { userId = userInfo.Id, postId = chat.Messages.First().RelatedPostId })" class="list-group-item list-group-item-action border-0">
 
-                                        <a href="@Url.Action("ChatIndex","Message",new { userId = userInfo.Id, postId = messageSample.RelatedPostId })" class="list-group-item list-group-item-action border-0">
-
-                                            @*
-                                            //  TODO : implement isRead
-                                            @if (Model.AllChat.Count(n => n.SenderUserId==userInfo.Id && n.ReceiverUserId == ViewBag.LoginUserId && n.IsRead ==false) > 0)
+                                            
+                                            @if (chat.Messages.Count(n =>n.IsRead == false) > 0)
                                             {
                                                 <div class="badge bg-success float-end"> </div>
                                             }
-                                            *@
+                                            
                                             <div class="d-flex align-items-start">
                                                 <img src="@userInfo.PhotoPath" class="rounded-circle mr-1" alt="@messageTitle" width="40" height="40">
                                                 <div class="flex-grow-1 ms-3 mt-2">
@@ -86,86 +107,82 @@
 
                             <hr class="d-block d-lg-none mt-1 mb-0">
                         </div>
-                        <div class="col-12 col-lg-6 col-xl-8">
-                            <div class="py-2 px-4 border-bottom d-none d-lg-block">
-@*                                <div class="d-flex align-items-center py-1">
+                        @if (Model.CurrentChat != null)
+                        {
+                            <div class="col-12 col-lg-6 col-xl-8">
+                                <div class="py-2 px-4 border-bottom d-none d-lg-block">
                                     @{
-                                        var userId = "";
+                                        var messageTitleModel = GetMessageTitle(Model.CurrentChat);
+                                        var userInfo = messageTitleModel.ReceiverUser;
 
-                                    }
-                                    @if (ViewBag.ReceiverUserId != null)
-                                    {
-                                        userId = (string)ViewBag.ReceiverUserId;
-                                        var user = Model.CurrentChat.Messages.Any() ?
-                                            Model.CurrentChat.Messages.First().ReceiverUser :
-                                            await _context.Users.FirstOrDefaultAsync(n => n.Id == userId);
-                                       
-                                        if (user != null)
-                                        {
+                                        var messageTitle = messageTitleModel.MessageBoxTitle;
+                                        <div class="d-flex align-items-center py-1">
                                             <div class="position-relative">
-                                                <img src="@user.PhotoPath" class="rounded-circle mr-1" alt="@user.Name @user.Surname" width="40" height="40">
+                                                <img src="@userInfo.PhotoPath" class="rounded-circle mr-1" alt="@messageTitle" width="40" height="40">
                                             </div>
                                             <div class="flex-grow-1 ps-3">
-                                                <strong>@user.Name @user.Surname</strong>
+                                                <strong>@messageTitle</strong>
                                             </div>
-                                        }
-                                    }
-                                </div>*@
-                            </div>
-
-                            <div class="position-relative">
-                                <div class="chat-messages p-4">
-                                    @if (Model.CurrentChat != null && Model.CurrentChat.Messages.Any())
-                                    {
-                                        var currentUser = await UserManager.GetUserAsync(User);
-                                        foreach (var chat in Model.CurrentChat.Messages.OrderBy(n => n.Date))
-                                        {
-                                            var receiverUser = chat.ReceiverUser;
-                                            var senderUser = chat.SenderUser;
-                                            if (senderUser.Id == currentUser.Id)
-                                            {
-                                                <div class="chat-message-right pb-4">
-                                                    <div>
-                                                        <img src="@senderUser.PhotoPath" class="rounded-circle mr-1" alt="@senderUser.Name @senderUser.Surname" width="40" height="40">
-                                                        <div class="text-muted small text-nowrap mt-2">@chat.Date.ToString("dd/MM/yyyy HH:mm")</div>
-                                                    </div>
-                                                    <div class="flex-shrink-1 bg-light rounded py-2 px-3 ms-3">
-                                                        <div class="fw-bold mb-1">Sen</div>
-                                                        @chat.Message
-                                                    </div>
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                <div class="chat-message-left pb-4">
-                                                    <div>
-                                                        <img src="@senderUser.PhotoPath" class="rounded-circle mr-1" alt="@senderUser.Name @senderUser.Surname" width="40" height="40">
-                                                        <div class="text-muted small text-nowrap mt-2">@chat.Date.ToString("dd/MM/yyyy HH:mm")</div>
-                                                    </div>
-                                                    <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
-                                                        <div class="fw-bold mb-1">@senderUser.Name @senderUser.Surname</div>
-                                                        @chat.Message
-                                                    </div>
-                                                </div>
-                                            }
-                                        }
+                                        </div>
                                     }
 
                                 </div>
-                            </div>
-                            @if (Model.CurrentChat != null)
-                            {
-                                var userinfo = Model.CurrentChat.MessageMetadata.RecipientsId.First(s => s != ViewBag.LoginUserId);
-                                <div class="flex-grow-0 py-3 px-4 border-top">
-                                    <div class="input-group">
-                                        <input type="text" id="messageText" class="form-control" placeholder="Mesajınızı buraya yazabilirsiniz.">
-                                        @*TODO : use asp-action and route rather than custom JS call*@
-                                        <button class="btn btn-primary" id="messageSendButton" onclick="Send('@userinfo','@Model.CurrentChat.MessageMetadata.PostId')">Gönder</button>
+
+                                <div class="position-relative">
+                                    <div class="chat-messages p-4">
+                                        @if (Model.CurrentChat.Messages.Any())
+                                        {
+                                            var currentUser = await UserManager.GetUserAsync(User);
+                                            foreach (var chat in Model.CurrentChat.Messages.OrderBy(n => n.Date))
+                                            {
+                                                var receiverUser = chat.ReceiverUser;
+                                                var senderUser = chat.SenderUser;
+                                                if (senderUser.Id == currentUser.Id)
+                                                {
+                                                    <div class="chat-message-right pb-4">
+                                                        <div>
+                                                            <img src="@senderUser.PhotoPath" class="rounded-circle mr-1" alt="@senderUser.Name @senderUser.Surname" width="40" height="40">
+                                                            <div class="text-muted small text-nowrap mt-2">@chat.Date.ToString("dd/MM/yyyy HH:mm")</div>
+                                                        </div>
+                                                        <div class="flex-shrink-1 bg-light rounded py-2 px-3 ms-3">
+                                                            <div class="fw-bold mb-1">Sen</div>
+                                                            @chat.Message
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="chat-message-left pb-4">
+                                                        <div>
+                                                            <img src="@senderUser.PhotoPath" class="rounded-circle mr-1" alt="@senderUser.Name @senderUser.Surname" width="40" height="40">
+                                                            <div class="text-muted small text-nowrap mt-2">@chat.Date.ToString("dd/MM/yyyy HH:mm")</div>
+                                                        </div>
+                                                        <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                                                            <div class="fw-bold mb-1">@senderUser.Name @senderUser.Surname</div>
+                                                            @chat.Message
+                                                        </div>
+                                                    </div>
+                                                }
+                                            }
+                                        }
+
                                     </div>
                                 </div>
-                            }
+                                @*@if (Model.CurrentChat != null)*@
+                                @{
+                                    var userinfo = Model.CurrentChat.MessageMetadata.RecipientIds.First(s => s != ViewBag.LoginUserId);
+                                    <div class="flex-grow-0 py-3 px-4 border-top">
+                                        <div class="input-group">
+                                            <input type="text" id="messageText" class="form-control" placeholder="Mesajınızı buraya yazabilirsiniz." oninput="checkInput()">
+                                            @*TODO : use asp-action and route rather than custom JS call*@
+                                            <button class="btn btn-primary" disabled="disabled" id="messageSendButton" onclick="Send('@userinfo','@Model.CurrentChat.MessageMetadata.PostId')">Gönder</button>
+                                        </div>
+                                    </div>
+                                }
 
-                        </div>
+                            </div>
+                        }
+                    
                     </div>
                 </div>
             </div>
@@ -264,6 +281,17 @@
     // Function to pad single-digit numbers with a leading zero
     function padZero(number) {
         return (number < 10 ? '0' : '') + number;
+    }
+
+    function checkInput() {
+        // Get the input element
+        var messageInput = document.getElementById('messageText');
+
+        // Get the button element
+        var sendButton = document.getElementById('messageSendButton');
+
+        // Disable the button if the input is empty, enable it otherwise
+        sendButton.disabled = messageInput.value.trim() === '';
     }
 
 </script>

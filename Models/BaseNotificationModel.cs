@@ -16,4 +16,5 @@ public class BaseNotificationModel
     public string? NotificationCountIdName { get; set; }
     [DisplayName("SignalRBroadCastingTitle")]
     public string? SignalRBroadCastingTitle { get; set; }
+    public string? ReadedNotificationCountIdName { get; set; }
 }
