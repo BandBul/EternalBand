@@ -12,7 +12,7 @@
 @inject IOptions<NotificationOptions> _notifSettings
 @{
     var user = await UserManager.GetUserAsync(User);
-    var notifications = await _context.Notification.Where(n => n.ReceiveUserId == user.Id && n.NotificationType == Model.NotificationType).ToListAsync();
+    var notifications = await _context.Notification.Include(s => s.SenderUser).Where(n => n.ReceiveUserId == user.Id && n.NotificationType == Model.NotificationType).ToListAsync();
 }
 @if (SignInManager.IsSignedIn(User))
 {
@@ -42,7 +42,7 @@
                         <div class="d-flex align-items-center">
                             <div class="flex-shrink-0 me-3">
                                 <div class="avatar-xs bg-primary text-white rounded-circle text-center">
-                                    <i class="uil uil-bell"></i>
+                                    <img src="@ms.SenderUser.PhotoPath" class="rounded-circle mr-1" alt="@ms.SenderUser.Name @ms.SenderUser.Surname" width="40" height="40">
                                 </div>
                             </div>
                             <div class="flex-grow-1">
@@ -87,13 +87,13 @@
                 countElement.innerText = currentCount + 1;
                 readedNotificationCountId.innerText = `${currentCount + 1} adet okunmamış mesajın var.`
             }
-
+                            
             var innerHTML = `
                                     <a href="/${notif.RedirectLink}" class="text-dark notification-item d-block active notReaded ">
                                 <div class="d-flex align-items-center">
                                     <div class="flex-shrink-0 me-3">
                                         <div class="avatar-xs bg-primary text-white rounded-circle text-center">
-                                            <i class="uil uil-bell"></i>
+                                            <img src="${notif.SenderUser.PhotoPath}" class="rounded-circle mr-1" alt="${notif.SenderUser.Name} ${notif.SenderUser.Surname}" width="40" height="40">
                                         </div>
                                     </div>
                                     <div class="flex-grow-1">

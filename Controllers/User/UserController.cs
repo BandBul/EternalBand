@@ -38,7 +38,7 @@ public class UserController : Controller
         return View(await applicationDbContext.ToListAsync());
     }
 
-    [Route("ilan-olustur")]
+    [Route("PostCreate")]
     // GET: Posts/Create
     public IActionResult PostCreate()
     {
@@ -53,7 +53,7 @@ public class UserController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    [Route("ilan-olustur")]
+    [Route("PostCreate")]
     public async Task<IActionResult> PostCreate([Bind("Id,Title,HTMLText,PostTypesId,InstrumentsId,CityId")] Posts posts,
         List<IFormFile>? images)
     {
@@ -78,8 +78,10 @@ public class UserController : Controller
                     AddedDate = DateTime.Now,
                     Message = $"{currentUser?.Name} '{posts.SeoLink}' id li yeni bir ilan paylaştı.",
                     ReceiveUserId = adminUsers.ElementAt(0).Id,
+                    SenderUserId = currentUser.Id,
                     RedirectLink = $"ilan?s={posts.SeoLink}&approvalPurpose=true",
-                    RelatedElementId = posts.SeoLink
+                    RelatedElementId = posts.SeoLink,
+                    NotificationType = NotificationType.PostSharing
                 });
                 posts.Status = Common.PostStatus.PendingApproval;
             }

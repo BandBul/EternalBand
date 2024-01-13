@@ -10,6 +10,8 @@ public class Notification
     public string Message { get; set; }
     public string RelatedElementId { get; set; }
     public string RedirectLink { get; set; }
+    public Users? SenderUser { get; set; }
+    public string? SenderUserId { get; set; }
     public Users ReceiveUser { get; set; }
     public string ReceiveUserId { get; set; }
     public DateTime AddedDate { get; set; } = DateTime.Now;
