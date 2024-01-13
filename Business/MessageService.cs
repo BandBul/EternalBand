@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using EternalBAND.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using System.Text.Json;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
 
 namespace EternalBAND.Business;
 
@@ -26,9 +27,11 @@ public class MessageService
     public async Task SendAndBroadCastMessageAsync(Users currentUser, Guid receiverUserId, string? message, int postId)
     {
         var msg = await SaveMessage(currentUser, receiverUserId, message, postId);
+        var postTitle = _context.Posts.Find(msg.RelatedPostId).Title;
         await _hubContext.Clients.All.SendAsync("ReceiveMessage", JsonSerializer.Serialize(msg));
         var notif = await CreateMessageNotification(
-            $"{currentUser.Name} sana bir mesaj gönderdi.",
+            $"{currentUser.Name} '{postTitle}' baþýklý ilana mesaj gönderdi.",
+            currentUser.Id,
             receiverUserId.ToString(),
             msg.RedirectLink,
             msg.Id.ToString());
@@ -54,7 +57,7 @@ public class MessageService
         return messages;
     }
 
-    private async Task<Notification> CreateMessageNotification(string message, string receiverUserId,string redirectLink, string seo)
+    private async Task<Notification> CreateMessageNotification(string message, string currentUserId, string receiverUserId,string redirectLink, string seo)
     {
         try
         {
@@ -64,6 +67,7 @@ public class MessageService
                 AddedDate = DateTime.Now,
                 Message = message,
                 ReceiveUserId = receiverUserId,
+                SenderUserId =currentUserId,
                 RedirectLink = redirectLink,
                 // TODO : message's related id is just post now maybe better to give user + post on following time
                 RelatedElementId = seo,

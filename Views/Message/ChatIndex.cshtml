@@ -265,7 +265,10 @@
             message: text,
             postId: postId
         },
-        function (data) {});
+        function (data) {
+            document.getElementById('messageText').value = '';
+            checkInput();
+        });
     }
 
     function formatDate(date) {
