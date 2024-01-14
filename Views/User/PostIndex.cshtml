@@ -1,7 +1,22 @@
+@using EternalBAND.Common;
+@using EternalBAND.Models.ViewModel;
 @model IEnumerable<EternalBAND.Models.Posts>
-
+<link href="/Css/PostIndex.css" rel="stylesheet" type="text/css">
 @{
     ViewData["Title"] = "İlanlarım";
+    PostStatusViewModel GetPostStatusStyle(PostStatus status)
+    {
+        return ViewBag.PostStatusViewModel[status];
+    }
+
+    IEnumerable<PostByStatusModel> postsByStatus = Enum.GetValues(typeof(PostStatus))
+    .Cast<PostStatus>().Skip(1)
+    .Select(status => new PostByStatusModel
+    {
+        Status = status,
+        Posts = Model.Where(post => post.Status == status).ToList()
+    });
+    //IEnumerable<PostByStatusModel> postsByStatus = Model.GroupBy(s => s.Status).Select(s => new PostByStatusModel { Status = s.Key, Posts = s.Select(s => s).ToList() });
 }
 
 <div class="main-content">
@@ -41,67 +56,81 @@
                 <div class="row">
                     @if (Model.Count() != 0)
                     {
-                        @foreach (var item in Model)
+                        @foreach (var postsWithStatus in postsByStatus)
                         {
-                            <div class="col-lg-4 col-md-6 mt-4">
-
-
-                                <div class="card job-grid-box bookmark-post">
-                                    <div class="card-body p-4">
-                                        <div class="favorite-icon">
-                                            <a onclick="DeletePost(this.id)" id="@item.Guid">
-                                                <i class="uil uil-trash-alt"></i>
-                                            </a>
-                                        </div>
-                                        @* <div> *@
-                                        @*     <a href="company-details.html"> *@
-                                        @*         <img src="~/images/featured-job/img-01.png" alt="" class="img-fluid rounded-3"> *@
-                                        @*     </a> *@
-                                        @* </div> *@
-                                        <div class="mt-4">
-                                            <a href="ilan?s=@item.SeoLink" class="primary-link">
-                                                <h5 class="fs-17 mb-1">@item.Title</h5>
-                                            </a>
-                                            @* <p class="text-link">Görüntüle</p> *@
-                                            <ul class="list-inline">
-                                                @if (item.PostTypes != null)
-                                                {
-                                                    <li class="list-inline-item">
-                                                        <span class="badge bg-soft-success fs-13 mt-1">@item.PostTypes.Type</span>
-                                                    </li>
-                                                }
-                                                @if (item.Instruments != null)
-                                                {
-                                                    <li class="list-inline-item">
-                                                        <span class="badge bg-soft-danger fs-13 mt-1">@item.Instruments.Instrument</span>
-                                                    </li>
-                                                }
-
-                                            </ul>
-                                        </div>
-                                        <div class="job-grid-content mt-3">
-                                            <p class="text-muted">
-                                                @{
-                                                    var text = item.HTMLText.Replace("<p>", "").Replace("</p>", "");
-                                                    if (text.Length >= 30)
+                            var style = GetPostStatusStyle(postsWithStatus.Status);
+                            <header class="header-status-@style.Color">
+                                <h1>@style.HeaderDisplayText İlanlar</h1>
+                                </header>
+                            @if (postsWithStatus.Posts.Count == 0)
+                            {
+                                <h2><br>@style.HeaderDisplayText İlanınız bulunmamaktadır</h2>
+                            }
+                            @foreach (var item in postsWithStatus.Posts)
+                            {
+                                var postStatusStyle = GetPostStatusStyle(item.Status);
+                                var statusTitle = postStatusStyle.DisplayText;
+                                var color = postStatusStyle.Color;
+                                <div class="col-lg-4 col-md-6 mt-4">
+                                    <div class="card job-grid-box bookmark-post">
+                                        <div class="card-body p-4">
+                                            <span class="badge bg-white status-@color">@statusTitle</span>
+                                            <div class="favorite-icon">
+                                                <a onclick="DeletePost(this.id)" id="@item.Guid">
+                                                    <i class="uil uil-trash-alt"></i>
+                                                </a>
+                                            </div>
+                                            @* <div> *@
+                                            @*     <a href="company-details.html"> *@
+                                            @*         <img src="~/images/featured-job/img-01.png" alt="" class="img-fluid rounded-3"> *@
+                                            @*     </a> *@
+                                            @* </div> *@
+                                            <div class="mt-4">
+                                                <a href="ilan?s=@item.SeoLink" class="primary-link">
+                                                    <h5 class="fs-17 mb-1">@item.Title</h5>
+                                                </a>
+                                                @* <p class="text-link">Görüntüle</p> *@
+                                                <ul class="list-inline">
+                                                    @if (item.PostTypes != null)
                                                     {
-                                                        text = text.Substring(0, 30) + "...";
+                                                        <li class="list-inline-item">
+                                                            <span class="badge bg-soft-success fs-13 mt-1">@item.PostTypes.Type</span>
+                                                        </li>
                                                     }
-                                                }
-                                                @text
-                                            </p>
-                                            <div class="d-flex align-items-center justify-content-between mt-4 border-top pt-3">
-                                                <p class="text-muted float-start mb-0">Eklenme Tarihi: @item.AddedDate.ToString("dd.MM.yyyy")</p>
-                                                <div class="text-end">
-                                                    <a asp-action="PostEdit" asp-route-id="@item.Guid" class="btn btn-sm btn-primary">Düzenle <i class="uil uil-angle-right-b"></i></a>
+                                                    @if (item.Instruments != null)
+                                                    {
+                                                        <li class="list-inline-item">
+                                                            <span class="badge bg-soft-danger fs-13 mt-1">@item.Instruments.Instrument</span>
+                                                        </li>
+                                                    }
+
+                                                </ul>
+                                            </div>
+                                            <div class="job-grid-content mt-3">
+                                                <p class="text-muted">
+                                                    @{
+                                                        var text = item.HTMLText.Replace("<p>", "").Replace("</p>", "");
+                                                        if (text.Length >= 30)
+                                                        {
+                                                            text = text.Substring(0, 30) + "...";
+                                                        }
+                                                    }
+                                                    @text
+                                                </p>
+                                                <div class="d-flex align-items-center justify-content-between mt-4 border-top pt-3">
+                                                    <p class="text-muted float-start mb-0">Eklenme Tarihi: @item.AddedDate.ToString("dd.MM.yyyy")</p>
+                                                    <div class="text-end">
+                                                        <a asp-action="PostEdit" asp-route-id="@item.Guid" class="btn btn-sm btn-primary">Düzenle <i class="uil uil-angle-right-b"></i></a>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div><!--end card-body-->
-                                </div><!--end job-grid-box-->
+                                        </div><!--end card-body-->
+                                    </div><!--end job-grid-box-->
 
-                            </div>
+                                </div>
+                            }
                         }
+                       
                     }
                     else
                     {

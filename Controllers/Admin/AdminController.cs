@@ -767,20 +767,30 @@ public class AdminController : Controller
     //[ValidateAntiForgeryToken]
     public async Task<IActionResult> ApprovePost( string postSeoLink)
     {
-        var post = _context.Posts.Where(p => p.SeoLink.Equals(postSeoLink)).FirstOrDefault();
-        post.Status = PostStatus.Active;
-        _context.Update(post);
-
-        // TODO-Engin getting all seolink of current post we need to add an check also received user is admin or not
-        var allNotifOnAdmin = _context.Notification.Where(not => not.RelatedElementId.Equals(postSeoLink) && not.IsRead == false).ToList();
-        allNotifOnAdmin.ForEach(n =>
+        try
         {
-            n.IsRead = true;
-        });
+            var post = _context.Posts.Where(p => p.SeoLink.Equals(postSeoLink)).FirstOrDefault();
+            post.Status = PostStatus.Active;
+            _context.Update(post);
 
-        _context.UpdateRange(allNotifOnAdmin);
-        await _context.SaveChangesAsync();
-        return RedirectToAction(actionName: Constants.MainPage, controllerName: "Home");
+            // TODO-Engin getting all seolink of current post we need to add an check also received user is admin or not
+            var allNotifOnAdmin = _context.Notification.Where(not => not.RelatedElementId.Equals(postSeoLink) && not.IsRead == false).ToList();
+            allNotifOnAdmin.ForEach(n =>
+            {
+                n.IsRead = true;
+            });
+
+            _context.UpdateRange(allNotifOnAdmin);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(actionName: Constants.MainPage, controllerName: "Home");
+        }
+        catch (Exception ex )
+        {
+            // TO DO 
+            // logger.LogError(ex,"Problem happens during approving the post. {ex.Message}");
+            throw;
+        }
+
     }
 
     private bool InstrumentsExists(int id)

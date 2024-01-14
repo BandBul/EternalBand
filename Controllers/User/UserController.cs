@@ -3,6 +3,7 @@ using EternalBAND.Common;
 using EternalBAND.Data;
 using EternalBAND.Helpers;
 using EternalBAND.Models;
+using EternalBAND.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +33,30 @@ public class UserController : Controller
     public async Task<IActionResult> PostIndex()
     {
         var getUser = await _userManager.GetUserAsync(User);
-    
+        ViewBag.PostStatusViewModel = new Dictionary<PostStatus, PostStatusViewModel>() {
+        { PostStatus.Active, new PostStatusViewModel()
+            {
+                DisplayText = "Aktif",
+                Color = "green",
+                HeaderDisplayText = "Aktif"
+            }
+        },
+        { PostStatus.PendingApproval, new PostStatusViewModel()
+            {
+                DisplayText = "Onay Bekliyor",
+                Color = "orange",
+                HeaderDisplayText = "Onay Bekleyen"
+            }
+        },
+        { PostStatus.DeActive, new PostStatusViewModel()
+            {
+                DisplayText = "Arşivde",
+                Color = "purple",
+                HeaderDisplayText = "Arşivlenen"
+            }
+        },
+    };
+
         var applicationDbContext = _context.Posts.Where(n=> n.AddedByUserId==getUser.Id).Include(p => p.AddedByUser).Include(p => p.AdminConfirmationUser)
             .Include(p => p.PostTypes).Include(p => p.Instruments);
         return View(await applicationDbContext.ToListAsync());
@@ -83,11 +107,11 @@ public class UserController : Controller
                     RelatedElementId = posts.SeoLink,
                     NotificationType = NotificationType.PostSharing
                 });
-                posts.Status = Common.PostStatus.PendingApproval;
+                posts.Status = PostStatus.PendingApproval;
             }
             else
             {
-                posts.Status = Common.PostStatus.Active;
+                posts.Status = PostStatus.Active;
             }
             _context.Add(posts);
             await _context.SaveChangesAsync();
@@ -131,13 +155,13 @@ public class UserController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Route("ilan-duzenle")]
-    public async Task<IActionResult> PostEdit(Guid id,
+    public async Task<IActionResult> PostEdit(
         [Bind(
             "Guid,Title,HTMLText,PostTypesId,InstrumentsId,CityId")]
         Posts posts,
         List<IFormFile>? images)
     {
-        if (id != posts.Guid)
+        if (posts.Guid == null)
         {
             return NotFound();
         }
@@ -148,8 +172,8 @@ public class UserController : Controller
             {
                 PostAddPhoto(posts, images);
                 var post = await _context.Posts.AsNoTracking().FirstOrDefaultAsync(n => n.Guid == posts.Guid);
-                var getUser = await _userManager.GetUserAsync(User);
-                if ((getUser.Id == post.AddedByUserId))
+                var currentUser = await _userManager.GetUserAsync(User);
+                if ((currentUser.Id == post.AddedByUserId))
                 {
                     if (images.Count == 0)
                     {
@@ -167,6 +191,19 @@ public class UserController : Controller
                     posts.AddedDate = post.AddedDate;
                     posts.SeoLink = post.SeoLink;
                     posts.Guid = post.Guid;
+                    posts.Status = PostStatus.PendingApproval;
+                    var adminUsers = await _userManager.GetUsersInRoleAsync(Constants.AdminRoleName);
+                    await _context.Notification.AddAsync(new Notification()
+                    {
+                        IsRead = false,
+                        AddedDate = DateTime.Now,
+                        Message = $"{currentUser?.Name} '{posts.SeoLink}' ilanında güncelleme yaptı",
+                        ReceiveUserId = adminUsers.ElementAt(0).Id,
+                        SenderUserId = currentUser.Id,
+                        RedirectLink = $"ilan?s={posts.SeoLink}&approvalPurpose=true",
+                        RelatedElementId = posts.SeoLink,
+                        NotificationType = NotificationType.PostSharing
+                    });
                     _context.Update(posts);
                     await _context.SaveChangesAsync();
                 }

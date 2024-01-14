@@ -1,0 +1,54 @@
+﻿.status-green
+{
+    background-color: forestgreen !important;
+}
+.status-purple
+{
+    background-color: rebeccapurple !important;
+}
+.status-orange
+{
+    background-color: orange !important;
+}
+
+.status-by-post-area
+{
+    max-width: 800px;
+    margin: 20px auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+
+header
+{
+   
+    padding: 20px;
+    text-align: center;
+}
+
+
+
+h1
+{
+    color: #fff; /* Set your desired text color */
+    font-size: 36px; /* Set your desired font size */
+    font-weight: bold;
+    margin: 0;
+}
+
+.header-status-green
+{
+    background-color: forestgreen !important; /* Set your desired background color */
+}
+
+.header-status-purple
+{
+    background-color: rebeccapurple !important; /* Set your desired background color */
+}
+
+.header-status-orange
+{
+    background-color: orange !important; /* Set your desired background color */
+}
