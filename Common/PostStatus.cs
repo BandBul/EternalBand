@@ -4,7 +4,8 @@
     {
         Initial = 0,
         Active,
-        DeActive,
-        PendingApproval
+        PendingApproval,
+        DeActive
+        
     }
 }
