@@ -769,6 +769,7 @@ public class AdminController : Controller
     {
         try
         {
+            var currentUser = await _userManager.GetUserAsync(User);
             var post = _context.Posts.Where(p => p.SeoLink.Equals(postSeoLink)).FirstOrDefault();
             post.Status = PostStatus.Active;
             _context.Update(post);
@@ -781,7 +782,23 @@ public class AdminController : Controller
             });
 
             _context.UpdateRange(allNotifOnAdmin);
+
+
+            var adminUsers = await _userManager.GetUsersInRoleAsync(Constants.AdminRoleName);
+            await _context.Notification.AddAsync(new Notification()
+            {
+                IsRead = false,
+                AddedDate = DateTime.Now,
+                Message = $"'{post.Title}' başlıklı ilanınız yayına alınmıştır",
+                ReceiveUserId = post.AddedByUserId,
+                SenderUserId = currentUser.Id,
+                RedirectLink = $"ilan?s={post.SeoLink}",
+                RelatedElementId = post.SeoLink,
+                NotificationType = NotificationType.PostSharing
+            });
+
             await _context.SaveChangesAsync();
+
             return RedirectToAction(actionName: Constants.MainPage, controllerName: "Home");
         }
         catch (Exception ex )

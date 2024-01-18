@@ -16,7 +16,6 @@
         Status = status,
         Posts = Model.Where(post => post.Status == status).ToList()
     });
-    //IEnumerable<PostByStatusModel> postsByStatus = Model.GroupBy(s => s.Status).Select(s => new PostByStatusModel { Status = s.Key, Posts = s.Select(s => s).ToList() });
 }
 
 <div class="main-content">
@@ -120,7 +119,29 @@
                                                 <div class="d-flex align-items-center justify-content-between mt-4 border-top pt-3">
                                                     <p class="text-muted float-start mb-0">Eklenme Tarihi: @item.AddedDate.ToString("dd.MM.yyyy")</p>
                                                     <div class="text-end">
-                                                        <a asp-action="PostEdit" asp-route-id="@item.Guid" class="btn btn-sm btn-primary">Düzenle <i class="uil uil-angle-right-b"></i></a>
+                                                        <div class="row mb-1">
+                                                            <div class="col">
+                                                                <a asp-action="PostEdit" asp-route-id="@item.Guid" class="btn btn-sm btn-primary">Düzenle <i class="uil uil-angle-right-b"></i></a>
+                                                            </div>
+                                                        </div>
+
+                                                        @if (item.Status == PostStatus.Active)
+                                                        {
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <a asp-controller="User" asp-action="PostArchived"  asp-route-id="@item.Id" class="btn btn-sm btn-primary archive-button">Arşivle <i class="uil uil-angle-right-b"></i></a>
+                                                                </div>
+                                                            </div>
+                                                        }
+
+                                                        @if (item.Status == PostStatus.DeActive)
+                                                        {
+                                                            <div class="row">
+                                                                <div class="col">
+                                                                    <a asp-controller="User"  asp-action="PostActivated" asp-route-id="@item.Id" class="btn btn-sm btn-primary activated-button">Yayına Al <i class="uil uil-angle-right-b"></i></a>
+                                                                </div>
+                                                            </div>
+                                                        }
                                                     </div>
                                                 </div>
                                             </div>
