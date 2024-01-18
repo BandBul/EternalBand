@@ -12,6 +12,7 @@
 @inject IOptions<NotificationOptions> _notifSettings
 @{
     var user = await UserManager.GetUserAsync(User);
+    var isMessageNotification = Model.NotificationType == NotificationType.Message; 
     var notifications = await _context.Notification.Include(s => s.SenderUser).Where(n => n.ReceiveUserId == user.Id && n.NotificationType == Model.NotificationType).ToListAsync();
 }
 @if (SignInManager.IsSignedIn(User))
@@ -38,7 +39,7 @@
                 var pagination = notifications.OrderBy(n => n.IsRead).ThenByDescending(n => n.AddedDate).Take(_notifSettings.Value.MaxNotificationCountInPopup).ToList();
                 foreach (var ms in pagination)
                 {
-                    <a href="~/@ms.RedirectLink" class="text-dark notification-item d-block active @(ms.IsRead ? "" : "notReaded") ">
+                    <a asp-controller="User" asp-action="NotificationRead" asp-route-id="@ms.Id" class="text-dark notification-item d-block active @(ms.IsRead ? "" : "notReaded") ">
                         <div class="d-flex align-items-center">
                             <div class="flex-shrink-0 me-3">
                                 <div class="avatar-xs bg-primary text-white rounded-circle text-center">
@@ -55,9 +56,20 @@
             }
         </div><!--end notification-wrapper-->
         <div class="notification-footer border-top text-center">
-            <a class="primary-link fs-13" asp-action="ChatIndex" asp-controller="Message">
-                <i class="mdi mdi-arrow-right-circle me-1"></i> <span>Tümünü Gör</span>
-            </a>
+            @if (isMessageNotification)
+            {
+                <a class="primary-link fs-13" asp-action="ChatIndex" asp-controller="Message">
+                    <i class="mdi mdi-arrow-right-circle me-1"></i> <span>Tümünü Gör</span>
+                </a>
+            }
+            else
+            {
+                <a class="primary-link fs-13" asp-action="NotificationIndex" asp-controller="User">
+                    <i class="mdi mdi-arrow-right-circle me-1"></i> <span>Tümünü Gör</span>
+                </a>
+            }
+            
+
         </div>
     </div>
 

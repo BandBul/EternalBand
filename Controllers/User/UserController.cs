@@ -10,10 +10,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using X.PagedList;
 
 namespace EternalBAND.Controllers.User;
-
+// TODO create a Reposıtory for manage _context, controller should only responsible for API and basic validations 
 [Authorize]
 public class UserController : Controller
 {
@@ -33,29 +34,30 @@ public class UserController : Controller
     public async Task<IActionResult> PostIndex()
     {
         var getUser = await _userManager.GetUserAsync(User);
-        ViewBag.PostStatusViewModel = new Dictionary<PostStatus, PostStatusViewModel>() {
-        { PostStatus.Active, new PostStatusViewModel()
-            {
-                DisplayText = "Aktif",
-                Color = "green",
-                HeaderDisplayText = "Aktif"
+        ViewBag.PostStatusViewModel = new Dictionary<PostStatus, PostStatusViewModel>() 
+        {
+            { PostStatus.Active, new PostStatusViewModel()
+                {
+                    DisplayText = "Aktif",
+                    Color = "green",
+                    HeaderDisplayText = "Aktif"
+                }
+            },
+            { PostStatus.PendingApproval, new PostStatusViewModel()
+                {
+                    DisplayText = "Onay Bekliyor",
+                    Color = "orange",
+                    HeaderDisplayText = "Onay Bekleyen"
+                }
+            },
+            { PostStatus.DeActive, new PostStatusViewModel()
+                {
+                    DisplayText = "Arşivde",
+                    Color = "purple",
+                    HeaderDisplayText = "Arşivlenen"
+                }
             }
-        },
-        { PostStatus.PendingApproval, new PostStatusViewModel()
-            {
-                DisplayText = "Onay Bekliyor",
-                Color = "orange",
-                HeaderDisplayText = "Onay Bekleyen"
-            }
-        },
-        { PostStatus.DeActive, new PostStatusViewModel()
-            {
-                DisplayText = "Arşivde",
-                Color = "purple",
-                HeaderDisplayText = "Arşivlenen"
-            }
-        },
-    };
+        };
 
         var applicationDbContext = _context.Posts.Where(n=> n.AddedByUserId==getUser.Id).Include(p => p.AddedByUser).Include(p => p.AdminConfirmationUser)
             .Include(p => p.PostTypes).Include(p => p.Instruments);
@@ -229,6 +231,64 @@ public class UserController : Controller
         return View(posts);
     }
 
+
+    //[ValidateAntiForgeryToken]
+    [ActionName("PostArchived")]
+    public async Task<IActionResult> PostArchived(int id)
+    {
+        var currentUser = await _userManager.GetUserAsync(User);
+        var post = _context.Posts.Find(id);
+        if(post == null)
+        {
+            return BadRequest($"There is no post with  this id : {id}");
+        }
+
+        post.Status = PostStatus.DeActive;
+
+        _context.Posts.Update(post);
+        await _context.SaveChangesAsync();
+
+        return Redirect("/ilanlarim");
+    }
+
+    //[ValidateAntiForgeryToken]
+    [ActionName("PostActivated")]
+    public async Task<IActionResult> PostActivated(int id)
+    {
+        var currentUser = await _userManager.GetUserAsync(User);
+        var isAdmin = await _userManager.IsInRoleAsync(currentUser, Constants.AdminRoleName);
+        var post = _context.Posts.Find(id);
+
+        if (post == null)
+        {
+            return BadRequest($"There is no post with  this id : {id}");
+        }
+
+        post.Status = isAdmin ? PostStatus.Active : PostStatus.PendingApproval;
+        _context.Posts.Update(post);
+        if(!isAdmin)
+        {
+            var adminUsers = await _userManager.GetUsersInRoleAsync(Constants.AdminRoleName);
+            await _context.Notification.AddAsync(new Notification()
+            {
+                IsRead = false,
+                AddedDate = DateTime.Now,
+                Message = $"{currentUser?.Name} '{post.SeoLink}' ilanını arşivden yayına almak istiyor",
+                ReceiveUserId = adminUsers.ElementAt(0).Id,
+                SenderUserId = currentUser.Id,
+                RedirectLink = $"ilan?s={post.SeoLink}&approvalPurpose=true",
+                RelatedElementId = post.SeoLink,
+                NotificationType = NotificationType.PostSharing
+            });
+        }
+
+        await _context.SaveChangesAsync();
+
+        return Redirect("/ilanlarim");
+    }
+
+
+
     [HttpPost, ActionName("PostDelete")]
     public async Task<JsonResult> DeleteConfirmed(Guid id)
     {
@@ -349,11 +409,28 @@ public class UserController : Controller
         }
     
     }
-[Route("bildirimler")]
+    [Route("bildirimler")]
     public async Task<IActionResult> NotificationIndex(int pId=1)
     {
         var getUser = await _userManager.GetUserAsync(User);
        
-        return View( await _context.Notification.Where(n => n.ReceiveUserId == getUser.Id).OrderByDescending(n=> n.IsRead).ThenByDescending(n=> n.AddedDate).ToPagedListAsync(pId, 10));
+        return View( await _context.Notification.Where(n => n.ReceiveUserId == getUser.Id && n.NotificationType == NotificationType.PostSharing).OrderByDescending(n=> n.IsRead).ThenByDescending(n=> n.AddedDate).ToPagedListAsync(pId, 10));
     }
+
+    [ActionName("NotificationRead")]
+    public async Task<IActionResult> NotificationRead(int id)
+    {
+        var notif  = _context.Notification.Find(id);
+        if (notif == null)
+        {
+            return BadRequest($"There is no notificaiton with this id : {id}");
+        }
+        notif.IsRead = true;
+        _context.Notification.Update(notif);
+        await _context.SaveChangesAsync();
+
+        return Redirect("/"+notif.RedirectLink);
+    }
+
+
 }
