@@ -1,4 +1,4 @@
-namespace EternalBAND.Models;
+namespace EternalBAND.DomainObjects;
 
 public class UserProfileControl
 {

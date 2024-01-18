@@ -1,9 +1,10 @@
 using EternalBAND.Business;
 using EternalBAND.Common;
 using EternalBAND.Data;
+using EternalBAND.DomainObjects;
 using EternalBAND.Helpers;
-using EternalBAND.Models;
-using EternalBAND.Models.ViewModel;
+using EternalBAND.DomainObjects;
+using EternalBAND.DomainObjects.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

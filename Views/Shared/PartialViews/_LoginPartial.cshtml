@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<EternalBAND.Models.Users> SignInManager 
-@inject UserManager<EternalBAND.Models.Users> UserManager
+@inject SignInManager<Users> SignInManager 
+@inject UserManager<Users> UserManager
 
 <ul class="navbar-nav ms-auto">
     @if (SignInManager.IsSignedIn(User))

@@ -1,8 +1,7 @@
 using System.ComponentModel;
 using EternalBAND.Common;
-using Microsoft.AspNetCore.Identity;
 
-namespace EternalBAND.Models;
+namespace EternalBAND.DomainObjects.ViewModel;
 
 public class BaseNotificationModel
 {

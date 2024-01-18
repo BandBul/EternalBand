@@ -1,7 +1,7 @@
 using EternalBAND.Common;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EternalBAND.Models;
+namespace EternalBAND.DomainObjects;
 
 public class Notification
 {

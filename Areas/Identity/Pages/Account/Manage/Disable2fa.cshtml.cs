@@ -8,16 +8,17 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using EternalBAND.DomainObjects;
 
 namespace EternalBAND.Areas.Identity.Pages.Account.Manage
 {
     public class Disable2faModel : PageModel
     {
-        private readonly UserManager<EternalBAND.Models.Users> _userManager;
+        private readonly UserManager<Users> _userManager;
         private readonly ILogger<Disable2faModel> _logger;
 
         public Disable2faModel(
-            UserManager<EternalBAND.Models.Users> userManager,
+            UserManager<Users> userManager,
             ILogger<Disable2faModel> logger)
         {
             _userManager = userManager;

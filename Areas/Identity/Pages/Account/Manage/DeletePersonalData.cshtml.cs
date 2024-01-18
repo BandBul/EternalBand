@@ -5,6 +5,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using EternalBAND.DomainObjects;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -14,13 +15,13 @@ namespace EternalBAND.Areas.Identity.Pages.Account.Manage
 {
     public class DeletePersonalDataModel : PageModel
     {
-        private readonly UserManager<EternalBAND.Models.Users> _userManager;
-        private readonly SignInManager<EternalBAND.Models.Users> _signInManager;
+        private readonly UserManager<Users> _userManager;
+        private readonly SignInManager<Users> _signInManager;
         private readonly ILogger<DeletePersonalDataModel> _logger;
 
         public DeletePersonalDataModel(
-            UserManager<EternalBAND.Models.Users> userManager,
-            SignInManager<EternalBAND.Models.Users> signInManager,
+            UserManager<Users> userManager,
+            SignInManager<Users> signInManager,
             ILogger<DeletePersonalDataModel> logger)
         {
             _userManager = userManager;

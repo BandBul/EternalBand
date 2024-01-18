@@ -14,15 +14,16 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using EternalBAND.DomainObjects;
 
 namespace EternalBAND.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {
-        private readonly SignInManager<EternalBAND.Models.Users> _signInManager;
+        private readonly SignInManager<Users> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<EternalBAND.Models.Users> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<Users> signInManager, ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
             _logger = logger;

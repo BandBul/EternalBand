@@ -8,17 +8,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using EternalBAND.DomainObjects;
 
 namespace EternalBAND.Areas.Identity.Pages.Account.Manage
 {
     public class SetPasswordModel : PageModel
     {
-        private readonly UserManager<EternalBAND.Models.Users> _userManager;
-        private readonly SignInManager<EternalBAND.Models.Users> _signInManager;
+        private readonly UserManager<Users> _userManager;
+        private readonly SignInManager<Users> _signInManager;
 
         public SetPasswordModel(
-            UserManager<EternalBAND.Models.Users> userManager,
-            SignInManager<EternalBAND.Models.Users> signInManager)
+            UserManager<Users> userManager,
+            SignInManager<Users> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;

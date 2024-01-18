@@ -1,5 +1,5 @@
 ﻿using EternalBAND.Data;
-using EternalBAND.Models;
+using EternalBAND.DomainObjects;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
@@ -7,17 +7,18 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using EternalBAND.DomainObjects;
 
 namespace EternalBAND.Controllers
 {
     [AllowAnonymous, Route("account")]
     public class AccountController : Controller
     {
-        private readonly SignInManager<EternalBAND.Models.Users> _signInManager;
+        private readonly SignInManager<Users> _signInManager;
         private readonly ILogger<AccountController> _logger;
-        private readonly UserManager<EternalBAND.Models.Users> _userManager;
+        private readonly UserManager<Users> _userManager;
 
-        public AccountController(SignInManager<EternalBAND.Models.Users> signInManager, ILogger<AccountController> logger, UserManager<Users> userManager)
+        public AccountController(SignInManager<Users> signInManager, ILogger<AccountController> logger, UserManager<Users> userManager)
         {
             _signInManager = signInManager;
             _logger = logger;

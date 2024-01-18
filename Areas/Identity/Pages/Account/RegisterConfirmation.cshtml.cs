@@ -11,16 +11,17 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using EternalBAND.DomainObjects;
 
 namespace EternalBAND.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class RegisterConfirmationModel : PageModel
     {
-        private readonly UserManager<EternalBAND.Models.Users> _userManager;
+        private readonly UserManager<Users> _userManager;
         private readonly IEmailSender _sender;
 
-        public RegisterConfirmationModel(UserManager<EternalBAND.Models.Users> userManager, IEmailSender sender)
+        public RegisterConfirmationModel(UserManager<Users> userManager, IEmailSender sender)
         {
             _userManager = userManager;
             _sender = sender;

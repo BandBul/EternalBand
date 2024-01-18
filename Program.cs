@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using EternalBAND.Data;
 using EternalBAND.Hubs;
-using EternalBAND.Models;
+using EternalBAND.DomainObjects;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.CodeAnalysis.Emit;
 using EternalBAND.Business.Options;
@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.FileProviders;
 using EternalBAND.Business;
+using EternalBAND.DomainObjects;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +23,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-// builder.Services.AddDefaultIdentity<EternalBAND.Models.Users>(options => options.SignIn.RequireConfirmedAccount = true)
+// builder.Services.AddDefaultIdentity<Users>(options => options.SignIn.RequireConfirmedAccount = true)
 //     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 builder.Services.AddIdentity<Users, IdentityRole>(options =>

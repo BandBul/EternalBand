@@ -1,4 +1,6 @@
-namespace EternalBAND.Models.ViewModel;
+using EternalBAND.DomainObjects;
+
+namespace EternalBAND.DomainObjects.ViewModel;
 
 public class ChatViewModel
 {

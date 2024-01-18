@@ -13,16 +13,17 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using EternalBAND.DomainObjects;
 
 namespace EternalBAND.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class ResendEmailConfirmationModel : PageModel
     {
-        private readonly UserManager<EternalBAND.Models.Users> _userManager;
+        private readonly UserManager<Users> _userManager;
         private readonly IEmailSender _emailSender;
 
-        public ResendEmailConfirmationModel(UserManager<EternalBAND.Models.Users> userManager, IEmailSender emailSender)
+        public ResendEmailConfirmationModel(UserManager<Users> userManager, IEmailSender emailSender)
         {
             _userManager = userManager;
             _emailSender = emailSender;

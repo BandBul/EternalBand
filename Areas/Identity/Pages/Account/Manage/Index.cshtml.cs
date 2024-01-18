@@ -9,23 +9,24 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using EternalBAND.Business;
 using EternalBAND.Data;
-using EternalBAND.Models;
+using EternalBAND.DomainObjects;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using EternalBAND.DomainObjects;
 
 namespace EternalBAND.Areas.Identity.Pages.Account.Manage
 {
     public class IndexModel : PageModel
     {
-        private readonly UserManager<EternalBAND.Models.Users> _userManager;
-        private readonly SignInManager<EternalBAND.Models.Users> _signInManager;
+        private readonly UserManager<Users> _userManager;
+        private readonly SignInManager<Users> _signInManager;
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _hostEnvironment;
         public IndexModel(
-            UserManager<EternalBAND.Models.Users> userManager,
-            SignInManager<EternalBAND.Models.Users> signInManager,IWebHostEnvironment hostEnvironment,ApplicationDbContext context)
+            UserManager<Users> userManager,
+            SignInManager<Users> signInManager,IWebHostEnvironment hostEnvironment,ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -85,7 +86,7 @@ namespace EternalBAND.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Fotoğrafınız")] public IFormFile Photo { get; set; }
         }
 
-        private async Task LoadAsync(Models.Users user)
+        private async Task LoadAsync(Users user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);

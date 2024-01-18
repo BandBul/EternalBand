@@ -11,19 +11,20 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using EternalBAND.DomainObjects;
 
 namespace EternalBAND.Areas.Identity.Pages.Account.Manage
 {
     public class ExternalLoginsModel : PageModel
     {
-        private readonly UserManager<EternalBAND.Models.Users> _userManager;
-        private readonly SignInManager<EternalBAND.Models.Users> _signInManager;
-        private readonly IUserStore<EternalBAND.Models.Users> _userStore;
+        private readonly UserManager<Users> _userManager;
+        private readonly SignInManager<Users> _signInManager;
+        private readonly IUserStore<Users> _userStore;
 
         public ExternalLoginsModel(
-            UserManager<EternalBAND.Models.Users> userManager,
-            SignInManager<EternalBAND.Models.Users> signInManager,
-            IUserStore<EternalBAND.Models.Users> userStore)
+            UserManager<Users> userManager,
+            SignInManager<Users> signInManager,
+            IUserStore<Users> userStore)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -69,7 +70,7 @@ namespace EternalBAND.Areas.Identity.Pages.Account.Manage
                 .ToList();
 
             string passwordHash = null;
-            if (_userStore is IUserPasswordStore<EternalBAND.Models.Users> userPasswordStore)
+            if (_userStore is IUserPasswordStore<Users> userPasswordStore)
             {
                 passwordHash = await userPasswordStore.GetPasswordHashAsync(user, HttpContext.RequestAborted);
             }

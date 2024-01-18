@@ -9,18 +9,19 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using EternalBAND.DomainObjects;
 
 namespace EternalBAND.Areas.Identity.Pages.Account.Manage
 {
     public class ChangePasswordModel : PageModel
     {
-        private readonly UserManager<EternalBAND.Models.Users> _userManager;
-        private readonly SignInManager<EternalBAND.Models.Users> _signInManager;
+        private readonly UserManager<Users> _userManager;
+        private readonly SignInManager<Users> _signInManager;
         private readonly ILogger<ChangePasswordModel> _logger;
 
         public ChangePasswordModel(
-            UserManager<EternalBAND.Models.Users> userManager,
-            SignInManager<EternalBAND.Models.Users> signInManager,
+            UserManager<Users> userManager,
+            SignInManager<Users> signInManager,
             ILogger<ChangePasswordModel> logger)
         {
             _userManager = userManager;

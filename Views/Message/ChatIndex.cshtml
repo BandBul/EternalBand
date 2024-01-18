@@ -1,11 +1,13 @@
-@using EternalBAND.Models.ViewModel;
+@using EternalBAND.DomainObjects;
+@using EternalBAND.DomainObjects.ViewModel;
+@using EternalBAND.DomainObjects.ViewModel;
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using EternalBAND.Data
 @using Microsoft.EntityFrameworkCore
-@using System.Security.Policy;
-@model EternalBAND.Models.ViewModel.ChatViewModel
-@inject UserManager<EternalBAND.Models.Users> UserManager
+@using System.Security.Policy
+@model EternalBAND.DomainObjects.ViewModel.ChatViewModel
+@inject UserManager<Users> UserManager
 @inject ApplicationDbContext _context
 @{
     ViewData["Title"] = "Mesajlar";

@@ -4,9 +4,9 @@
 @using X.PagedList.Mvc.Core
 @using X.PagedList.Web.Common
 <link href="/Css/NotificationIndex.css" rel="stylesheet" type="text/css">
-@inject UserManager<EternalBAND.Models.Users> _userManager
+@inject UserManager<Users> _userManager
 @inject ApplicationDbContext _context
-@model X.PagedList.IPagedList<EternalBAND.Models.Notification>
+@model X.PagedList.IPagedList<EternalBAND.DomainObjects.Notification>
 
 @{
     ViewData["Title"] = "Bildirimler";

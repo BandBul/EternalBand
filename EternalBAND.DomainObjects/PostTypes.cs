@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-namespace EternalBAND.Models;
+namespace EternalBAND.DomainObjects;
 
 public class PostTypes
 {

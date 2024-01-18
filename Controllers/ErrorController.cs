@@ -1,5 +1,4 @@
 using EternalBAND.Data;
-using EternalBAND.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EternalBAND.Controllers;

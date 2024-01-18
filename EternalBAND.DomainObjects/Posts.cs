@@ -2,7 +2,7 @@ using EternalBAND.Common;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 
-namespace EternalBAND.Models;
+namespace EternalBAND.DomainObjects;
 
 public class Posts
 {

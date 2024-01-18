@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace  EternalBAND.Models
+namespace EternalBAND.DomainObjects
 {
     public class Logs
     {

@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using EternalBAND.Data;
-using EternalBAND.Models;
+using EternalBAND.DomainObjects;
 
 namespace EternalBAND.Business
 {

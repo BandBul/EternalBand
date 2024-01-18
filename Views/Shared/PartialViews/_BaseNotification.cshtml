@@ -1,14 +1,16 @@
 ﻿@using EternalBAND.Business.Options;
 @using EternalBAND.Common;
-@using EternalBAND.Data
-@using Microsoft.AspNetCore.Identity
-@using Microsoft.EntityFrameworkCore
+@using EternalBAND.Data;
+@using EternalBAND.DomainObjects.ViewModel;
+@using EternalBAND.DomainObjects;
+@using Microsoft.AspNetCore.Identity;
+@using Microsoft.EntityFrameworkCore;
 @using Microsoft.Extensions.Options;
 <link href="/Css/NotificationPopUp.css" rel="stylesheet" type="text/css">
 @model BaseNotificationModel
 @inject ApplicationDbContext _context
-@inject UserManager<EternalBAND.Models.Users> UserManager
-@inject SignInManager<EternalBAND.Models.Users> SignInManager
+@inject UserManager<Users> UserManager
+@inject SignInManager<Users> SignInManager
 @inject IOptions<NotificationOptions> _notifSettings
 @{
     var user = await UserManager.GetUserAsync(User);

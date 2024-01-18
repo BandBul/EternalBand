@@ -5,6 +5,7 @@
 using System;
 using System.Text;
 using System.Threading.Tasks;
+using EternalBAND.DomainObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,10 +16,10 @@ namespace EternalBAND.Areas.Identity.Pages.Account
 {
     public class ConfirmEmailChangeModel : PageModel
     {
-        private readonly UserManager<EternalBAND.Models.Users> _userManager;
-        private readonly SignInManager<EternalBAND.Models.Users> _signInManager;
+        private readonly UserManager<Users> _userManager;
+        private readonly SignInManager<Users> _signInManager;
 
-        public ConfirmEmailChangeModel(UserManager<EternalBAND.Models.Users> userManager, SignInManager<EternalBAND.Models.Users> signInManager)
+        public ConfirmEmailChangeModel(UserManager<Users> userManager, SignInManager<Users> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;

@@ -1,10 +1,11 @@
 ﻿using System.Diagnostics;
 using EternalBAND.Data;
 using Microsoft.AspNetCore.Mvc;
-using EternalBAND.Models;
 using Microsoft.EntityFrameworkCore;
 using X.PagedList;
 using Microsoft.AspNetCore.Authorization;
+using EternalBAND.DomainObjects;
+using EternalBAND.DomainObjects.ViewModel;
 
 namespace EternalBAND.Controllers;
 [Authorize]

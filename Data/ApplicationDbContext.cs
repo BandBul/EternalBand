@@ -1,5 +1,5 @@
 ﻿using EternalBAND.Common;
-using EternalBAND.Models;
+using EternalBAND.DomainObjects;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -138,7 +138,7 @@ public class ApplicationDbContext : IdentityDbContext<Users>
         );
         
         
-        builder.Entity<EternalBAND.Models.Users>().HasData(new EternalBAND.Models.Users // Pass Af9CCdzXYYxLQSXR
+        builder.Entity<Users>().HasData(new Users // Pass Af9CCdzXYYxLQSXR
         {
             Id = Constants.AdminUserId,
             UserName = "admin@bandbul.com",

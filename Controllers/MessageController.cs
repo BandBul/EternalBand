@@ -1,18 +1,12 @@
 using EternalBAND.Business;
-using EternalBAND.Business.Options;
 using EternalBAND.Data;
+using EternalBAND.DomainObjects;
+using EternalBAND.DomainObjects.ViewModel;
 using EternalBAND.Hubs;
-using EternalBAND.Models;
-using EternalBAND.Models.ViewModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.Internal;
-using Microsoft.Extensions.Options;
-using System;
-using System.Text.Json;
 
 namespace EternalBAND.Controllers;
 

@@ -1,7 +1,7 @@
 using EternalBAND.Common;
 using EternalBAND.Data;
+using EternalBAND.DomainObjects;
 using EternalBAND.Helpers;
-using EternalBAND.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

@@ -13,15 +13,15 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-
+using EternalBAND.DomainObjects;
 namespace EternalBAND.Areas.Identity.Pages.Account
 {
     public class ForgotPasswordModel : PageModel
     {
-        private readonly UserManager<EternalBAND.Models.Users> _userManager;
+        private readonly UserManager<Users> _userManager;
         private readonly IEmailSender _emailSender;
 
-        public ForgotPasswordModel(UserManager<EternalBAND.Models.Users> userManager, IEmailSender emailSender)
+        public ForgotPasswordModel(UserManager<Users> userManager, IEmailSender emailSender)
         {
             _userManager = userManager;
             _emailSender = emailSender;

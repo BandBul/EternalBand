@@ -2,8 +2,8 @@
 @inject ApplicationDbContext _context
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.EntityFrameworkCore
-@inject SignInManager<EternalBAND.Models.Users> SignInManager 
-@inject UserManager<EternalBAND.Models.Users> UserManager
+@inject SignInManager<Users> SignInManager 
+@inject UserManager<Users> UserManager
 
 @if (SignInManager.IsSignedIn(User))
 {

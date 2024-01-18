@@ -1,11 +1,12 @@
-﻿@inject SignInManager<EternalBAND.Models.Users> SignInManager
-@inject UserManager<EternalBAND.Models.Users> _userManager
+﻿@inject SignInManager<Users> SignInManager
+@inject UserManager<Users> _userManager
+@using EternalBAND.DomainObjects;
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using EternalBAND.Data
 @using EternalBAND.Business
 @inject ApplicationDbContext _context
-@model EternalBAND.Models.Posts
+@model EternalBAND.DomainObjects.Posts
 @{
     ViewData["Title"] = Model.Title;
 }

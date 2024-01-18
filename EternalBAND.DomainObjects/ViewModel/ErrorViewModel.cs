@@ -1,4 +1,4 @@
-namespace EternalBAND.Models;
+namespace EternalBAND.DomainObjects.ViewModel;
 
 public class ErrorViewModel
 {

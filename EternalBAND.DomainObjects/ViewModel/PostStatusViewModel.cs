@@ -1,4 +1,4 @@
-﻿namespace EternalBAND.Models.ViewModel
+﻿namespace EternalBAND.DomainObjects.ViewModel
 {
     public class PostStatusViewModel
     {

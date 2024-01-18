@@ -11,18 +11,19 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using EternalBAND.DomainObjects;
 
 namespace EternalBAND.Areas.Identity.Pages.Account
 {
     public class LoginWith2faModel : PageModel
     {
-        private readonly SignInManager<EternalBAND.Models.Users> _signInManager;
-        private readonly UserManager<EternalBAND.Models.Users> _userManager;
+        private readonly SignInManager<Users> _signInManager;
+        private readonly UserManager<Users> _userManager;
         private readonly ILogger<LoginWith2faModel> _logger;
 
         public LoginWith2faModel(
-            SignInManager<EternalBAND.Models.Users> signInManager,
-            UserManager<EternalBAND.Models.Users> userManager,
+            SignInManager<Users> signInManager,
+            UserManager<Users> userManager,
             ILogger<LoginWith2faModel> logger)
         {
             _signInManager = signInManager;

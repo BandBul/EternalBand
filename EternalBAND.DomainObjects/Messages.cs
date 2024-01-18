@@ -1,6 +1,6 @@
 using EternalBAND.Common;
 
-namespace EternalBAND.Models;
+namespace EternalBAND.DomainObjects;
 
 public class Messages
 {

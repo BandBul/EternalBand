@@ -10,17 +10,19 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using EternalBAND.DomainObjects;
+
 namespace EternalBAND.Areas.Identity.Pages.Account
 {
     public class LoginWithRecoveryCodeModel : PageModel
     {
-        private readonly SignInManager<EternalBAND.Models.Users> _signInManager;
-        private readonly UserManager<EternalBAND.Models.Users> _userManager;
+        private readonly SignInManager<Users> _signInManager;
+        private readonly UserManager<Users> _userManager;
         private readonly ILogger<LoginWithRecoveryCodeModel> _logger;
 
         public LoginWithRecoveryCodeModel(
-            SignInManager<EternalBAND.Models.Users> signInManager,
-            UserManager<EternalBAND.Models.Users> userManager,
+            SignInManager<Users> signInManager,
+            UserManager<Users> userManager,
             ILogger<LoginWithRecoveryCodeModel> logger)
         {
             _signInManager = signInManager;

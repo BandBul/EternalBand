@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using Microsoft.AspNetCore.Identity;
 
-namespace EternalBAND.Models;
+namespace EternalBAND.DomainObjects;
 
 public class Users:IdentityUser
 {

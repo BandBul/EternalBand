@@ -1,6 +1,6 @@
 using EternalBAND.Data;
-using EternalBAND.Models;
-using EternalBAND.Models.ViewModel;
+using EternalBAND.DomainObjects;
+using EternalBAND.DomainObjects.ViewModel;
 using Microsoft.AspNetCore.SignalR;
 using System.Text.Json;
 
