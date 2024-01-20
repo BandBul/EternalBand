@@ -1,4 +1,4 @@
-using EternalBAND.Data;
+using EternalBAND.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using EternalBAND.Hubs;

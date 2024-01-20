@@ -1,18 +1,16 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using EternalBAND.Data;
+using EternalBAND.DataAccess;
 using EternalBAND.Hubs;
 using EternalBAND.DomainObjects;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.CodeAnalysis.Emit;
 using EternalBAND.Business.Options;
-using System.Configuration;
-using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.Extensions.Options;
 using Microsoft.Extensions.FileProviders;
 using EternalBAND.Business;
-using EternalBAND.DomainObjects;
+using EternalBAND.DataAccess.Repository;
+using EternalBAND.Win.Extensions;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,7 +53,7 @@ builder.Services.AddRazorPages(options =>
 
 builder.Services.AddScoped<IEmailSender, MailSender>();
 builder.Services.AddScoped<MessageService>();
-
+builder.Services.RegisterRepositories();
 var googleApiKey = new GoogleApiKeyOptions();
 builder.Configuration.GetSection(GoogleApiKeyOptions.GoogleApiKey).Bind(googleApiKey);
 builder.Services.Configure<NotificationOptions>(
@@ -78,7 +76,14 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.ExpireTimeSpan = TimeSpan.FromHours(3);
 });
 builder.Services.AddSignalR();
+
 var app = builder.Build();
+//var teta = app.Services.GetService(typeof(BaseRepository<Users>));
+//var z = app.Services.GetServices<BaseRepository<Users>>();
+//var y = app.Services.GetRequiredService<BaseRepository<Blogs>>();
+//var x = app.Services.GetRequiredService<BaseRepository<IEntity>>();
+//var provider = builder.Services.BuildServiceProvider();
+//var serviceDescriptors = provider.GetServices<ServiceDescriptor>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -113,3 +118,8 @@ app.MapHub<ChatHub>("/chatHub");
 
 
 app.Run();
+
+
+
+
+

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EternalBAND.DomainObjects
 {
-    public class SystemInfo
+    public class SystemInfo : IEntity
     {
         [Required]
         [Key]

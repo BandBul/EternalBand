@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EternalBAND.DomainObjects;
 
-public class Contacts
+public class Contacts : IEntity
 {
     public int Id { get; set; }
     [Display(Name = "Mail Adresi")]

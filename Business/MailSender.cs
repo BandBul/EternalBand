@@ -1,5 +1,5 @@
 using System.Net.Mail;
-using EternalBAND.Data;
+using EternalBAND.DataAccess;
 using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace EternalBAND.Business;

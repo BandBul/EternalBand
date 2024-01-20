@@ -1,4 +1,4 @@
-using EternalBAND.Data;
+using EternalBAND.DataAccess;
 using EternalBAND.DomainObjects;
 using EternalBAND.DomainObjects.ViewModel;
 using Microsoft.AspNetCore.SignalR;
@@ -6,12 +6,10 @@ using System.Text.Json;
 
 namespace EternalBAND.Hubs;
 
-public class ChatHub:Hub
+public class ChatHub : Hub
 {
-    private ApplicationDbContext _context;
-    public ChatHub(ApplicationDbContext context)
+    public ChatHub()
     {
-        _context = context;
     }
     public async Task SendMessage(Messages message)
     {

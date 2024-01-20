@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EternalBAND.DomainObjects
 {
-    public class ErrorLogs
+    public class ErrorLogs : IEntity
     {
         public int Id { get; set; }
         [Display(Name = "Hata Alınan Yer")] public string PageOrMethod { get; set; }

@@ -104,7 +104,7 @@
 
     <ItemGroup>
       <ProjectReference Include="EternalBAND.Common\EternalBAND.Common.csproj" />
-      <ProjectReference Include="EternalBand.DataAccess\EternalBand.DataAccess.csproj" />
+      <ProjectReference Include="EternalBand.DataAccess\EternalBAND.DataAccess.csproj" />
       <ProjectReference Include="EternalBAND.DomainObjects\EternalBAND.DomainObjects.csproj" />
     </ItemGroup>
 

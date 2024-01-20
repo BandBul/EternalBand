@@ -1,6 +1,6 @@
 namespace EternalBAND.DomainObjects;
 
-public class UserProfileControl
+public class UserProfileControl : IEntity
 {
     public int Id { get; set; }
     public Users Users { get; set; }

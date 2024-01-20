@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace EternalBAND.DomainObjects;
 
-public class Posts
+public class Posts : IEntity
 {
     public int Id { get; set; }
     [Display(Name = "Başlık")]

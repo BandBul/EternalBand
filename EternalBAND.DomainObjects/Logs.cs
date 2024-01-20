@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EternalBAND.DomainObjects
 {
-    public class Logs
+    public class Logs : IEntity
     {
         public int Id { get; set; }
         [Display(Name = "Tip")]

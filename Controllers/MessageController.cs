@@ -1,5 +1,5 @@
 using EternalBAND.Business;
-using EternalBAND.Data;
+using EternalBAND.DataAccess;
 using EternalBAND.DomainObjects;
 using EternalBAND.DomainObjects.ViewModel;
 using EternalBAND.Hubs;
@@ -69,20 +69,20 @@ public class MessageController : Controller
                 ViewBag.ReceiverUserId = userId;
                 ViewBag.PostId = postId;
                 var messageBox = GetMessageBox(userId, user.Id, postId);
-                foreach (var isread in messageBox.Messages.Where(n => !n.IsRead).ToList())
+                foreach (var msg in messageBox.Messages.Where(n => !n.IsRead).ToList())
                 {
-                    isread.IsRead = true;
+                    msg.IsRead = true;
 
                     var notifs = _context.Notification.Where(s =>
                         s.NotificationType == Common.NotificationType.Message &&
-                        s.RelatedElementId == isread.Id.ToString() &&
+                        s.RelatedElementId == msg.Id.ToString() &&
                         !s.IsRead
                     );
                     foreach(var not in notifs)
                     {
                         not.IsRead = true;
                     }
-                    await _context.SaveChangesAsync();
+                    await _context.Commit();
                 }
                 
                 viewModel.CurrentChat = messageBox;

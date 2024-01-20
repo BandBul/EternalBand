@@ -2,7 +2,7 @@ using System.ComponentModel;
 
 namespace EternalBAND.DomainObjects;
 
-public class Blogs
+public class Blogs : IEntity
 {
     public int Id { get; set; }
     [DisplayName("Başlık")] 

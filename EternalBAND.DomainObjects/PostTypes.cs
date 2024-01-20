@@ -2,7 +2,7 @@ using System.ComponentModel;
 
 namespace EternalBAND.DomainObjects;
 
-public class PostTypes
+public class PostTypes : IEntity
 {
     public int Id { get; set; }
     [DisplayName("Tip")]

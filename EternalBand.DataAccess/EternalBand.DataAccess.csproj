@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EternalBAND.DomainObjects\EternalBAND.DomainObjects.csproj" />
+  </ItemGroup>
+
 </Project>

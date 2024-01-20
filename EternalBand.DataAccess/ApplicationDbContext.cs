@@ -3,9 +3,8 @@ using EternalBAND.DomainObjects;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Cities = EternalBAND.Business.Cities;
 
-namespace EternalBAND.Data;
+namespace EternalBAND.DataAccess;
 
 public class ApplicationDbContext : IdentityDbContext<Users>
 {
@@ -27,6 +26,10 @@ public class ApplicationDbContext : IdentityDbContext<Users>
     public DbSet<ErrorLogs> ErrorLogs { get; set; }
     public DbSet<Blogs> Blogs { get; set; }
 
+    public async Task Commit()
+    {
+        await SaveChangesAsync();
+    }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.Entity<PostTypes>().HasData(

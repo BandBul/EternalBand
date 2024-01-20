@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EternalBAND.DomainObjects;
 
-public class Notification
+public class Notification : IEntity
 {
    
     public int Id { get; set; }

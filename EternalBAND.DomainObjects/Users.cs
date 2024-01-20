@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace EternalBAND.DomainObjects;
 
-public class Users:IdentityUser
+public class Users:IdentityUser,IEntity
 {
     [DisplayName("Ad")]
     public string? Name { get; set; }

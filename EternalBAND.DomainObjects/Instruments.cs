@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EternalBAND.DomainObjects;
 
-public class Instruments
+public class Instruments : IEntity
 {
     public int Id { get; set; }
     [Display(Name = "Enstrüman")]

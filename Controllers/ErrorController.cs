@@ -1,15 +1,12 @@
-using EternalBAND.Data;
+using EternalBAND.DataAccess;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EternalBAND.Controllers;
 
 public class ErrorController : Controller
 {
-    private ApplicationDbContext _context;
-
-    public ErrorController(ApplicationDbContext context)
+    public ErrorController()
     {
-        _context = context;
     }
 
     [Route("hata-olustu/404")]

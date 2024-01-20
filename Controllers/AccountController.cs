@@ -1,4 +1,4 @@
-﻿using EternalBAND.Data;
+﻿using EternalBAND.DataAccess;
 using EternalBAND.DomainObjects;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;

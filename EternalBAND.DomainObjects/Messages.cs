@@ -2,7 +2,7 @@ using EternalBAND.Common;
 
 namespace EternalBAND.DomainObjects;
 
-public class Messages
+public class Messages : IEntity
 {
     public int Id { get; set; }
     public Users? SenderUser { get; set; }

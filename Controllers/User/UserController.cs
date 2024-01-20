@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using X.PagedList;
+using EternalBAND.DataAccess;
 
 namespace EternalBAND.Controllers.User;
 // TODO create a Reposıtory for manage _context, controller should only responsible for API and basic validations 
