@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using EternalBAND.DataAccess;
 using EternalBAND.DomainObjects;
 
-namespace EternalBAND.Business
+namespace EternalBAND.Api
 {
     public class LogService
     {

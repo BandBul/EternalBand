@@ -1,66 +1,33 @@
-using EternalBAND.Business;
-using EternalBAND.DataAccess;
-using EternalBAND.DomainObjects;
 using EternalBAND.DomainObjects.ViewModel;
-using EternalBAND.Hubs;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
+using EternalBAND.Api.Services;
+using EternalBAND.Api.Helpers;
 
 namespace EternalBAND.Controllers;
 
 public class MessageController : Controller
 {
-    private ApplicationDbContext _context;
-    private readonly UserManager<Users> _userManager;
-    private readonly IHubContext<ChatHub> _hubContext;
     private readonly MessageService _messageService;
+    private readonly ControllerHelper _controllerHelper;
 
 
-    public MessageController(ApplicationDbContext context, UserManager<Users> userManager, IHubContext<ChatHub> hubContext, MessageService notificationProcess)
+    public MessageController(MessageService messageService, ControllerHelper controllerHelper)
     {
-        _context = context;
-        _userManager = userManager;
-        _hubContext = hubContext;
-        _messageService = notificationProcess;
+        _messageService = messageService;
+        _controllerHelper = controllerHelper;
     }
 
-    private IEnumerable<MessageBox> GetAllMessageBoxes(string userId)
-    {
-        var allMessages = _context.Messages.Include(n => n.ReceiverUser).Include(n => n.SenderUser).Include(p => p.RelatedPost)
-            .Where(n => n.SenderUserId == userId || n.ReceiverUserId == userId);
-        return GroupByMetadata(allMessages);
-    }
-
-    private IEnumerable<MessageBox> GroupByMetadata(IEnumerable<Messages> messages)
-    {
-        return messages
-            .GroupBy(n => new { n.RelatedPostId, Recipients= string.Join(",", new[] { n.SenderUserId, n.ReceiverUserId }.OrderBy(s => s)) })
-            .Select(s => new MessageBox(new MessageMetadata(s.Key.RelatedPostId, s.Key.Recipients.Split(",")), s.Select(s => s).ToList()));
-    }
-
-    private MessageBox? GetMessageBox(string receiverUserId, string senderUserId, int postId)
-    {
-        var allMessages = _context.Messages
-            .Include(n => n.ReceiverUser)
-            .Include(n => n.SenderUser)
-            .Where(n => 
-                (n.ReceiverUserId == receiverUserId || n.ReceiverUserId == senderUserId) 
-                && (n.SenderUserId == senderUserId || n.SenderUserId == receiverUserId)
-                && n.RelatedPostId == postId);
-        return GroupByMetadata(allMessages).FirstOrDefault() ?? new MessageBox(new MessageMetadata(postId, new[] { senderUserId, receiverUserId }.OrderBy(s => s).ToArray()));
-    }
 
     [Route("mesajlar/{userId?}")]
     // userId : message receiver userId
     // postId : mssage is being sent for related postId
     public async Task<ActionResult> ChatIndex(string? userId, int postId)
     {
-        var user = await _userManager.GetUserAsync(User);
+
+        var user = await _controllerHelper.GetCurrentUserAsync(User);
         if (user != null)
         {
-            var chats = GetAllMessageBoxes(user.Id).ToList();
+            var chats = _messageService.GetAllMessageBoxes(user.Id).ToList();
             ChatViewModel viewModel = new() { AllChat = chats };
             ViewBag.LoginUserId = user.Id;
 
@@ -68,27 +35,10 @@ public class MessageController : Controller
             {
                 ViewBag.ReceiverUserId = userId;
                 ViewBag.PostId = postId;
-                var messageBox = GetMessageBox(userId, user.Id, postId);
-                foreach (var msg in messageBox.Messages.Where(n => !n.IsRead).ToList())
-                {
-                    msg.IsRead = true;
 
-                    var notifs = _context.Notification.Where(s =>
-                        s.NotificationType == Common.NotificationType.Message &&
-                        s.RelatedElementId == msg.Id.ToString() &&
-                        !s.IsRead
-                    );
-                    foreach(var not in notifs)
-                    {
-                        not.IsRead = true;
-                    }
-                    await _context.Commit();
-                }
-                
+                var messageBox = await _messageService.GetOrCreteMessageBox(userId, user.Id, postId);
                 viewModel.CurrentChat = messageBox;
-
             }
-            // coming from My messages
             return View(viewModel);
         }
         else
@@ -100,11 +50,12 @@ public class MessageController : Controller
     [HttpPost, ActionName("SendMessage")]
     public async Task<ActionResult> SendMessage(Guid id, string message, int postId)
     {
-        if (!_context.Users.Any(n => n.Id == id.ToString()))
+        bool isUserExist = await _controllerHelper.IsUserExist(id.ToString());
+        if (isUserExist)
         {
             return Json("Kayýt bulunamadý.");
         }
-        var currentUser = await _userManager.GetUserAsync(User);
+        var currentUser = await _controllerHelper.GetCurrentUserAsync(User);
         if (id.ToString().Equals(currentUser.Id))
         {
             return Json("User can not send message to yourself");

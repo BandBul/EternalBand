@@ -1,4 +1,4 @@
-﻿namespace EternalBAND.Business.Options
+﻿namespace EternalBAND.Api.Options
 {
     public class NotificationOptions
     {

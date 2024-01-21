@@ -1,6 +1,7 @@
 
 using EternalBAND.DataAccess;
-using EternalBAND.DomainObjects;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace EternalBAND.Business
 {
@@ -23,31 +24,31 @@ namespace EternalBAND.Business
         }
         public static void SetAppSettingValue(string key, string value)
         {
-            string appSettingsJsonFilePath = System.IO.Path.Combine(System.AppContext.BaseDirectory, "appsettings.json");
+            string appSettingsJsonFilePath = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
             var jsonObj = GetDynamicJson(appSettingsJsonFilePath);
             jsonObj.SiteGeneralSetting[key] = value;
-            string output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Newtonsoft.Json.Formatting.Indented);
-            System.IO.File.WriteAllText(appSettingsJsonFilePath, output);
+            string output = JsonConvert.SerializeObject(jsonObj, Formatting.Indented);
+            File.WriteAllText(appSettingsJsonFilePath, output);
 
         }
         public static void SetSiteDomainValue(string value)
         {
-            string appSettingsJsonFilePath = System.IO.Path.Combine(System.AppContext.BaseDirectory, "appsettings.json");
+            string appSettingsJsonFilePath = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
             var jsonObj = GetDynamicJson(appSettingsJsonFilePath);
             jsonObj.SiteGeneralSetting["SiteDomain"] = value;
-            string output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Newtonsoft.Json.Formatting.Indented);
-            System.IO.File.WriteAllText(appSettingsJsonFilePath, output);
+            string output = JsonConvert.SerializeObject(jsonObj, Formatting.Indented);
+            File.WriteAllText(appSettingsJsonFilePath, output);
 
         }
         public static dynamic GetDynamicJson()
         {
-            return  GetDynamicJson(System.IO.Path.Combine(System.AppContext.BaseDirectory, "appsettings.json"));
+            return  GetDynamicJson(Path.Combine(AppContext.BaseDirectory, "appsettings.json"));
         }
         public static dynamic GetDynamicJson(string path)
         {
            
-            var json = System.IO.File.ReadAllText(path);
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<Newtonsoft.Json.Linq.JObject>(json);
+            var json = File.ReadAllText(path);
+            return JsonConvert.DeserializeObject<Newtonsoft.Json.Linq.JObject>(json);
 
         }
         public static string GetAppSettings(dynamic jsonObj,string searchText)

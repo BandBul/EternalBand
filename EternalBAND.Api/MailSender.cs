@@ -2,7 +2,7 @@ using System.Net.Mail;
 using EternalBAND.DataAccess;
 using Microsoft.AspNetCore.Identity.UI.Services;
 
-namespace EternalBAND.Business;
+namespace EternalBAND.Api;
 
  public class MailSender : IEmailSender
     {
@@ -27,7 +27,7 @@ namespace EternalBAND.Business;
                     mail.To.Add(email);
                     mail.From = new MailAddress(senderMail, senderDisplayName, System.Text.Encoding.UTF8);
                     mail.Subject = subject;
-                    mail.Body = new Business.GeneratorMailTemplate(htmlMessage).GenerateEmail();
+                    mail.Body = new GeneratorMailTemplate(htmlMessage).GenerateEmail();
                     SmtpClient smtpClient = new SmtpClient();
                     smtpClient.Timeout = 10000;
                     smtpClient.Credentials = new System.Net.NetworkCredential(senderMail, senderMailPassword);

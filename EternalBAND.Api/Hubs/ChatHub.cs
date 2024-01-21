@@ -4,7 +4,7 @@ using EternalBAND.DomainObjects.ViewModel;
 using Microsoft.AspNetCore.SignalR;
 using System.Text.Json;
 
-namespace EternalBAND.Hubs;
+namespace EternalBAND.Api.Hubs;
 
 public class ChatHub : Hub
 {

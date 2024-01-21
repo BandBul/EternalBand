@@ -13,21 +13,25 @@
     <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
     <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
     <ItemGroup>
+      <Compile Remove="EternalBAND.Api\**" />
       <Compile Remove="EternalBAND.Common\**" />
       <Compile Remove="EternalBand.DataAccess\**" />
       <Compile Remove="EternalBAND.DomainObjects\**" />
       <Compile Remove="EternalBAND\**" />
       <Compile Remove="__MACOSX\**" />
+      <Content Remove="EternalBAND.Api\**" />
       <Content Remove="EternalBAND.Common\**" />
       <Content Remove="EternalBand.DataAccess\**" />
       <Content Remove="EternalBAND.DomainObjects\**" />
       <Content Remove="EternalBAND\**" />
       <Content Remove="__MACOSX\**" />
+      <EmbeddedResource Remove="EternalBAND.Api\**" />
       <EmbeddedResource Remove="EternalBAND.Common\**" />
       <EmbeddedResource Remove="EternalBand.DataAccess\**" />
       <EmbeddedResource Remove="EternalBAND.DomainObjects\**" />
       <EmbeddedResource Remove="EternalBAND\**" />
       <EmbeddedResource Remove="__MACOSX\**" />
+      <None Remove="EternalBAND.Api\**" />
       <None Remove="EternalBAND.Common\**" />
       <None Remove="EternalBand.DataAccess\**" />
       <None Remove="EternalBAND.DomainObjects\**" />
@@ -103,6 +107,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="EternalBAND.Api\EternalBAND.Api.csproj" />
       <ProjectReference Include="EternalBAND.Common\EternalBAND.Common.csproj" />
       <ProjectReference Include="EternalBand.DataAccess\EternalBAND.DataAccess.csproj" />
       <ProjectReference Include="EternalBAND.DomainObjects\EternalBAND.DomainObjects.csproj" />

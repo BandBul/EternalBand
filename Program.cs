@@ -1,16 +1,15 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using EternalBAND.DataAccess;
-using EternalBAND.Hubs;
+using EternalBAND.Api.Hubs;
 using EternalBAND.DomainObjects;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using EternalBAND.Business.Options;
+using EternalBAND.Api.Options;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.FileProviders;
-using EternalBAND.Business;
-using EternalBAND.DataAccess.Repository;
+using EternalBAND.Api;
 using EternalBAND.Win.Extensions;
-using Microsoft.Extensions.DependencyInjection;
+using EternalBAND.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

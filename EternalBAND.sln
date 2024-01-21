@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EternalBAND.DomainObjects",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EternalBAND.Common", "EternalBAND.Common\EternalBAND.Common.csproj", "{120A0969-B263-47A5-A3F5-941C69CE35B2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EternalBAND.Api", "EternalBAND.Api\EternalBAND.Api.csproj", "{32064DE7-90B6-4EC5-823A-8B04DB86E888}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{120A0969-B263-47A5-A3F5-941C69CE35B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{120A0969-B263-47A5-A3F5-941C69CE35B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{120A0969-B263-47A5-A3F5-941C69CE35B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32064DE7-90B6-4EC5-823A-8B04DB86E888}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32064DE7-90B6-4EC5-823A-8B04DB86E888}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32064DE7-90B6-4EC5-823A-8B04DB86E888}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32064DE7-90B6-4EC5-823A-8B04DB86E888}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

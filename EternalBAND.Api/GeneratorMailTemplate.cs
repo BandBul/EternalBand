@@ -1,6 +1,6 @@
-namespace EternalBAND.Business
+namespace EternalBAND.Api
 {
-      public class GeneratorMailTemplate
+    public class GeneratorMailTemplate
     {
         private string _emailContents, _emailTitle;
         public GeneratorMailTemplate(string emailContents)

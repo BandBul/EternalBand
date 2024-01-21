@@ -5,6 +5,7 @@
 
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using EternalBAND.Api;
 using EternalBAND.Business;
 using EternalBAND.DataAccess;
 using EternalBAND.DomainObjects;
@@ -179,7 +180,7 @@ namespace EternalBAND.Areas.Identity.Pages.Account.Manage
                 }
                 catch (Exception ex)
                 {
-                    await new EternalBAND.Business.LogService(_context).ErrorLogMethod(
+                    await new LogService(_context).ErrorLogMethod(
                         "Manage/Index fotoğraf eklenirken hata.", ex,
                         "OnPostAsync");
                 }
