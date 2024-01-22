@@ -3,13 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using EternalBAND.DataAccess;
 using EternalBAND.Api.Hubs;
 using EternalBAND.DomainObjects;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using EternalBAND.Api.Options;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.FileProviders;
-using EternalBAND.Api;
 using EternalBAND.Win.Extensions;
-using EternalBAND.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,8 +17,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-// builder.Services.AddDefaultIdentity<Users>(options => options.SignIn.RequireConfirmedAccount = true)
-//     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 builder.Services.AddIdentity<Users, IdentityRole>(options =>
     {
@@ -50,9 +45,10 @@ builder.Services.AddRazorPages(options =>
         "/mail-gonderildi"); 
 });
 
-builder.Services.AddScoped<IEmailSender, MailSender>();
-builder.Services.AddScoped<MessageService>();
-builder.Services.RegisterRepositories();
+builder.Services
+    .RegisterRepositories()
+    .RegisterBusinessDomainObject();
+
 var googleApiKey = new GoogleApiKeyOptions();
 builder.Configuration.GetSection(GoogleApiKeyOptions.GoogleApiKey).Bind(googleApiKey);
 builder.Services.Configure<NotificationOptions>(
@@ -77,12 +73,6 @@ builder.Services.ConfigureApplicationCookie(options =>
 builder.Services.AddSignalR();
 
 var app = builder.Build();
-//var teta = app.Services.GetService(typeof(BaseRepository<Users>));
-//var z = app.Services.GetServices<BaseRepository<Users>>();
-//var y = app.Services.GetRequiredService<BaseRepository<Blogs>>();
-//var x = app.Services.GetRequiredService<BaseRepository<IEntity>>();
-//var provider = builder.Services.BuildServiceProvider();
-//var serviceDescriptors = provider.GetServices<ServiceDescriptor>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

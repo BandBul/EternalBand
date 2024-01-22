@@ -24,11 +24,11 @@ public class MessageController : Controller
     public async Task<ActionResult> ChatIndex(string? userId, int postId)
     {
 
-        var user = await _controllerHelper.GetCurrentUserAsync(User);
+        var user = await _controllerHelper.GetUserAsync(User);
         if (user != null)
         {
-            var chats = _messageService.GetAllMessageBoxes(user.Id).ToList();
-            ChatViewModel viewModel = new() { AllChat = chats };
+            var allMessageBoxes = _messageService.GetAllMessageBoxes(user.Id).ToList();
+            ChatViewModel viewModel = new() { AllChat = allMessageBoxes };
             ViewBag.LoginUserId = user.Id;
 
             if (userId != null)
@@ -55,7 +55,7 @@ public class MessageController : Controller
         {
             return Json("Kayýt bulunamadý.");
         }
-        var currentUser = await _controllerHelper.GetCurrentUserAsync(User);
+        var currentUser = await _controllerHelper.GetUserAsync(User);
         if (id.ToString().Equals(currentUser.Id))
         {
             return Json("User can not send message to yourself");

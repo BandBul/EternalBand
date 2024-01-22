@@ -1,17 +1,13 @@
 using EternalBAND.Business;
 using EternalBAND.Common;
-using EternalBAND.Data;
 using EternalBAND.DomainObjects;
 using EternalBAND.Helpers;
-using EternalBAND.DomainObjects;
-using EternalBAND.DomainObjects.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 using X.PagedList;
 using EternalBAND.DataAccess;
 
@@ -36,30 +32,7 @@ public class UserController : Controller
     public async Task<IActionResult> PostIndex()
     {
         var getUser = await _userManager.GetUserAsync(User);
-        ViewBag.PostStatusViewModel = new Dictionary<PostStatus, PostStatusViewModel>() 
-        {
-            { PostStatus.Active, new PostStatusViewModel()
-                {
-                    DisplayText = "Aktif",
-                    Color = "green",
-                    HeaderDisplayText = "Aktif"
-                }
-            },
-            { PostStatus.PendingApproval, new PostStatusViewModel()
-                {
-                    DisplayText = "Onay Bekliyor",
-                    Color = "orange",
-                    HeaderDisplayText = "Onay Bekleyen"
-                }
-            },
-            { PostStatus.DeActive, new PostStatusViewModel()
-                {
-                    DisplayText = "Arşivde",
-                    Color = "purple",
-                    HeaderDisplayText = "Arşivlenen"
-                }
-            }
-        };
+        ViewBag.PostStatusViewModel = Initials.InitialPostStatusViewModelValue;
 
         var applicationDbContext = _context.Posts.Where(n=> n.AddedByUserId==getUser.Id).Include(p => p.AddedByUser).Include(p => p.AdminConfirmationUser)
             .Include(p => p.PostTypes).Include(p => p.Instruments);

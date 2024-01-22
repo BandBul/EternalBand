@@ -18,13 +18,12 @@ namespace EternalBAND.Api.Services
     {
         private ApplicationDbContext _context;
         private readonly IEmailSender _mailsender;
-        private readonly IHubContext<ChatHub> _hubContext;
-
-        public MessageService(ApplicationDbContext context, IEmailSender mailsender, IHubContext<ChatHub> hubContext)
+        private readonly HubController _hubController;
+        public MessageService(ApplicationDbContext context, IEmailSender mailsender, HubController hubController)
         {
             _context = context;
             _mailsender = mailsender;
-            _hubContext = hubContext;
+            _hubController = hubController;
         }
 
 
@@ -32,14 +31,14 @@ namespace EternalBAND.Api.Services
         {
             var msg = await SaveMessage(currentUser, receiverUserId, message, postId);
             var postTitle = _context.Posts.Find(msg.RelatedPostId).Title;
-            await _hubContext.Clients.All.SendAsync("ReceiveMessage", JsonSerializer.Serialize(msg));
+            await _hubController.BroadcastMessage("ReceiveMessage", JsonSerializer.Serialize(msg));
             var notif = await CreateMessageNotification(
                 $"{currentUser.Name} '{postTitle}' başıklı ilana mesaj gönderdi.",
                 currentUser.Id,
                 receiverUserId.ToString(),
                 msg.RedirectLink,
                 msg.Id.ToString());
-            await _hubContext.Clients.All.SendAsync("ReceiveMessageNotification", JsonSerializer.Serialize(notif));
+            await _hubController.BroadcastMessage("ReceiveMessageNotification", JsonSerializer.Serialize(notif));
         }
 
         public IEnumerable<MessageBox> GetAllMessageBoxes(string userId)

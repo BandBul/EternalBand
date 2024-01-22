@@ -1,0 +1,28 @@
+﻿using EternalBAND.Api.Helpers;
+using EternalBAND.Api.Hubs;
+using EternalBAND.Common;
+using EternalBAND.DataAccess;
+using EternalBAND.DomainObjects;
+using EternalBAND.Helpers;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
+
+namespace EternalBAND.Api.Services
+{
+    // TODO move all logıc from UserController to here
+    public class UserService
+    {
+
+    }
+}

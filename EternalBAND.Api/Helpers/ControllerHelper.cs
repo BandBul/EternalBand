@@ -20,7 +20,7 @@ namespace EternalBAND.Api.Helpers
             _context = context;
         }
 
-        public async Task<Users> GetCurrentUserAsync(ClaimsPrincipal user )
+        public async Task<Users> GetUserAsync(ClaimsPrincipal user )
         {
             return await _userManager.GetUserAsync(user);
         }

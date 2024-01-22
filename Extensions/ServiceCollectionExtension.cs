@@ -1,5 +1,8 @@
-﻿using EternalBAND.DataAccess.Repository;
+﻿using EternalBAND.Api;
+using EternalBAND.Api.Services;
+using EternalBAND.DataAccess.Repository;
 using EternalBAND.DomainObjects;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -27,5 +30,15 @@ namespace EternalBAND.Win.Extensions
 
             return services;
         }
+
+        public static IServiceCollection RegisterBusinessDomainObject(this IServiceCollection services)
+        {
+            services.AddScoped<IEmailSender, MailSender>();
+            services.AddScoped<MessageService>();
+            services.AddScoped<HubController>();
+            return services;
+        }
+
+            
     }
 }

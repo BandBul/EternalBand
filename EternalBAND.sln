@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EternalBAND.Common", "Etern
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EternalBAND.Api", "EternalBAND.Api\EternalBAND.Api.csproj", "{32064DE7-90B6-4EC5-823A-8B04DB86E888}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EternalBAND.Migrations", "EternalBAND.Migrations\EternalBAND.Migrations.csproj", "{EF5764EA-94C8-41DD-9EFA-7C1E55232446}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{32064DE7-90B6-4EC5-823A-8B04DB86E888}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32064DE7-90B6-4EC5-823A-8B04DB86E888}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32064DE7-90B6-4EC5-823A-8B04DB86E888}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF5764EA-94C8-41DD-9EFA-7C1E55232446}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF5764EA-94C8-41DD-9EFA-7C1E55232446}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF5764EA-94C8-41DD-9EFA-7C1E55232446}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF5764EA-94C8-41DD-9EFA-7C1E55232446}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

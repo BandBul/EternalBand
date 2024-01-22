@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EternalBAND.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230910084256_initial")]
-    partial class initial
+    [Migration("20230914082405_Instruments_And_PostTypes_Initilization")]
+    partial class Instruments_And_PostTypes_Initilization
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace EternalBAND.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("EternalBAND.Models.Blogs", b =>
+            modelBuilder.Entity("EternalBAND.DomainObjects.Blogs", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -69,7 +69,7 @@ namespace EternalBAND.Data.Migrations
                     b.ToTable("Blogs");
                 });
 
-            modelBuilder.Entity("EternalBAND.Models.Contacts", b =>
+            modelBuilder.Entity("EternalBAND.DomainObjects.Contacts", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -108,7 +108,7 @@ namespace EternalBAND.Data.Migrations
                     b.ToTable("Contacts");
                 });
 
-            modelBuilder.Entity("EternalBAND.Models.ErrorLogs", b =>
+            modelBuilder.Entity("EternalBAND.DomainObjects.ErrorLogs", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -136,7 +136,7 @@ namespace EternalBAND.Data.Migrations
                     b.ToTable("ErrorLogs");
                 });
 
-            modelBuilder.Entity("EternalBAND.Models.Instruments", b =>
+            modelBuilder.Entity("EternalBAND.DomainObjects.Instruments", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -157,9 +157,74 @@ namespace EternalBAND.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Instruments");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Instrument = "Gitar",
+                            InstrumentShort = "Guitar",
+                            IsActive = true
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Instrument = "Bas Gitar",
+                            InstrumentShort = "Bass Guitar",
+                            IsActive = true
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Instrument = "Davul",
+                            InstrumentShort = "Drum",
+                            IsActive = true
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Instrument = "Piano",
+                            InstrumentShort = "Piano",
+                            IsActive = true
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Instrument = "Klavye",
+                            InstrumentShort = "Keyboard",
+                            IsActive = true
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Instrument = "Saksafon",
+                            InstrumentShort = "Saxophone",
+                            IsActive = true
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Instrument = "Keman",
+                            InstrumentShort = "Violin",
+                            IsActive = true
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Instrument = "Vokal",
+                            InstrumentShort = "Vocal",
+                            IsActive = true
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Instrument = "Kontrabas",
+                            InstrumentShort = "Kontrabas",
+                            IsActive = true
+                        });
                 });
 
-            modelBuilder.Entity("EternalBAND.Models.Logs", b =>
+            modelBuilder.Entity("EternalBAND.DomainObjects.Logs", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -187,7 +252,7 @@ namespace EternalBAND.Data.Migrations
                     b.ToTable("Logs");
                 });
 
-            modelBuilder.Entity("EternalBAND.Models.Messages", b =>
+            modelBuilder.Entity("EternalBAND.DomainObjects.Messages", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -222,7 +287,7 @@ namespace EternalBAND.Data.Migrations
                     b.ToTable("Messages");
                 });
 
-            modelBuilder.Entity("EternalBAND.Models.Notification", b =>
+            modelBuilder.Entity("EternalBAND.DomainObjects.Notification", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -248,6 +313,10 @@ namespace EternalBAND.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("RelatedElementId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ReceiveUserId");
@@ -255,7 +324,7 @@ namespace EternalBAND.Data.Migrations
                     b.ToTable("Notification");
                 });
 
-            modelBuilder.Entity("EternalBAND.Models.PostTypes", b =>
+            modelBuilder.Entity("EternalBAND.DomainObjects.PostTypes", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -279,9 +348,35 @@ namespace EternalBAND.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PostTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Active = true,
+                            AddedDate = new DateTime(2023, 9, 14, 10, 24, 4, 784, DateTimeKind.Local).AddTicks(2371),
+                            Type = "Müzisyen Arıyorum",
+                            TypeShort = "Musician"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Active = true,
+                            AddedDate = new DateTime(2023, 9, 14, 10, 24, 4, 784, DateTimeKind.Local).AddTicks(2419),
+                            Type = "Grup Arıyorum",
+                            TypeShort = "Group"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Active = true,
+                            AddedDate = new DateTime(2023, 9, 14, 10, 24, 4, 784, DateTimeKind.Local).AddTicks(2421),
+                            Type = "Ders Vermek İstiyorum",
+                            TypeShort = "Lesson"
+                        });
                 });
 
-            modelBuilder.Entity("EternalBAND.Models.Posts", b =>
+            modelBuilder.Entity("EternalBAND.DomainObjects.Posts", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -338,6 +433,9 @@ namespace EternalBAND.Data.Migrations
                     b.Property<string>("SeoLink")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -355,7 +453,7 @@ namespace EternalBAND.Data.Migrations
                     b.ToTable("Posts");
                 });
 
-            modelBuilder.Entity("EternalBAND.Models.SystemInfo", b =>
+            modelBuilder.Entity("EternalBAND.DomainObjects.SystemInfo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -514,7 +612,7 @@ namespace EternalBAND.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("EternalBAND.Models.UserProfileControl", b =>
+            modelBuilder.Entity("EternalBAND.DomainObjects.UserProfileControl", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -539,7 +637,7 @@ namespace EternalBAND.Data.Migrations
                     b.ToTable("UserProfileControl");
                 });
 
-            modelBuilder.Entity("EternalBAND.Models.Users", b =>
+            modelBuilder.Entity("EternalBAND.DomainObjects.Users", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -683,13 +781,13 @@ namespace EternalBAND.Data.Migrations
                         {
                             Id = "39d321fc-0911-4412-a19e-98fb7d068440",
                             Name = "Admin",
-                            NormalizedName = "Admin"
+                            NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "a3641119-ff91-4eca-aa32-120c36d61d1a",
                             Name = "User",
-                            NormalizedName = "User"
+                            NormalizedName = "USER"
                         });
                 });
 
@@ -806,13 +904,13 @@ namespace EternalBAND.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("EternalBAND.Models.Messages", b =>
+            modelBuilder.Entity("EternalBAND.DomainObjects.Messages", b =>
                 {
-                    b.HasOne("EternalBAND.Models.Users", "ReceiverUser")
+                    b.HasOne("EternalBAND.DomainObjects.Users", "ReceiverUser")
                         .WithMany()
                         .HasForeignKey("ReceiverUserId");
 
-                    b.HasOne("EternalBAND.Models.Users", "SenderUser")
+                    b.HasOne("EternalBAND.DomainObjects.Users", "SenderUser")
                         .WithMany()
                         .HasForeignKey("SenderUserId");
 
@@ -821,9 +919,9 @@ namespace EternalBAND.Data.Migrations
                     b.Navigation("SenderUser");
                 });
 
-            modelBuilder.Entity("EternalBAND.Models.Notification", b =>
+            modelBuilder.Entity("EternalBAND.DomainObjects.Notification", b =>
                 {
-                    b.HasOne("EternalBAND.Models.Users", "ReceiveUser")
+                    b.HasOne("EternalBAND.DomainObjects.Users", "ReceiveUser")
                         .WithMany()
                         .HasForeignKey("ReceiveUserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -832,21 +930,21 @@ namespace EternalBAND.Data.Migrations
                     b.Navigation("ReceiveUser");
                 });
 
-            modelBuilder.Entity("EternalBAND.Models.Posts", b =>
+            modelBuilder.Entity("EternalBAND.DomainObjects.Posts", b =>
                 {
-                    b.HasOne("EternalBAND.Models.Users", "AddedByUser")
+                    b.HasOne("EternalBAND.DomainObjects.Users", "AddedByUser")
                         .WithMany()
                         .HasForeignKey("AddedByUserId");
 
-                    b.HasOne("EternalBAND.Models.Users", "AdminConfirmationUser")
+                    b.HasOne("EternalBAND.DomainObjects.Users", "AdminConfirmationUser")
                         .WithMany()
                         .HasForeignKey("AdminConfirmationUserId");
 
-                    b.HasOne("EternalBAND.Models.Instruments", "Instruments")
+                    b.HasOne("EternalBAND.DomainObjects.Instruments", "Instruments")
                         .WithMany()
                         .HasForeignKey("InstrumentsId");
 
-                    b.HasOne("EternalBAND.Models.PostTypes", "PostTypes")
+                    b.HasOne("EternalBAND.DomainObjects.PostTypes", "PostTypes")
                         .WithMany()
                         .HasForeignKey("PostTypesId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -861,9 +959,9 @@ namespace EternalBAND.Data.Migrations
                     b.Navigation("PostTypes");
                 });
 
-            modelBuilder.Entity("EternalBAND.Models.UserProfileControl", b =>
+            modelBuilder.Entity("EternalBAND.DomainObjects.UserProfileControl", b =>
                 {
-                    b.HasOne("EternalBAND.Models.Users", "Users")
+                    b.HasOne("EternalBAND.DomainObjects.Users", "Users")
                         .WithMany()
                         .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -883,7 +981,7 @@ namespace EternalBAND.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("EternalBAND.Models.Users", null)
+                    b.HasOne("EternalBAND.DomainObjects.Users", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -892,7 +990,7 @@ namespace EternalBAND.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("EternalBAND.Models.Users", null)
+                    b.HasOne("EternalBAND.DomainObjects.Users", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -907,7 +1005,7 @@ namespace EternalBAND.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EternalBAND.Models.Users", null)
+                    b.HasOne("EternalBAND.DomainObjects.Users", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -916,7 +1014,7 @@ namespace EternalBAND.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("EternalBAND.Models.Users", null)
+                    b.HasOne("EternalBAND.DomainObjects.Users", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
