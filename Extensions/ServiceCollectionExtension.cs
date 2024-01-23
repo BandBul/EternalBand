@@ -34,6 +34,7 @@ namespace EternalBAND.Win.Extensions
         public static IServiceCollection RegisterBusinessDomainObject(this IServiceCollection services)
         {
             services.AddScoped<IEmailSender, MailSender>();
+            services.AddScoped<HomeService>();
             services.AddScoped<MessageService>();
             services.AddScoped<HubController>();
             return services;

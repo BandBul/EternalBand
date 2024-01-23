@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EternalBAND.DataAccess.Repository
 {
-
+    //TODO remove all usage of ApplicationDbContext and instead use BaseRepository.
     public class BaseRepository
     {
         protected readonly ApplicationDbContext _dbContext;
@@ -21,7 +21,7 @@ namespace EternalBAND.DataAccess.Repository
             _dbContext.SaveChanges();
         }
     }
-    // TODO create an Entity interface for represent all Entity Objects
+
     public class BaseRepository<TEntity> : BaseRepository
         where TEntity : class
     {

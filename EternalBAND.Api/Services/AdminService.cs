@@ -23,7 +23,7 @@ using X.PagedList;
 
 namespace EternalBAND.Api.Services
 {
-    public class UserService
+    public class AdminService
     {
     }
 }

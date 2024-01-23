@@ -6,18 +6,20 @@ using X.PagedList;
 using Microsoft.AspNetCore.Authorization;
 using EternalBAND.DomainObjects;
 using EternalBAND.DomainObjects.ViewModel;
+using EternalBAND.Api.Services;
+using System.Security.Cryptography;
 
 namespace EternalBAND.Controllers;
 [Authorize]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    private readonly ApplicationDbContext _context;
+    private readonly HomeService _homeService;
 
-    public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
+    public HomeController(ILogger<HomeController> logger, HomeService homeService)
     {
         _logger = logger;
-        _context = context;
+        _homeService =homeService;
     }
     [AllowAnonymous]
     [Route("")]
@@ -36,61 +38,42 @@ public class HomeController : Controller
     [Route("blog-yazilari")]
     public async Task<IActionResult> Blogs(int pId = 1, string? s = "")
     {
-        if (s == null) s = "";
-        return View(await _context.Blogs.Where(n => n.Title.Contains(s)).ToPagedListAsync(pId, 10));
+        if (s == null)
+        {
+            s = "";
+        }
+        return View(await _homeService.Blogs(s, pId));
     }
 
     [Route("blog")]
     public async Task<IActionResult> Blog(string? s = "")
     {
         if (s == null)
+        {
             return RedirectToAction(nameof(Anasayfa));
+        }
 
-        return View(await _context.Blogs.FirstOrDefaultAsync(n => n.SeoLink == s));
+        return View(await _homeService.Blog(s));
     }
-
+    // TODO change parameter names as understandable strings
     [Route("ilanlar")]
     public async Task<IActionResult> Posts(int pId = 1, string? s = "", int c = 0, string? e = "")
     {
         ViewBag.CityId = c;
         ViewBag.TypeShort = s;
         ViewBag.Instrument = e;
-        var r = await _context.Posts.Where(p => p.Status == Common.PostStatus.Active).Include(n => n.PostTypes).Include(n => n.Instruments).ToListAsync();
-        if (c != 0 || e != "" || s != "")
-        {
-            if(e != "0" && s!= "0")
-            {
-                r = r.Where(n => n.Instruments.InstrumentShort.Contains(e) || n.PostTypes.TypeShort.Contains(s))
-                    .ToList();
-            }
-            else if (e != "0")
-            {
-                r = r.Where(n => n.Instruments.InstrumentShort.Contains(e))
-                    .ToList();
-            }
-            else if (s != "0")
-            {
-                r = r.Where(n =>n.PostTypes.TypeShort.Contains(s))
-                    .ToList();
-            }
-            if (c != 0)
-            {
-                r = r.Where(n => n.CityId == c).ToList();
-            }
-            return View(await r.ToPagedListAsync(pId,10));
-        }
-
-        return View(await r.ToPagedListAsync(pId, 10));
+        return View(await _homeService.Posts(pId, s, c, e));
     }
 
     [Route("ilan")]
     public async Task<IActionResult> Post(string? s = "", bool approvalPurpose = false)
     {
         if (s == null)
+        {
             return RedirectToAction(nameof(Anasayfa));
+        }
         ViewBag.ApprovalPurpose = approvalPurpose;
-        return View(await _context.Posts.Include(n => n.PostTypes).Include(n => n.Instruments)
-            .FirstOrDefaultAsync(n => n.SeoLink == s));
+        return View(await _homeService.Post(s));
     }
 
     [Route("iletisim")]
@@ -107,10 +90,7 @@ public class HomeController : Controller
     {
         if (ModelState.IsValid)
         {
-            contacts.AddedDate = DateTime.Now;
-
-            _context.Add(contacts);
-            await _context.SaveChangesAsync();
+            await _homeService.ContactsCreate(contacts);
             ViewBag.Message = "İletişim formunuz başarıyla ulaştı.";
         }
         else

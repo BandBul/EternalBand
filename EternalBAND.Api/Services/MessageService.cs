@@ -1,16 +1,9 @@
-﻿using EternalBAND.Api.Hubs;
-using EternalBAND.DataAccess;
+﻿using EternalBAND.DataAccess;
 using EternalBAND.DomainObjects;
 using EternalBAND.DomainObjects.ViewModel;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace EternalBAND.Api.Services
 {
