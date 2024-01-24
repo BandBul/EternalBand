@@ -35,8 +35,12 @@ namespace EternalBAND.Win.Extensions
         {
             services.AddScoped<IEmailSender, MailSender>();
             services.AddScoped<HomeService>();
+            services.AddScoped<UserService>();
+            services.AddScoped<AdminService>();
+            services.AddScoped<AccountService>();
             services.AddScoped<MessageService>();
             services.AddScoped<HubController>();
+
             return services;
         }
 

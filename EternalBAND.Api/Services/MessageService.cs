@@ -19,7 +19,6 @@ namespace EternalBAND.Api.Services
             _hubController = hubController;
         }
 
-
         public async Task SendAndBroadCastMessageAsync(Users currentUser, Guid receiverUserId, string? message, int postId)
         {
             var msg = await SaveMessage(currentUser, receiverUserId, message, postId);

@@ -10,7 +10,6 @@ public class MessageController : Controller
     private readonly MessageService _messageService;
     private readonly ControllerHelper _controllerHelper;
 
-
     public MessageController(MessageService messageService, ControllerHelper controllerHelper)
     {
         _messageService = messageService;
