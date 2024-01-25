@@ -1,5 +1,4 @@
-function RunQuill(textId,editor='htmlEditor') {
-
+function RunQuill(textId, editor = 'htmlEditor') {
     var quill = new Quill("#"+editor, {
         modules: {
             toolbar: [
@@ -19,8 +18,5 @@ function RunQuill(textId,editor='htmlEditor') {
     });
     quill.on('text-change', () => {
         $("#"+textId).val(quill.root.innerHTML);
-    });
-    document.addEventListener('DOMContentLoaded', function () {
-        quill.root.innerHTML = $("#"+textId).val();
     });
 }

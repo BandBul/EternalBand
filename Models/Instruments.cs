@@ -4,7 +4,7 @@ namespace EternalBAND.Models;
 
 public class Instruments
 {
-    public int Id { get; set; }
+    public int? Id { get; set; }
     [Display(Name = "Enstrüman")]
     public string Instrument { get; set; }
     [Display(Name = "Enstrüman Kısa ")]
