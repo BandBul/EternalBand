@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using NuGet.Packaging;
 using X.PagedList;
 
 namespace EternalBAND.Controllers.User;
@@ -68,10 +69,20 @@ public class UserController : Controller
     // GET: Posts/Create
     public IActionResult PostCreate()
     {
-        ViewData["PostTypesId"] = new SelectList(_context.PostTypes, "Id", "Type");
-        ViewData["InstrumentsId"] = new SelectList(_context.Instruments, "Id", "Instrument");
-        ViewData["CityId"] = new SelectList(Cities.GetCities(), "Key", "Value");
+        AddDefaultValuesToView();
         return View();
+    }
+
+    private void AddDefaultValuesToView()
+    {
+        List<PostTypes> postTypes = new List<PostTypes>() { new PostTypes() { Active = true, Id = null, Type = "Seçiniz", TypeShort = "Default" } };
+        postTypes.AddRange(_context.PostTypes);
+        List<Instruments> instruments = new List<Instruments>() { new Instruments() { Id = null, Instrument = "Seçiniz", InstrumentShort= "Default" } };
+        instruments.AddRange(_context.Instruments);
+        ViewData["PostTypesId"] = new SelectList(postTypes, "Id", "Type");
+        ViewData["InstrumentsId"] = new SelectList(instruments, "Id", "Instrument");
+        ViewData["CityId"] = new SelectList(Cities.GetCities(), "Key", "Value");
+
     }
 
     // POST: Posts/Create
@@ -124,9 +135,6 @@ public class UserController : Controller
             IEnumerable<ModelError> allErrors = ModelState.Values.SelectMany(v => v.Errors);
         }
 
-        ViewData["PostTypesId"] = new SelectList(_context.PostTypes, "Id", "Type", posts.PostTypesId);
-        ViewData["InstrumentsId"] = new SelectList(_context.Instruments, "Id", "Instrument", posts.InstrumentsId);
-        ViewData["CityId"] = new SelectList(Cities.GetCities(), "Key", "Value", posts.CityId);
         return View(posts);
     }
 

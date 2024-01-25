@@ -462,7 +462,7 @@ public class AdminController : Controller
         return RedirectToAction(nameof(PostTypesIndex));
     }
 
-    private bool PostTypesExists(int id)
+    private bool PostTypesExists(int? id)
     {
         return (_context.PostTypes?.Any(e => e.Id == id)).GetValueOrDefault();
     }
@@ -810,7 +810,7 @@ public class AdminController : Controller
 
     }
 
-    private bool InstrumentsExists(int id)
+    private bool InstrumentsExists(int? id)
     {
         return (_context.Instruments?.Any(e => e.Id == id)).GetValueOrDefault();
     }

@@ -6,6 +6,7 @@ public static class Cities
     {
         return new Dictionary<int, string>()
         {
+            {0, "Seçiniz" },
             {1, "Adana"},
             {2, "Adıyaman"},
             {3, "Afyon"},
