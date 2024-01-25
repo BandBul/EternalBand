@@ -1,4 +1,5 @@
 ﻿using EternalBAND.Api;
+using EternalBAND.Api.Helpers;
 using EternalBAND.Api.Services;
 using EternalBAND.DataAccess.Repository;
 using EternalBAND.DomainObjects;
@@ -40,6 +41,7 @@ namespace EternalBAND.Win.Extensions
             services.AddScoped<AccountService>();
             services.AddScoped<MessageService>();
             services.AddScoped<HubController>();
+            services.AddScoped<ControllerHelper>();
 
             return services;
         }

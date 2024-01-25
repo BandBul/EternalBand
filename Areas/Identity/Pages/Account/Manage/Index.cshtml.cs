@@ -6,6 +6,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using EternalBAND.Api;
+using EternalBAND.Api.Services;
 using EternalBAND.Business;
 using EternalBAND.DataAccess;
 using EternalBAND.DomainObjects;

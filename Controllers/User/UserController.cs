@@ -14,6 +14,7 @@ using EternalBAND.Api.Helpers;
 using EternalBAND.Api.Services;
 using Microsoft.Extensions.Hosting;
 using EternalBAND.Api.Exceptions;
+using System;
 
 namespace EternalBAND.Controllers.User;
 // TODO create a Reposıtory for manage _context, controller should only responsible for API and basic validations 
@@ -24,9 +25,6 @@ public class UserController : Controller
     private readonly UserService _userService;
 
     public UserController(
-        ApplicationDbContext context, 
-        UserManager<Users> userManager, 
-        IWebHostEnvironment environment, 
         ControllerHelper controllerHelper,
         UserService userService)
     {

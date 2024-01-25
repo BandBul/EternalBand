@@ -1,9 +1,7 @@
-using System;
-using System.Threading.Tasks;
 using EternalBAND.DataAccess;
 using EternalBAND.DomainObjects;
 
-namespace EternalBAND.Api
+namespace EternalBAND.Api.Services
 {
     public class LogService
     {
