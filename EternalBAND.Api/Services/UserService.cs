@@ -260,11 +260,11 @@ namespace EternalBAND.Api.Services
             return notif.RedirectLink;
         }
 
-        public IEnumerable GetPostTypes() 
+        public IEnumerable<PostTypes> GetPostTypes() 
         {
             return _context.PostTypes;
         }
-        public IEnumerable GetInstruments()
+        public IEnumerable<Instruments> GetInstruments()
         {
             return _context.Instruments;
         }

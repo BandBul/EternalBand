@@ -497,7 +497,7 @@ namespace EternalBAND.Api.Services
             await _context.SaveChangesAsync();
         }
 
-        private bool InstrumentsExists(int id)
+        private bool InstrumentsExists(int? id)
         {
             return (_context.Instruments?.Any(e => e.Id == id)).GetValueOrDefault();
         }
@@ -507,7 +507,7 @@ namespace EternalBAND.Api.Services
             return (_context.SystemInfo?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
-        private bool PostTypesExists(int id)
+        private bool PostTypesExists(int? id)
         {
             return (_context.PostTypes?.Any(e => e.Id == id)).GetValueOrDefault();
         }

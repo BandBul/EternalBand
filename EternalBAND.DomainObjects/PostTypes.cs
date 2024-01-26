@@ -4,7 +4,7 @@ namespace EternalBAND.DomainObjects;
 
 public class PostTypes : IEntity
 {
-    public int Id { get; set; }
+    public int? Id { get; set; }
     [DisplayName("Tip")]
     public string Type { get; set; }
     [DisplayName("Tip Kısa")]

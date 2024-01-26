@@ -141,7 +141,7 @@
                     <div class="d-flex">
                         <label class="text-dark">Şehir</label>
                         <div>
-                            <p class="text-muted mb-0">@Cities.GetCities().FirstOrDefault(n => n.Key == Model.CityId).Value</p>
+                            <p class="text-muted mb-0">@Cities.GetCities().FirstOrDefault(n => n.Id == Model.CityId).Name</p>
                         </div>
                     </div>
 

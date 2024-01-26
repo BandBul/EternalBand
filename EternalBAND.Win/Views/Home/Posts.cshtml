@@ -85,7 +85,7 @@
                                 <option disabled="disabled" selected="">ŞEHİR</option>
                                 @foreach (var city in Cities.GetCities())
                                 {
-                                    <option value="@city.Key">@city.Value</option>
+                                    <option value="@city.Id">@city.Name</option>
                                 }
                             </select>
                         </div>
@@ -254,7 +254,7 @@
                                             @if (post.CityId != null && post.CityId != 0)
                                             {
                                                 <li class="list-inline-item">
-                                                    <i class="uil uil-location-pin-alt"></i> @Cities.GetCities().FirstOrDefault(n => n.Key == post.CityId).Value
+                                                    <i class="uil uil-location-pin-alt"></i> @Cities.GetCities().FirstOrDefault(n => n.Id == post.CityId).Name
                                                 </li>
                                             }
                                         </ul>

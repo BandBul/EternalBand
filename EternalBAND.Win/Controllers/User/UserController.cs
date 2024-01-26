@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using EternalBAND.Api.Helpers;
 using EternalBAND.Api.Services;
 using EternalBAND.Api.Exceptions;
+using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging;
 
 namespace EternalBAND.Controllers.User;
 // TODO create a Reposıtory for manage _context, controller should only responsible for API and basic validations 
@@ -40,9 +42,15 @@ public class UserController : Controller
     // GET: Posts/Create
     public IActionResult PostCreate()
     {
-        ViewData["PostTypesId"] = new SelectList(_userService.GetPostTypes(), "Id", "Type");
-        ViewData["InstrumentsId"] = new SelectList(_userService.GetInstruments(), "Id", "Instrument");
-        ViewData["CityId"] = new SelectList(Cities.GetCities(), "Key", "Value");
+        var postTypes = new List<PostTypes>() { new PostTypes() { Active = true, Id = null, Type = "Seçiniz", TypeShort = "Default" } };
+        postTypes.AddRange(_userService.GetPostTypes());
+
+        var instruments = new List<Instruments>() { new Instruments() { Id = null, Instrument = "Seçiniz", InstrumentShort = "Default" } };
+        instruments.AddRange(_userService.GetInstruments());
+
+        ViewData["PostTypesId"] = new SelectList(postTypes, "Id", "Type");
+        ViewData["InstrumentsId"] = new SelectList(instruments, "Id", "Instrument");
+        ViewData["CityId"] = new SelectList(Cities.GetCities(), "Id", "Name");
         return View();
     }
 
@@ -61,13 +69,10 @@ public class UserController : Controller
             await _userService.PostCreate(currentUser, posts, images);
             return RedirectToAction(nameof(PostIndex));
         }
-        // TODO log warning and use allErrors to pass to Front End if needed
         else
         {
             IEnumerable<ModelError> allErrors = ModelState.Values.SelectMany(v => v.Errors);
-            ViewData["PostTypesId"] = new SelectList(_userService.GetPostTypes(), "Id", "Type", posts.PostTypesId);
-            ViewData["InstrumentsId"] = new SelectList(_userService.GetInstruments(), "Id", "Instrument", posts.InstrumentsId);
-            ViewData["CityId"] = new SelectList(Cities.GetCities(), "Key", "Value", posts.CityId);
+            // TODO what should we do with this error list we can display it at FE
         }
       
         return View(posts);

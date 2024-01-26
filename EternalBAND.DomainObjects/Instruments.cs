@@ -4,7 +4,7 @@ namespace EternalBAND.DomainObjects;
 
 public class Instruments : IEntity
 {
-    public int Id { get; set; }
+    public int? Id { get; set; }
     [Display(Name = "Enstrüman")]
     public string Instrument { get; set; }
     [Display(Name = "Enstrüman Kısa ")]
