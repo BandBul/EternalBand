@@ -1,0 +1,144 @@
+@using EternalBAND.DataAccess;
+@inject ApplicationDbContext _context
+
+<section class="bg-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="footer-item mt-4 mt-lg-0 me-lg-5">
+                    <h4 class="text-white mb-4">
+                        <partial name="PartialViews/_GetSiteTitlePartial"/>
+                    </h4>
+                    <p class="text-white-50">
+                        @_context.SystemInfo.FirstOrDefault(n => n.Type == "site-footer-left-text").Value
+                    </p>
+                    @{
+                        var instagram = _context.SystemInfo.FirstOrDefault(n => n.Type == "site-instagram");
+                        var facebook = _context.SystemInfo.FirstOrDefault(n => n.Type == "site-facebook");
+                        var twitter = _context.SystemInfo.FirstOrDefault(n => n.Type == "site-twitter");
+                        if (instagram != null || facebook != null || twitter != null)
+                        {
+                            <p class="text-white mt-3">Sosyal Medya Hesaplarımız</p>
+
+                            <ul class="footer-social-menu list-inline mb-0">
+                                @if (facebook != null)
+                                {
+                                    <li class="list-inline-item">
+                                        <a href="@facebook.Value">
+                                            <i class="uil uil-facebook-f"></i>
+                                        </a>
+                                    </li>
+                                }
+                                @if (instagram != null)
+                                {
+                                    <li class="list-inline-item">
+                                        <a href="@instagram.Value">
+                                            <i class="uil uil-instagram"></i>
+                                        </a>
+                                    </li>
+                                }
+                                @if (twitter != null)
+                                {
+                                    <li class="list-inline-item">
+                                        <a href="@twitter.Value">
+                                            <i class="uil uil-twitter"></i>
+                                        </a>
+                                    </li>
+                                }
+
+                            </ul>
+                        }
+                    }
+
+                </div>
+            </div><!--end col-->
+            <div class="col-lg-2 col-6">
+                <div class="footer-item mt-4 mt-lg-0">
+                    <p class="fs-16 text-white mb-4">Company</p>
+                    <ul class="list-unstyled footer-list mb-0">
+                        <li>
+                            <a href="about.html"><i class="mdi mdi-chevron-right"></i> About Us</a>
+                        </li>
+                        <li>
+                            <a href="contact.html"><i class="mdi mdi-chevron-right"></i> Contact Us</a>
+                        </li>
+                        <li>
+                            <a href="services.html"><i class="mdi mdi-chevron-right"></i> Services</a>
+                        </li>
+                        <li>
+                            <a href="blog.html"><i class="mdi mdi-chevron-right"></i> Blog</a>
+                        </li>
+                        <li>
+                            <a href="team.html"><i class="mdi mdi-chevron-right"></i> Team</a>
+                        </li>
+                        <li>
+                            <a href="pricing.html"><i class="mdi mdi-chevron-right"></i> Pricing</a>
+                        </li>
+                    </ul>
+                </div>
+            </div><!--end col-->
+            <div class="col-lg-2 col-6">
+                <div class="footer-item mt-4 mt-lg-0">
+                    <p class="fs-16 text-white mb-4">For Jobs</p>
+                    <ul class="list-unstyled footer-list mb-0">
+                        <li>
+                            <a href="job-categories.html"><i class="mdi mdi-chevron-right"></i> Browser Categories</a>
+                        </li>
+                        <li>
+                            <a href="job-list.html"><i class="mdi mdi-chevron-right"></i> Browser Jobs</a>
+                        </li>
+                        <li>
+                            <a href="job-details.html"><i class="mdi mdi-chevron-right"></i> Job Details</a>
+                        </li>
+                        <li>
+                            <a href="bookmark-jobs.html"><i class="mdi mdi-chevron-right"></i> Bookmark Jobs</a>
+                        </li>
+                    </ul>
+                </div>
+            </div><!--end col-->
+            <div class="col-lg-2 col-6">
+                <div class="footer-item mt-4 mt-lg-0">
+                    <p class="text-white fs-16 mb-4">For Candidates</p>
+                    <ul class="list-unstyled footer-list mb-0">
+                        <li>
+                            <a href="candidate-list.html"><i class="mdi mdi-chevron-right"></i> Candidate List</a>
+                        </li>
+                        <li>
+                            <a href="candidate-grid.html"><i class="mdi mdi-chevron-right"></i> Candidate Grid</a>
+                        </li>
+                        <li>
+                            <a href="candidate-details.html"><i class="mdi mdi-chevron-right"></i> Candidate Details</a>
+                        </li>
+                    </ul>
+                </div>
+            </div><!--end col-->
+            <div class="col-lg-2 col-6">
+                <div class="footer-item mt-4 mt-lg-0">
+                    <p class="fs-16 text-white mb-4">Support</p>
+                    <ul class="list-unstyled footer-list mb-0">
+                        <li>
+                            <a href="contact.html"><i class="mdi mdi-chevron-right"></i> Help Center</a>
+                        </li>
+                        <li>
+                            <a href="faqs.html"><i class="mdi mdi-chevron-right"></i> FAQ'S</a>
+                        </li>
+                        <li>
+                            <a href="privacy-policy.html"><i class="mdi mdi-chevron-right"></i> Privacy Policy</a>
+                        </li>
+                    </ul>
+                </div>
+            </div><!--end col-->
+        </div><!--end row-->
+    </div><!--end container-->
+</section>
+<div class="footer-alt">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <p class="text-white-50 text-center mb-0">
+                    @DateTime.Now.Year <partial name="PartialViews/_FooterBottomText"></partial>
+                </p>
+            </div><!--end col-->
+        </div><!--end row-->
+    </div><!--end container-->
+</div>

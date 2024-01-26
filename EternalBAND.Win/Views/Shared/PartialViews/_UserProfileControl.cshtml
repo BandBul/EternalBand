@@ -1,0 +1,18 @@
+@using EternalBAND.DataAccess;
+@inject ApplicationDbContext _context
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@inject SignInManager<Users> SignInManager 
+@inject UserManager<Users> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+  var user = await UserManager.GetUserAsync(User);
+  if (!_context.UserProfileControl.Any(n => n.UsersId == user.Id && n.Completed))
+  {
+    <script>
+    if (!window.location.href.includes("profil"))
+        window.location.href ="/profil";
+    </script>
+  }
+}

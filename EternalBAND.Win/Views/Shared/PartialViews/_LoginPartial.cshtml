@@ -1,0 +1,47 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<Users> SignInManager 
+@inject UserManager<Users> UserManager
+
+<ul class="navbar-nav ms-auto">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        var user = await UserManager.GetUserAsync(User);
+        <ul class="header-menu list-inline d-flex align-items-center mb-0">
+            <li class="list-inline-item dropdown me-4">
+                 <partial name="PartialViews/_GetNotification"/>
+            </li>
+            <li class="list-inline-item dropdown me-2">
+                <partial name="PartialViews/_GetMessage" />
+            </li>
+            <li class="list-inline-item dropdown">
+                <a href="javascript:void(0)" class="header-item" id="userdropdown" data-bs-toggle="dropdown"
+                   aria-expanded="false">
+                    <img src="@user.PhotoPath" alt="mdo" width="35" height="35" class="rounded-circle me-1"> <span class="d-none d-md-inline-block fw-medium">Hoşgeldin, @user.Name</span>
+                </a>
+         <partial name="PartialViews/_ProfileMenu"/>
+            </li>
+        </ul>
+    }
+    else
+    {
+        @* <li class="nav-item"> *@
+        @*     <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a> *@
+        @* </li> *@
+        @* <li class="nav-item"> *@
+        @*     <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a> *@
+        @* </li> *@
+
+        <li class="list-inline-item py-2 me-2 align-middle">
+            <a asp-area="Identity" asp-page="/Account/Login" class="text-dark fw-medium fs-13">
+                <i class="uil uil-user-check"></i>
+                Giriş Yap
+            </a>
+        </li>
+        <li class="list-inline-item py-2 me-2 align-middle">
+            <a asp-area="Identity" asp-page="/Account/Register" class="text-dark fw-medium fs-13">
+                <i class="uil uil-user-square"></i>
+                Kayıt Ol
+            </a>
+        </li>
+    }
+</ul>
