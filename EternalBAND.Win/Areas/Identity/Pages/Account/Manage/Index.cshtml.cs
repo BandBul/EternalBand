@@ -91,8 +91,8 @@ namespace EternalBAND.Areas.Identity.Pages.Account.Manage
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             ViewData["PhotoPath"] = user.PhotoPath;
-            ViewData["Cities"] = new SelectList(Cities.GetCities(), "Id", "Type");
-            ViewData["Cities"] = new SelectList(Cities.GetCities(), "Key", "Value", user.City);
+            ViewData["Cities"] = new SelectList(Cities.GetCities(), "Id", "Name");
+            ViewData["Cities"] = new SelectList(Cities.GetCities(), "Id", "Name", user.City);
 
             Input = new InputModel
             {

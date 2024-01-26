@@ -87,7 +87,7 @@ public class UserController : Controller
             var post = await _userService.PostEditInitial(id);
             ViewData["PostTypesId"] = new SelectList(_userService.GetPostTypes(), "Id", "Type", post.PostTypesId);
             ViewData["InstrumentsId"] = new SelectList(_userService.GetInstruments(), "Id", "Instrument", post.InstrumentsId);
-            ViewData["CityId"] = new SelectList(Cities.GetCities(), "Key", "Value", post.CityId);
+            ViewData["CityId"] = new SelectList(Cities.GetCities(), "Id", "Name", post.CityId);
             return View(post);
         }
         catch (NotFoundException)
@@ -131,7 +131,7 @@ public class UserController : Controller
 
         ViewData["PostTypesId"] = new SelectList(_userService.GetPostTypes(), "Id", "Type", posts.PostTypesId);
         ViewData["InstrumentsId"] = new SelectList(_userService.GetInstruments(), "Id", "Instrument", posts.InstrumentsId);
-        ViewData["CityId"] = new SelectList(Cities.GetCities(), "Key", "Value", posts.CityId);
+        ViewData["CityId"] = new SelectList(Cities.GetCities(), "Id", "Name", posts.CityId);
         return View(posts);
     }
 
