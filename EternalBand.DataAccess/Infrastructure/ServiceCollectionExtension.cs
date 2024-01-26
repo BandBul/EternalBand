@@ -1,18 +1,12 @@
-﻿using EternalBAND.Api;
-using EternalBAND.Api.Helpers;
-using EternalBAND.Api.Services;
-using EternalBAND.DataAccess.Repository;
+﻿using EternalBAND.DataAccess.Repository;
 using EternalBAND.DomainObjects;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace EternalBAND.Win.Extensions
+namespace EternalBAND.DataAccess.Infrastructure
 {
     public static class ServiceCollectionExtension
     {
-        //TODO change the project and folder name/structure this is actually IOC registration but name seems its just extension
-        public static IServiceCollection RegisterRepositories(this IServiceCollection services)
+        public static IServiceCollection AddDataAccessInfrastructure(this IServiceCollection services)
         {
             services.AddScoped<BaseRepository,BaseRepository<UserProfileControl>>();
             services.AddScoped<BaseRepository,BaseRepository<Notification>>();
@@ -31,21 +25,5 @@ namespace EternalBAND.Win.Extensions
 
             return services;
         }
-
-        public static IServiceCollection RegisterBusinessDomainObject(this IServiceCollection services)
-        {
-            services.AddScoped<IEmailSender, MailSender>();
-            services.AddScoped<HomeService>();
-            services.AddScoped<UserService>();
-            services.AddScoped<AdminService>();
-            services.AddScoped<AccountService>();
-            services.AddScoped<MessageService>();
-            services.AddScoped<HubController>();
-            services.AddScoped<ControllerHelper>();
-
-            return services;
-        }
-
-            
     }
 }

@@ -6,7 +6,8 @@ using EternalBAND.DomainObjects;
 using EternalBAND.Api.Options;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.FileProviders;
-using EternalBAND.Win.Extensions;
+using EternalBAND.Api.Infrastructure;
+using EternalBAND.DataAccess.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,9 +46,7 @@ builder.Services.AddRazorPages(options =>
         "/mail-gonderildi"); 
 });
 
-builder.Services
-    .RegisterRepositories()
-    .RegisterBusinessDomainObject();
+
 
 var googleApiKey = new GoogleApiKeyOptions();
 builder.Configuration.GetSection(GoogleApiKeyOptions.GoogleApiKey).Bind(googleApiKey);
@@ -71,6 +70,10 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.ExpireTimeSpan = TimeSpan.FromHours(3);
 });
 builder.Services.AddSignalR();
+
+builder.Services
+    .AddDataAccessInfrastructure()
+    .AddApiInfrastructure();
 
 var app = builder.Build();
 
