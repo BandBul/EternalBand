@@ -1,20 +1,12 @@
 using EternalBAND.Business;
-using EternalBAND.Common;
 using EternalBAND.DomainObjects;
-using EternalBAND.Helpers;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using X.PagedList;
-using EternalBAND.DataAccess;
 using EternalBAND.Api.Helpers;
 using EternalBAND.Api.Services;
-using Microsoft.Extensions.Hosting;
 using EternalBAND.Api.Exceptions;
-using System;
 
 namespace EternalBAND.Controllers.User;
 // TODO create a Reposıtory for manage _context, controller should only responsible for API and basic validations 
@@ -39,7 +31,7 @@ public class UserController : Controller
         ViewBag.PostStatusViewModel = Initials.InitialPostStatusViewModelValue;
         
         var currentUser = await _controllerHelper.GetUserAsync(User);
-        var allPosts = _userService.PostIndex(currentUser);
+        var allPosts = await _userService.PostIndex(currentUser);
         
         return View(allPosts);
     }
@@ -179,7 +171,7 @@ public class UserController : Controller
         try
         {
             var currentUser = await _controllerHelper.GetUserAsync(User);
-            var result = _userService.PostDelete(currentUser, id);
+            var result = await _userService.PostDelete(currentUser, id);
             return Json(result);
         }
         catch (JsonException ex)

@@ -24,14 +24,13 @@ namespace EternalBAND.Api.Services
             _userManager = userManager;
             _environment = environment;
         }
-        public async Task<List<Posts>> PostIndex(Users currentUser)
+        public async Task<IEnumerable<Posts>> PostIndex(Users currentUser)
         {
             return _context.Posts.Where(n => n.AddedByUserId == currentUser.Id)
                 .Include(p => p.AddedByUser)
                 .Include(p => p.AdminConfirmationUser)
                 .Include(p => p.PostTypes)
-                .Include(p => p.Instruments)
-                .ToList();
+                .Include(p => p.Instruments);
         }
 
 
