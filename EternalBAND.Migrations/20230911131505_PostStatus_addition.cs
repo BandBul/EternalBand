@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace EternalBAND.Data.Migrations
+namespace EternalBAND.Migrations
 {
     /// <inheritdoc />
     public partial class PostStatus_addition : Migration

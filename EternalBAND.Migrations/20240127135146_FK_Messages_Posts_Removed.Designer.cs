@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EternalBAND.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231217145813_postId_introduce_for_messages")]
-    partial class postId_introduce_for_messages
+    [Migration("20240127135146_FK_Messages_Posts_Removed")]
+    partial class FK_Messages_Posts_Removed
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.12")
+                .HasAnnotation("ProductVersion", "7.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -138,11 +138,11 @@ namespace EternalBAND.Migrations
 
             modelBuilder.Entity("EternalBAND.DomainObjects.Instruments", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
 
                     b.Property<string>("Instrument")
                         .IsRequired()
@@ -275,7 +275,7 @@ namespace EternalBAND.Migrations
                     b.Property<string>("ReceiverUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("RelatedPostId")
+                    b.Property<int?>("RelatedPostId")
                         .HasColumnType("int");
 
                     b.Property<string>("SenderUserId")
@@ -284,8 +284,6 @@ namespace EternalBAND.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ReceiverUserId");
-
-                    b.HasIndex("RelatedPostId");
 
                     b.HasIndex("SenderUserId");
 
@@ -310,6 +308,9 @@ namespace EternalBAND.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("NotificationType")
+                        .HasColumnType("int");
+
                     b.Property<string>("ReceiveUserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -322,20 +323,25 @@ namespace EternalBAND.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("SenderUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ReceiveUserId");
+
+                    b.HasIndex("SenderUserId");
 
                     b.ToTable("Notification");
                 });
 
             modelBuilder.Entity("EternalBAND.DomainObjects.PostTypes", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
@@ -359,7 +365,7 @@ namespace EternalBAND.Migrations
                         {
                             Id = 1,
                             Active = true,
-                            AddedDate = new DateTime(2023, 12, 17, 15, 58, 13, 1, DateTimeKind.Local).AddTicks(9832),
+                            AddedDate = new DateTime(2024, 1, 27, 14, 51, 45, 699, DateTimeKind.Local).AddTicks(7428),
                             Type = "Müzisyen Arıyorum",
                             TypeShort = "Musician"
                         },
@@ -367,7 +373,7 @@ namespace EternalBAND.Migrations
                         {
                             Id = 2,
                             Active = true,
-                            AddedDate = new DateTime(2023, 12, 17, 15, 58, 13, 1, DateTimeKind.Local).AddTicks(9881),
+                            AddedDate = new DateTime(2024, 1, 27, 14, 51, 45, 699, DateTimeKind.Local).AddTicks(7482),
                             Type = "Grup Arıyorum",
                             TypeShort = "Group"
                         },
@@ -375,7 +381,7 @@ namespace EternalBAND.Migrations
                         {
                             Id = 3,
                             Active = true,
-                            AddedDate = new DateTime(2023, 12, 17, 15, 58, 13, 1, DateTimeKind.Local).AddTicks(9883),
+                            AddedDate = new DateTime(2024, 1, 27, 14, 51, 45, 699, DateTimeKind.Local).AddTicks(7485),
                             Type = "Ders Vermek İstiyorum",
                             TypeShort = "Lesson"
                         });
@@ -404,7 +410,8 @@ namespace EternalBAND.Migrations
                     b.Property<string>("AdminConfirmationUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("CityId")
+                    b.Property<int?>("CityId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<Guid?>("Guid")
@@ -415,6 +422,7 @@ namespace EternalBAND.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("InstrumentsId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("Photo1")
@@ -432,7 +440,8 @@ namespace EternalBAND.Migrations
                     b.Property<string>("Photo5")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PostTypesId")
+                    b.Property<int?>("PostTypesId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("SeoLink")
@@ -914,19 +923,11 @@ namespace EternalBAND.Migrations
                         .WithMany()
                         .HasForeignKey("ReceiverUserId");
 
-                    b.HasOne("EternalBAND.DomainObjects.Posts", "RelatedPost")
-                        .WithMany()
-                        .HasForeignKey("RelatedPostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("EternalBAND.DomainObjects.Users", "SenderUser")
                         .WithMany()
                         .HasForeignKey("SenderUserId");
 
                     b.Navigation("ReceiverUser");
-
-                    b.Navigation("RelatedPost");
 
                     b.Navigation("SenderUser");
                 });
@@ -939,7 +940,13 @@ namespace EternalBAND.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("EternalBAND.DomainObjects.Users", "SenderUser")
+                        .WithMany()
+                        .HasForeignKey("SenderUserId");
+
                     b.Navigation("ReceiveUser");
+
+                    b.Navigation("SenderUser");
                 });
 
             modelBuilder.Entity("EternalBAND.DomainObjects.Posts", b =>
@@ -954,7 +961,9 @@ namespace EternalBAND.Migrations
 
                     b.HasOne("EternalBAND.DomainObjects.Instruments", "Instruments")
                         .WithMany()
-                        .HasForeignKey("InstrumentsId");
+                        .HasForeignKey("InstrumentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("EternalBAND.DomainObjects.PostTypes", "PostTypes")
                         .WithMany()

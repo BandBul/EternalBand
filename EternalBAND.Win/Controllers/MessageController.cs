@@ -50,7 +50,7 @@ public class MessageController : Controller
     public async Task<ActionResult> SendMessage(Guid id, string message, int postId)
     {
         bool isUserExist = await _controllerHelper.IsUserExist(id.ToString());
-        if (isUserExist)
+        if (!isUserExist)
         {
             return Json("Kayýt bulunamadý.");
         }

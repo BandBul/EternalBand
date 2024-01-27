@@ -35,7 +35,7 @@ namespace EternalBAND.Api.Services
 
         public IEnumerable<MessageBox> GetAllMessageBoxes(string userId)
         {
-            var allMessages = _context.Messages.Include(n => n.ReceiverUser).Include(n => n.SenderUser).Include(p => p.RelatedPost)
+            var allMessages = _context.Messages.Include(n => n.ReceiverUser).Include(n => n.SenderUser)
                 .Where(n => n.SenderUserId == userId || n.ReceiverUserId == userId);
             return GroupByMetadata(allMessages);
         }

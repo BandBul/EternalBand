@@ -6,43 +6,43 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EternalBAND.Migrations
 {
     /// <inheritdoc />
-    public partial class postId_introduce_for_messages : Migration
+    public partial class FK_Messages_Posts_RelatedPostId_Update3 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
+            migrationBuilder.DropForeignKey(
+                name: "FK_Messages_Posts_RelatedPostId",
+                table: "Messages");
+
+            migrationBuilder.AlterColumn<int>(
                 name: "RelatedPostId",
                 table: "Messages",
                 type: "int",
-                nullable: false,
-                defaultValue: 0);
+                nullable: true,
+                oldClrType: typeof(int),
+                oldType: "int");
 
             migrationBuilder.UpdateData(
                 table: "PostTypes",
                 keyColumn: "Id",
                 keyValue: 1,
                 column: "AddedDate",
-                value: new DateTime(2023, 12, 17, 15, 58, 13, 1, DateTimeKind.Local).AddTicks(9832));
+                value: new DateTime(2024, 1, 26, 23, 26, 24, 716, DateTimeKind.Local).AddTicks(7908));
 
             migrationBuilder.UpdateData(
                 table: "PostTypes",
                 keyColumn: "Id",
                 keyValue: 2,
                 column: "AddedDate",
-                value: new DateTime(2023, 12, 17, 15, 58, 13, 1, DateTimeKind.Local).AddTicks(9881));
+                value: new DateTime(2024, 1, 26, 23, 26, 24, 716, DateTimeKind.Local).AddTicks(7957));
 
             migrationBuilder.UpdateData(
                 table: "PostTypes",
                 keyColumn: "Id",
                 keyValue: 3,
                 column: "AddedDate",
-                value: new DateTime(2023, 12, 17, 15, 58, 13, 1, DateTimeKind.Local).AddTicks(9883));
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Messages_RelatedPostId",
-                table: "Messages",
-                column: "RelatedPostId");
+                value: new DateTime(2024, 1, 26, 23, 26, 24, 716, DateTimeKind.Local).AddTicks(7960));
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Messages_Posts_RelatedPostId",
@@ -50,7 +50,7 @@ namespace EternalBAND.Migrations
                 column: "RelatedPostId",
                 principalTable: "Posts",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.SetNull);
         }
 
         /// <inheritdoc />
@@ -60,34 +60,44 @@ namespace EternalBAND.Migrations
                 name: "FK_Messages_Posts_RelatedPostId",
                 table: "Messages");
 
-            migrationBuilder.DropIndex(
-                name: "IX_Messages_RelatedPostId",
-                table: "Messages");
-
-            migrationBuilder.DropColumn(
+            migrationBuilder.AlterColumn<int>(
                 name: "RelatedPostId",
-                table: "Messages");
+                table: "Messages",
+                type: "int",
+                nullable: false,
+                defaultValue: 0,
+                oldClrType: typeof(int),
+                oldType: "int",
+                oldNullable: true);
 
             migrationBuilder.UpdateData(
                 table: "PostTypes",
                 keyColumn: "Id",
                 keyValue: 1,
                 column: "AddedDate",
-                value: new DateTime(2023, 9, 14, 23, 33, 16, 431, DateTimeKind.Local).AddTicks(4389));
+                value: new DateTime(2024, 1, 26, 23, 4, 54, 180, DateTimeKind.Local).AddTicks(599));
 
             migrationBuilder.UpdateData(
                 table: "PostTypes",
                 keyColumn: "Id",
                 keyValue: 2,
                 column: "AddedDate",
-                value: new DateTime(2023, 9, 14, 23, 33, 16, 431, DateTimeKind.Local).AddTicks(4440));
+                value: new DateTime(2024, 1, 26, 23, 4, 54, 180, DateTimeKind.Local).AddTicks(645));
 
             migrationBuilder.UpdateData(
                 table: "PostTypes",
                 keyColumn: "Id",
                 keyValue: 3,
                 column: "AddedDate",
-                value: new DateTime(2023, 9, 14, 23, 33, 16, 431, DateTimeKind.Local).AddTicks(4444));
+                value: new DateTime(2024, 1, 26, 23, 4, 54, 180, DateTimeKind.Local).AddTicks(648));
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Messages_Posts_RelatedPostId",
+                table: "Messages",
+                column: "RelatedPostId",
+                principalTable: "Posts",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
         }
     }
 }

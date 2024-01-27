@@ -46,28 +46,32 @@
                 <div class="card">
                     <div class="row g-0">
                         @{
+                            bool IsCurrentPostDeleted()
+                            {
+                                return Model.CurrentChat != null && Model.CurrentChat.MessageMetadata.PostId < 0;
+                            }
+
                             MessageTitleModel GetMessageTitle(MessageBox msBox)
                             {
+                                var currentPost = _context.Posts.Find(msBox.MessageMetadata.PostId);
                                 Users userInfo = null;
                                 string messageTitle = "";
-                                Posts relatedPost = null;
+                                string relatedPostTitle = currentPost != null ? currentPost.Title : "Silinmiş İlan";
                                 if (msBox.Messages.Any())
                                 {
                                     var message = msBox.Messages.First();
                                     var senderUser = message.SenderUser;
                                     var receiverUser = message.ReceiverUser;
-                                    relatedPost = message.RelatedPost;
                                     userInfo = ViewBag.LoginUserId == senderUser.Id ? receiverUser : senderUser;
                                 }
                                 else
                                 {
                                     var postId = msBox.MessageMetadata.PostId;
-                                    relatedPost = _context.Posts.FirstOrDefault(s => s.Id == postId);
                                     var senderUserId = msBox.MessageMetadata.RecipientIds.First(s => s != ViewBag.LoginUserId);
                                     userInfo = _context.Users.FirstOrDefault(s => s.Id == senderUserId);
                                 }
 
-                                messageTitle = userInfo.Name == null ? userInfo.Email : userInfo.Name + " " + userInfo.Surname + " - " + relatedPost?.Title ?? "silinmiş ilan";
+                                messageTitle = userInfo.Name == null ? userInfo.Email : userInfo.Name + " " + userInfo.Surname + " - " + relatedPostTitle;
                                 return new MessageTitleModel()
                                 {
                                     MessageBoxTitle = messageTitle,
@@ -289,6 +293,10 @@
     }
 
     function checkInput() {
+        @if(IsCurrentPostDeleted())
+        {
+            return ;
+        }
         // Get the input element
         var messageInput = document.getElementById('messageText');
 

@@ -115,6 +115,7 @@
       <ProjectReference Include="..\EternalBAND.Common\EternalBAND.Common.csproj" />
       <ProjectReference Include="..\EternalBand.DataAccess\EternalBAND.DataAccess.csproj" />
       <ProjectReference Include="..\EternalBAND.DomainObjects\EternalBAND.DomainObjects.csproj" />
+      <ProjectReference Include="..\EternalBAND.Migrations\EternalBAND.Migrations.csproj" />
     </ItemGroup>
 
     <ItemGroup>

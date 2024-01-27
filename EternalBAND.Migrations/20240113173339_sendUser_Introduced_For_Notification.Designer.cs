@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace EternalBAND.Data.Migrations
+namespace EternalBAND.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20240113173339_sebdeUSer_Introduced_For_Notification")]

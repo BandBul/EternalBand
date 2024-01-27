@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace EternalBAND.Data.Migrations
+namespace EternalBAND.Migrations
 {
     /// <inheritdoc />
     public partial class RelatedElement_Addition_For_Notification : Migration

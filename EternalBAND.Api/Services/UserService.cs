@@ -215,6 +215,11 @@ namespace EternalBAND.Api.Services
             }
             else
             {
+                var postMessages = _context.Messages.Where(s => s.RelatedPostId == posts.Id).ToList();
+                foreach (var message in postMessages)
+                {
+                    message.RelatedPostId = posts.Id * -1;
+                }
                 _context.Posts.Remove(posts);
                 await _context.SaveChangesAsync();
 

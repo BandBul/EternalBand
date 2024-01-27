@@ -6,67 +6,77 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EternalBAND.Migrations
 {
     /// <inheritdoc />
-    public partial class NotificationType_Introduced_For_Notification_Table : Migration
+    public partial class FK_Messages_Posts_Removed : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "NotificationType",
-                table: "Notification",
-                type: "int",
-                nullable: false,
-                defaultValue: 0);
+            migrationBuilder.DropForeignKey(
+                name: "FK_Messages_Posts_RelatedPostId",
+                table: "Messages");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Messages_RelatedPostId",
+                table: "Messages");
 
             migrationBuilder.UpdateData(
                 table: "PostTypes",
                 keyColumn: "Id",
                 keyValue: 1,
                 column: "AddedDate",
-                value: new DateTime(2024, 1, 6, 14, 41, 33, 977, DateTimeKind.Local).AddTicks(8212));
+                value: new DateTime(2024, 1, 27, 14, 51, 45, 699, DateTimeKind.Local).AddTicks(7428));
 
             migrationBuilder.UpdateData(
                 table: "PostTypes",
                 keyColumn: "Id",
                 keyValue: 2,
                 column: "AddedDate",
-                value: new DateTime(2024, 1, 6, 14, 41, 33, 977, DateTimeKind.Local).AddTicks(8268));
+                value: new DateTime(2024, 1, 27, 14, 51, 45, 699, DateTimeKind.Local).AddTicks(7482));
 
             migrationBuilder.UpdateData(
                 table: "PostTypes",
                 keyColumn: "Id",
                 keyValue: 3,
                 column: "AddedDate",
-                value: new DateTime(2024, 1, 6, 14, 41, 33, 977, DateTimeKind.Local).AddTicks(8320));
+                value: new DateTime(2024, 1, 27, 14, 51, 45, 699, DateTimeKind.Local).AddTicks(7485));
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "NotificationType",
-                table: "Notification");
-
             migrationBuilder.UpdateData(
                 table: "PostTypes",
                 keyColumn: "Id",
                 keyValue: 1,
                 column: "AddedDate",
-                value: new DateTime(2023, 12, 17, 15, 58, 13, 1, DateTimeKind.Local).AddTicks(9832));
+                value: new DateTime(2024, 1, 26, 23, 26, 24, 716, DateTimeKind.Local).AddTicks(7908));
 
             migrationBuilder.UpdateData(
                 table: "PostTypes",
                 keyColumn: "Id",
                 keyValue: 2,
                 column: "AddedDate",
-                value: new DateTime(2023, 12, 17, 15, 58, 13, 1, DateTimeKind.Local).AddTicks(9881));
+                value: new DateTime(2024, 1, 26, 23, 26, 24, 716, DateTimeKind.Local).AddTicks(7957));
 
             migrationBuilder.UpdateData(
                 table: "PostTypes",
                 keyColumn: "Id",
                 keyValue: 3,
                 column: "AddedDate",
-                value: new DateTime(2023, 12, 17, 15, 58, 13, 1, DateTimeKind.Local).AddTicks(9883));
+                value: new DateTime(2024, 1, 26, 23, 26, 24, 716, DateTimeKind.Local).AddTicks(7960));
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Messages_RelatedPostId",
+                table: "Messages",
+                column: "RelatedPostId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Messages_Posts_RelatedPostId",
+                table: "Messages",
+                column: "RelatedPostId",
+                principalTable: "Posts",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.SetNull);
         }
     }
 }
