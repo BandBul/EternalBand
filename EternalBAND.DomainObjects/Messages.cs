@@ -1,4 +1,5 @@
 using EternalBAND.Common;
+using Microsoft.EntityFrameworkCore;
 
 namespace EternalBAND.DomainObjects;
 
@@ -13,8 +14,7 @@ public class Messages : IEntity
     public string? Message { get; set; }
     public bool IsRead { get; set; }
     public Guid MessageGuid { get; set; }
-    public Posts? RelatedPost { get; set; }
-    public int RelatedPostId { get; set; }
+    public int? RelatedPostId { get; set; }
     // "mesajlar/id?postid=postid"
     public string RedirectLink => 
         $"{Constants.MessagesQueryParameter}/{SenderUserId}?{Constants.PostIdQueryParameter}={RelatedPostId}";

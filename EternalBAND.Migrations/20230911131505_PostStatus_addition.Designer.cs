@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace EternalBAND.Data.Migrations
+namespace EternalBAND.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20230911131505_PostStatus_addition")]

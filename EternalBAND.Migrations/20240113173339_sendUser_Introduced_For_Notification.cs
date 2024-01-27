@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace EternalBAND.Data.Migrations
+namespace EternalBAND.Migrations
 {
     /// <inheritdoc />
     public partial class sebdeUSer_Introduced_For_Notification : Migration

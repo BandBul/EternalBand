@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace EternalBAND.Data.Migrations
+namespace EternalBAND.Migrations
 {
     /// <inheritdoc />
     public partial class nullable_PhotoPath_Correction : Migration

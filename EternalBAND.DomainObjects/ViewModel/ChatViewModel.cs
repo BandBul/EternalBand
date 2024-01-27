@@ -30,12 +30,12 @@ public class MessageBox
 public class MessageMetadata
 {
 
-    public MessageMetadata(int postid, string[] recipientIds)
+    public MessageMetadata(int? postid, string[] recipientIds)
     {
         RecipientIds = recipientIds;
         PostId = postid;
     }
 
-    public int PostId { get; set; }
+    public int? PostId { get; set; }
     public string[] RecipientIds { get; set; }
 }
