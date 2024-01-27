@@ -46,30 +46,47 @@
                 <div class="card">
                     <div class="row g-0">
                         @{
-                            bool IsCurrentPostDeleted()
+                            bool IsSendButtonActive()
                             {
-                                return Model.CurrentChat != null && Model.CurrentChat.MessageMetadata.PostId < 0;
+                                return Model.CurrentChat != null
+                                && Model.CurrentChat.MessageMetadata.PostId > 0
+                                && _context.Posts.Find(Model.CurrentChat.MessageMetadata.PostId).Status == EternalBAND.Common.PostStatus.Active;
                             }
 
-                            MessageTitleModel GetMessageTitle(MessageBox msBox)
+                            Users GetUserInfo(MessageBox msBox)
                             {
-                                var currentPost = _context.Posts.Find(msBox.MessageMetadata.PostId);
-                                Users userInfo = null;
-                                string messageTitle = "";
-                                string relatedPostTitle = currentPost != null ? currentPost.Title : "Silinmiş İlan";
                                 if (msBox.Messages.Any())
                                 {
                                     var message = msBox.Messages.First();
                                     var senderUser = message.SenderUser;
                                     var receiverUser = message.ReceiverUser;
-                                    userInfo = ViewBag.LoginUserId == senderUser.Id ? receiverUser : senderUser;
+                                    return ViewBag.LoginUserId == senderUser.Id ? receiverUser : senderUser;
                                 }
                                 else
                                 {
-                                    var postId = msBox.MessageMetadata.PostId;
                                     var senderUserId = msBox.MessageMetadata.RecipientIds.First(s => s != ViewBag.LoginUserId);
-                                    userInfo = _context.Users.FirstOrDefault(s => s.Id == senderUserId);
+                                    return _context.Users.FirstOrDefault(s => s.Id == senderUserId);
                                 }
+                            }
+
+                            string GetCorrectPostTitle(Posts? post)
+                            {
+                                if(post == null)
+                                {
+                                    return "Silinmiş İlan";
+                                }
+                                return post?.Status == EternalBAND.Common.PostStatus.Active ?
+                                    post.Title :
+                                    post.Title + " - yayında olmayan ilan";
+                            }
+
+                            MessageTitleModel GetMessageTitle(MessageBox msBox)
+                            {
+                                var currentPost = _context.Posts.Find(msBox.MessageMetadata.PostId);
+                                Users userInfo = GetUserInfo(msBox);
+
+                                string relatedPostTitle = GetCorrectPostTitle(currentPost);
+                                string messageTitle = "";
 
                                 messageTitle = userInfo.Name == null ? userInfo.Email : userInfo.Name + " " + userInfo.Surname + " - " + relatedPostTitle;
                                 return new MessageTitleModel()
@@ -293,7 +310,7 @@
     }
 
     function checkInput() {
-        @if(IsCurrentPostDeleted())
+        @if(!IsSendButtonActive())
         {
             return ;
         }
