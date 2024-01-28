@@ -17,6 +17,7 @@ namespace EternalBAND.Api.Infrastructure
             services.AddScoped<MessageService>();
             services.AddScoped<HubController>();
             services.AddScoped<ControllerHelper>();
+            services.AddScoped<BroadCastingManager>();
 
             return services;
         }
