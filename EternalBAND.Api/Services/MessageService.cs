@@ -9,28 +9,24 @@ namespace EternalBAND.Api.Services
 {
     public class MessageService
     {
-        private ApplicationDbContext _context;
+        private readonly BroadCastingManager _broadcastingManager;
+        private readonly ApplicationDbContext _context;
         private readonly IEmailSender _mailsender;
-        private readonly HubController _hubController;
-        public MessageService(ApplicationDbContext context, IEmailSender mailsender, HubController hubController)
+        public MessageService(ApplicationDbContext context, IEmailSender mailsender, BroadCastingManager broadCastingManager)
         {
             _context = context;
             _mailsender = mailsender;
-            _hubController = hubController;
+            _broadcastingManager = broadCastingManager;
         }
 
         public async Task SendAndBroadCastMessageAsync(Users currentUser, Guid receiverUserId, string? message, int postId)
         {
-            var msg = await SaveMessage(currentUser, receiverUserId, message, postId);
+            var msg = await _broadcastingManager.CreateMessage(currentUser, receiverUserId.ToString(), postId, message);
+            
             var postTitle = _context.Posts.Find(msg.RelatedPostId).Title;
-            await _hubController.BroadcastMessage("ReceiveMessage", JsonSerializer.Serialize(msg));
-            var notif = await CreateMessageNotification(
+            await _broadcastingManager.CreateMessageNotification(
                 $"{currentUser.Name} '{postTitle}' başıklı ilana mesaj gönderdi.",
-                currentUser.Id,
-                receiverUserId.ToString(),
-                msg.RedirectLink,
-                msg.Id.ToString());
-            await _hubController.BroadcastMessage("ReceiveMessageNotification", JsonSerializer.Serialize(notif));
+                msg);
         }
 
         public IEnumerable<MessageBox> GetAllMessageBoxes(string userId)
@@ -96,33 +92,6 @@ namespace EternalBAND.Api.Services
             messages.SenderUser = currentUser;
             await _context.SaveChangesAsync();
             return messages;
-        }
-
-        private async Task<Notification> CreateMessageNotification(string message, string currentUserId, string receiverUserId, string redirectLink, string seo)
-        {
-            try
-            {
-                var notif = new Notification()
-                {
-                    IsRead = false,
-                    AddedDate = DateTime.Now,
-                    Message = message,
-                    ReceiveUserId = receiverUserId,
-                    SenderUserId = currentUserId,
-                    RedirectLink = redirectLink,
-                    // TODO : message's related id is just post now maybe better to give user + post on following time
-                    RelatedElementId = seo,
-                    NotificationType = Common.NotificationType.Message
-
-                };
-                await _context.Notification.AddAsync(notif);
-                await _context.SaveChangesAsync();
-                return notif;
-            }
-            catch (Exception ex)//TODO:log
-            {
-                throw;
-            }
         }
 
         // TODO remove SMTP related function

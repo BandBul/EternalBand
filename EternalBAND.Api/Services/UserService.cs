@@ -9,20 +9,26 @@ using Microsoft.EntityFrameworkCore;
 using X.PagedList;
 using EternalBAND.Api.Exceptions;
 using System.Collections;
+using Microsoft.Extensions.Hosting;
+using System.Text.Json;
+using JsonException = EternalBAND.Api.Exceptions.JsonException;
+using EternalBAND.Common;
 
 namespace EternalBAND.Api.Services
 {
     public class UserService
     {
+        private readonly BroadCastingManager _notificationManager;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<Users> _userManager;
         private readonly IWebHostEnvironment _environment;
 
-        public UserService(ApplicationDbContext context, UserManager<Users> userManager, IWebHostEnvironment environment)
+        public UserService(ApplicationDbContext context, UserManager<Users> userManager, IWebHostEnvironment environment, BroadCastingManager notificationManager)
         {
             _context = context;
             _userManager = userManager;
             _environment = environment;
+            _notificationManager = notificationManager;
         }
         public async Task<IEnumerable<Posts>> PostIndex(Users currentUser)
         {
@@ -34,37 +40,24 @@ namespace EternalBAND.Api.Services
         }
 
 
-        public async Task PostCreate(Users? currentUser, Posts posts, List<IFormFile>? images)
+        public async Task PostCreate(Users? currentUser, Posts post, List<IFormFile>? images)
         {
-            await PostAddPhoto(posts, images);
-            PostAddSeoLink(posts);
-            posts.AddedByUserId = currentUser?.Id;
-            posts.AddedDate = DateTime.Now;
-            posts.Guid = Guid.NewGuid();
-            var isUserAdmin = await _userManager.IsInRoleAsync(currentUser, Constants.AdminRoleName);
-            if (!isUserAdmin)
+            await PostAddPhoto(post, images);
+            PostAddSeoLink(post);
+            post.AddedByUserId = currentUser?.Id;
+            post.AddedDate = DateTime.Now;
+            post.Guid = Guid.NewGuid();
+            var isAdmin = await _userManager.IsInRoleAsync(currentUser, Constants.AdminRoleName);
+            post.Status = isAdmin ? PostStatus.Active : PostStatus.PendingApproval;
+            if (!isAdmin)
             {
-                var adminUsers = await _userManager.GetUsersInRoleAsync(Constants.AdminRoleName);
-                // Engin-TODO need to send all admins
-                // Engin-TODO pass SignalR hub and use ReceiveNotification broadcasting title to send message to front end
-                await _context.Notification.AddAsync(new Notification()
-                {
-                    IsRead = false,
-                    AddedDate = DateTime.Now,
-                    Message = $"{currentUser?.Name} '{posts.SeoLink}' id li yeni bir ilan paylaştı.",
-                    ReceiveUserId = adminUsers.ElementAt(0).Id,
-                    SenderUserId = currentUser.Id,
-                    RedirectLink = $"ilan?s={posts.SeoLink}&approvalPurpose=true",
-                    RelatedElementId = posts.SeoLink,
-                    NotificationType = NotificationType.PostSharing
-                });
-                posts.Status = PostStatus.PendingApproval;
+                var adminMessage = $"{currentUser?.Name} '{post.SeoLink}' id li yeni bir ilan paylaştı.";
+                var userMessage = $"'{post.Title}' başlıklı ilanınız onay sürecindedir. En kısa sürede onay sürecini tamamlayacağız";
+                await _notificationManager.CreateAdminNotification(currentUser, post, adminMessage);
+                await _notificationManager.CreateUserNotification(currentUser, post, userMessage);
             }
-            else
-            {
-                posts.Status = PostStatus.Active;
-            }
-            _context.Add(posts);
+          
+            _context.Add(post);
             await _context.SaveChangesAsync();
         }
 
@@ -95,6 +88,7 @@ namespace EternalBAND.Api.Services
 
                 PostAddPhoto(posts, images);
                 var post = await _context.Posts.AsNoTracking().FirstOrDefaultAsync(n => n.Guid == posts.Guid);
+                var postStatus = post.Status;
                 if ((currentUser.Id == post.AddedByUserId))
                 {
                     var isAdmin = await _userManager.IsInRoleAsync(currentUser, Constants.AdminRoleName);
@@ -114,21 +108,14 @@ namespace EternalBAND.Api.Services
                     posts.AddedDate = post.AddedDate;
                     posts.SeoLink = post.SeoLink;
                     posts.Guid = post.Guid;
-                    posts.Status = PostStatus.PendingApproval;
-                    if (!isAdmin)
+                    posts.Status = isAdmin ? PostStatus.Active : post.Status;
+                    if (!isAdmin && postStatus == PostStatus.Active)
                     {
-                        var adminUsers = await _userManager.GetUsersInRoleAsync(Constants.AdminRoleName);
-                        await _context.Notification.AddAsync(new Notification()
-                        {
-                            IsRead = false,
-                            AddedDate = DateTime.Now,
-                            Message = $"{currentUser?.Name} '{posts.SeoLink}' ilanında güncelleme yaptı",
-                            ReceiveUserId = adminUsers.ElementAt(0).Id,
-                            SenderUserId = currentUser.Id,
-                            RedirectLink = $"ilan?s={posts.SeoLink}&approvalPurpose=true",
-                            RelatedElementId = posts.SeoLink,
-                            NotificationType = NotificationType.PostSharing
-                        });
+                        post.Status = PostStatus.PendingApproval;
+                        var message = $"{currentUser?.Name} '{posts.SeoLink}' ilanında güncelleme yaptı";
+                        await _notificationManager.CreateAdminNotification(currentUser, post, message);
+                        var userMessage = $"'{post.Title}' başlıklı ilanınız onay sürecindedir. En kısa sürede onay sürecini tamamlayacağız";
+                        await _notificationManager.CreateUserNotification(currentUser, post, userMessage);
                     }
 
                     _context.Update(posts);
@@ -178,18 +165,10 @@ namespace EternalBAND.Api.Services
             _context.Posts.Update(post);
             if (!isAdmin)
             {
-                var adminUsers = await _userManager.GetUsersInRoleAsync(Constants.AdminRoleName);
-                await _context.Notification.AddAsync(new Notification()
-                {
-                    IsRead = false,
-                    AddedDate = DateTime.Now,
-                    Message = $"{currentUser?.Name} '{post.SeoLink}' ilanını arşivden yayına almak istiyor",
-                    ReceiveUserId = adminUsers.ElementAt(0).Id,
-                    SenderUserId = currentUser.Id,
-                    RedirectLink = $"ilan?s={post.SeoLink}&approvalPurpose=true",
-                    RelatedElementId = post.SeoLink,
-                    NotificationType = NotificationType.PostSharing
-                });
+                var message = $"{currentUser?.Name} '{post.SeoLink}' ilanını arşivden yayına almak istiyor";
+                await _notificationManager.CreateAdminNotification(currentUser, post, message);
+                var userMessage = $"'{post.Title}' başlıklı ilanınız onay sürecindedir. En kısa sürede onay sürecini tamamlayacağız";
+                await _notificationManager.CreateUserNotification(currentUser, post, userMessage);
             }
 
             await _context.SaveChangesAsync();
@@ -330,8 +309,11 @@ namespace EternalBAND.Api.Services
 
         private async Task PostAddSeoLink(Posts post)
         {
-            string seoLink = post.Title.Replace(" ", "-").ToLower();
-            seoLink += new Random().Next(0, 9999999) + new Random().Next(0, 9999);
+            var parsedStr = StrConvert.TRToEnDeleteAllSpacesAndToLower(post.Title);
+            string seoLink = 
+                parsedStr 
+                + new Random().Next(0, 9999999) 
+                + new Random().Next(0, 9999);
             while (true)
             {
                 if (!_context.Posts.Any(n => n.SeoLink == seoLink))

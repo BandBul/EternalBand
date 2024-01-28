@@ -1,11 +1,11 @@
 using System.Globalization;
 using System.Text;
 
-namespace EternalBAND.Business;
+namespace EternalBAND.Common;
 
-public class StrConvert
+public static class StrConvert
 {
-    public string TRToEnDeleteAllSpacesAndToLower(string TempStr)
+    public static string TRToEnDeleteAllSpacesAndToLower(string TempStr)
     {
         TempStr = String.Join("", TempStr.Normalize(NormalizationForm.FormD)
             .Where(c => char.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)).Replace(" ", "-").ToLower();

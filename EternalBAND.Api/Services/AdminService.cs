@@ -13,15 +13,17 @@ namespace EternalBAND.Api.Services
 {
     public class AdminService
     {
+        private readonly BroadCastingManager _broadcastingManager;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<Users> _userManager;
         private readonly IWebHostEnvironment _environment;
 
-        public AdminService(ApplicationDbContext context, UserManager<Users> userManager, IWebHostEnvironment environment)
+        public AdminService(ApplicationDbContext context, UserManager<Users> userManager, IWebHostEnvironment environment, BroadCastingManager broadcastingManager)
         {
             _context = context;
             _userManager = userManager;
             _environment = environment;
+            _broadcastingManager = broadcastingManager;
         }
 
         public async Task<IPagedList<Blogs>> BlogsIndex(int pId = 1)
@@ -37,7 +39,7 @@ namespace EternalBAND.Api.Services
         public async Task BlogsCreate(Blogs blogs, List<IFormFile>? images)
         {
             await BlogPhotoAdd(blogs, images);
-            blogs.SeoLink = new Business.StrConvert().TRToEnDeleteAllSpacesAndToLower(blogs.Title) + "-" + new Random().Next(0, 999999);
+            blogs.SeoLink = StrConvert.TRToEnDeleteAllSpacesAndToLower(blogs.Title) + "-" + new Random().Next(0, 999999);
             blogs.AddedDate = DateTime.Now;
             _context.Add(blogs);
             await _context.SaveChangesAsync();
@@ -209,7 +211,7 @@ namespace EternalBAND.Api.Services
 
         public async Task PostTypesCreate(PostTypes postTypes)
         {
-            postTypes.TypeShort = new Business.StrConvert().TRToEnDeleteAllSpacesAndToLower(postTypes.Type);
+            postTypes.TypeShort = StrConvert.TRToEnDeleteAllSpacesAndToLower(postTypes.Type);
             postTypes.Active = true;
             postTypes.AddedDate = DateTime.Now;
             _context.Add(postTypes);
@@ -244,7 +246,7 @@ namespace EternalBAND.Api.Services
                 var post = await _context.PostTypes.FirstOrDefaultAsync(n => n.Id == id);
                 post.Active = postTypes.Active;
                 post.Type = postTypes.Type;
-                post.TypeShort = new Business.StrConvert().TRToEnDeleteAllSpacesAndToLower(postTypes.Type);
+                post.TypeShort = StrConvert.TRToEnDeleteAllSpacesAndToLower(postTypes.Type);
                 _context.Update(post);
                 await _context.SaveChangesAsync();
             }
@@ -331,7 +333,7 @@ namespace EternalBAND.Api.Services
                 {
                     if (image != null)
                     {
-                        var photoName = new Business.StrConvert().TRToEnDeleteAllSpacesAndToLower(image.FileName) + new PhotoName().GeneratePhotoName(new Random().Next(0, 10000000).ToString()) +
+                        var photoName = StrConvert.TRToEnDeleteAllSpacesAndToLower(image.FileName) + new PhotoName().GeneratePhotoName(new Random().Next(0, 10000000).ToString()) +
                                         new Random().Next(0, 1000) +
                                         System.IO.Path.GetExtension(image.FileName);
                         using (var stream =
@@ -401,7 +403,7 @@ namespace EternalBAND.Api.Services
 
         public async Task InstrumentsCreate(Instruments instruments)
         {
-            instruments.InstrumentShort = new Business.StrConvert().TRToEnDeleteAllSpacesAndToLower(instruments.Instrument);
+            instruments.InstrumentShort = StrConvert.TRToEnDeleteAllSpacesAndToLower(instruments.Instrument);
             instruments.IsActive = true;
             _context.Add(instruments);
             await _context.SaveChangesAsync();
@@ -432,7 +434,7 @@ namespace EternalBAND.Api.Services
 
             try
             {
-                instruments.InstrumentShort = new Business.StrConvert().TRToEnDeleteAllSpacesAndToLower(instruments.Instrument);
+                instruments.InstrumentShort = StrConvert.TRToEnDeleteAllSpacesAndToLower(instruments.Instrument);
                 _context.Update(instruments);
                 await _context.SaveChangesAsync();
             }
@@ -479,22 +481,14 @@ namespace EternalBAND.Api.Services
             });
 
             _context.UpdateRange(allNotifOnAdmin);
-
-
-            var adminUsers = await _userManager.GetUsersInRoleAsync(Constants.AdminRoleName);
-            await _context.Notification.AddAsync(new Notification()
-            {
-                IsRead = false,
-                AddedDate = DateTime.Now,
-                Message = $"'{post.Title}' başlıklı ilanınız yayına alınmıştır",
-                ReceiveUserId = post.AddedByUserId,
-                SenderUserId = currentUser.Id,
-                RedirectLink = $"ilan?s={post.SeoLink}",
-                RelatedElementId = post.SeoLink,
-                NotificationType = NotificationType.PostSharing
-            });
-
             await _context.SaveChangesAsync();
+            var message = $"'{post.Title}' başlıklı ilanınız yayına alınmıştır";
+            await _broadcastingManager.CreateCustomNotification(
+                currentUser.Id,
+                post.AddedByUserId,
+                post,
+                message
+                );
         }
 
         private bool InstrumentsExists(int? id)
