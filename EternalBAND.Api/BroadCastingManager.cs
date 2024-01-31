@@ -31,7 +31,7 @@ namespace EternalBAND.Api
                 ReceiveUserId = currentUser.Id,
                 Message = message,
                 SenderUserId = adminUsers.ElementAt(0).Id,
-                RedirectLink = $"ilan?s={post.SeoLink}",
+                RedirectLink = $"ilan/{post.SeoLink}",
                 RelatedElementId = post.SeoLink
             };
 
@@ -48,7 +48,7 @@ namespace EternalBAND.Api
                 ReceiveUserId = receiverUserId,
                 Message = message,
                 SenderUserId = senderUserId,
-                RedirectLink = $"ilan?s={post.SeoLink}",
+                RedirectLink = $"ilan/{post.SeoLink}",
                 RelatedElementId = post.SeoLink
             };
 
@@ -68,7 +68,7 @@ namespace EternalBAND.Api
                 ReceiveUserId = adminUsers.ElementAt(0).Id,
                 Message = message,
                 SenderUserId = currentUser.Id,
-                RedirectLink = $"ilan?s={post.SeoLink}&approvalPurpose=true",
+                RedirectLink = $"ilan/{post.SeoLink}?approvalPurpose=true",
                 RelatedElementId = post.SeoLink
             };
             await SaveAndBroadCastNotification(notif, BroadCastingTitle.ReceiveNotification);

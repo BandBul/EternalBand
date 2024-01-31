@@ -85,7 +85,7 @@
                                             @*     </a> *@
                                             @* </div> *@
                                             <div class="mt-4">
-                                                <a href="ilan?s=@item.SeoLink" class="primary-link">
+                                                <a href="ilan/@item.SeoLink" class="primary-link">
                                                     <h5 class="fs-17 mb-1">@item.Title</h5>
                                                 </a>
                                                 @* <p class="text-link">Görüntüle</p> *@
@@ -127,20 +127,31 @@
 
                                                         @if (item.Status == PostStatus.Active)
                                                         {
+                                                            <form method="post" asp-controller="User" asp-action="PostArchived" asp-route-id="@item.Id">
+                                                                <div class="row">
+                                                                    <div class="col">
+                                                                        <button type="submit" class="btn btn-sm btn-primary archive-button">Arşivle <i class="uil uil-angle-right-b"></i></button>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                            
+                                                            @*
                                                             <div class="row">
                                                                 <div class="col">
                                                                     <a asp-controller="User" asp-action="PostArchived"  asp-route-id="@item.Id" class="btn btn-sm btn-primary archive-button">Arşivle <i class="uil uil-angle-right-b"></i></a>
                                                                 </div>
-                                                            </div>
+                                                            </div>*@
                                                         }
 
                                                         @if (item.Status == PostStatus.DeActive)
                                                         {
-                                                            <div class="row">
-                                                                <div class="col">
-                                                                    <a asp-controller="User"  asp-action="PostActivated" asp-route-id="@item.Id" class="btn btn-sm btn-primary activated-button">Yayına Al <i class="uil uil-angle-right-b"></i></a>
+                                                            <form method="post" asp-controller="User" asp-action="PostActivated" asp-route-id="@item.Id">
+                                                                <div class="row">
+                                                                    <div class="col">
+                                                                        <button type="submit" class="btn btn-sm btn-primary activated-button">Yayına Al <i class="uil uil-angle-right-b"></i></button>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
+                                                            </form>
                                                         }
                                                     </div>
                                                 </div>
@@ -165,34 +176,38 @@
 
     <partial name="PartialViews/_SwitcherAndTopPartial"/>
 </div>
+
 <script>
-function DeletePost(id){
-Swal.fire({
-  title: 'İlan silinecektir emin misiniz?',
-  showDenyButton: true,
-  confirmButtonText: 'Sil',
-  denyButtonText: `Silme`,
-}).then((result) => {
-  if (result.isConfirmed) {
-      $.post( "/User/PostDelete/"+id, function( data ) {
-          var message = "";
-          if (data.includes('silindi')){
-              message = 'success';
-          }
-          else
-              {
-                  message ='info';
-                  }
-          Swal.fire({
-            title: data,confirmButtonText: 'Kapat'}).then((result) => {
-                                                        if (result['isConfirmed']){
-                                                              setTimeout( location.reload(), 2000);
-                                                        }
-                                                      });
+
+function DeletePost(id)
+{
+
+    Swal.fire({
+      title: 'İlan silinecektir emin misiniz?',
+      showDenyButton: true,
+      confirmButtonText: 'Sil',
+      denyButtonText: `Silme`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+          $.post( "/User/PostDelete/"+id, function( data ) {
+              var message = "";
+              if (data.includes('silindi')){
+                  message = 'success';
+              }
+              else
+                  {
+                      message ='info';
+                      }
+              Swal.fire({
+                title: data,confirmButtonText: 'Kapat'}).then((result) => {
+                                                            if (result['isConfirmed']){
+                                                                  setTimeout( location.reload(), 2000);
+                                                            }
+                                                          });
   
-      });
-  } 
-})
+          });
+      } 
+    })
 }
 
 </script>

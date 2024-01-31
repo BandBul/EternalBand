@@ -8,6 +8,7 @@ using EternalBAND.DomainObjects;
 using EternalBAND.DomainObjects.ViewModel;
 using EternalBAND.Api.Services;
 using System.Security.Cryptography;
+using EternalBAND.Api.Helpers;
 
 namespace EternalBAND.Controllers;
 [Authorize]
@@ -15,27 +16,29 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly HomeService _homeService;
+    private readonly ControllerHelper _controllerHelper;
 
-    public HomeController(ILogger<HomeController> logger, HomeService homeService)
+    public HomeController(ILogger<HomeController> logger, HomeService homeService, ControllerHelper controllerHelper)
     {
         _logger = logger;
-        _homeService =homeService;
+        _homeService = homeService;
+        _controllerHelper = controllerHelper;
     }
     [AllowAnonymous]
-    [Route("")]
+    [HttpGet, Route("")]
     public IActionResult Anasayfa()
     {
         return View();
     }
 
     [AllowAnonymous]
-    [Route("Anasayfa")]
+    [HttpGet, Route("Anasayfa")]
     public IActionResult MainPage()
     {
         return View();
     }
 
-    [Route("blog-yazilari")]
+    [HttpGet, Route("blog-yazilari")]
     public async Task<IActionResult> Blogs(int pId = 1, string? s = "")
     {
         if (s == null)
@@ -45,7 +48,7 @@ public class HomeController : Controller
         return View(await _homeService.Blogs(s, pId));
     }
 
-    [Route("blog")]
+    [HttpGet, Route("blog")]
     public async Task<IActionResult> Blog(string? s = "")
     {
         if (s == null)
@@ -56,7 +59,7 @@ public class HomeController : Controller
         return View(await _homeService.Blog(s));
     }
     // TODO change parameter names as understandable strings
-    [Route("ilanlar")]
+    [HttpGet, Route("ilanlar")]
     public async Task<IActionResult> Posts(int pId = 1, string? s = "", int c = 0, string? e = "")
     {
         ViewBag.CityId = c;
@@ -65,15 +68,23 @@ public class HomeController : Controller
         return View(await _homeService.Posts(pId, s, c, e));
     }
 
-    [Route("ilan")]
-    public async Task<IActionResult> Post(string? s = "", bool approvalPurpose = false)
+    [HttpGet, Route("ilan/{seolink}")]
+    public async Task<IActionResult> Post(string? seolink , bool approvalPurpose = false)
     {
-        if (s == null)
+        if (approvalPurpose)
+        {
+            var isAdmin = await _controllerHelper.IsUserAdmin(User);
+            if(isAdmin)
+            {
+                approvalPurpose = false;
+            }
+        }
+        if (seolink == null)
         {
             return RedirectToAction(nameof(Anasayfa));
         }
         ViewBag.ApprovalPurpose = approvalPurpose;
-        return View(await _homeService.Post(s));
+        return View(await _homeService.Post(seolink));
     }
 
     [Route("iletisim")]
