@@ -1,4 +1,5 @@
-﻿using EternalBAND.DataAccess;
+﻿using EternalBAND.Common;
+using EternalBAND.DataAccess;
 using EternalBAND.DomainObjects;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -29,6 +30,12 @@ namespace EternalBAND.Api.Helpers
         { 
             var user = await _context.Users.FindAsync(id);
             return user != null;
+        }
+
+        public async Task<bool> IsUserAdmin(ClaimsPrincipal user)
+        {
+            var currentUser = await _userManager.GetUserAsync(user);
+            return await _userManager.IsInRoleAsync(currentUser, Constants.AdminRoleName);
         }
     }
 }

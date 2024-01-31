@@ -104,28 +104,6 @@
     </div><!--end col-->
 </div><!--end row-->
 
-@* <div class="row justify-content-end"> *@
-@* *@
-@* *@
-@*     <div class="col-lg-3 col-md-5 "> *@
-@*         <div class="candidate-list-widgets"> *@
-@*             <div class="row"> *@
-@*                 <div class="col-md-12"> *@
-@*                     <div class="selection-widget mt-3 mt-md-0"> *@
-@*                         <select class="form-select filter-input-box" data-trigger name="choices-single-filter-orderby" id="choices-single-filter-orderby" aria-label="Default select example"> *@
-@*                             <option value="df">Default</option> *@
-@*                             <option value="ne">Newest</option> *@
-@*                             <option value="od">Oldest</option> *@
-@*                             <option value="rd">Random</option> *@
-@*                         </select> *@
-@*                     </div> *@
-@*                 </div><!--end col--> *@
-@* *@
-@*             </div><!--end row--> *@
-@*         </div><!--end candidate-list-widgets--> *@
-@*     </div><!--end col--> *@
-@* </div><!--end row--> *@
-
 <div class="candidate-list">
     <div class="row">
         @{
@@ -135,94 +113,6 @@
                 {
                     string photoPath = post.Photo1 != null ? post.Photo1 :
                         (post.Photo2 != null ? post.Photo2 : ((post.Photo3 != null ? post.Photo3 : ((post.Photo4 != null ? post.Photo4 : ((post.Photo5 != null ? post.Photo5 : "~/images/hazirlaniyor.jpg")))))));
-                    @* <div class="col-lg-4 col-md-6"> *@
-                    @*     <div class="candidate-grid-box bookmark-post card mt-4"> *@
-                    @*         <div class="card-body p-3 pt-4"> *@
-                    @*             <div class="featured-label"> *@
-                    @*                 <span class="featured">Acil</span> *@
-                    @*                 $1$ <ul class="list-inline d-flex justify-content-between align-items-center"> #1# *@
-                    @*                 $1$ #1# *@
-                    @*                 $1$     <li class="list-inline-item"> #1# *@
-                    @*                 $1$         <div class="favorite-icon"> #1# *@
-                    @*                 $1$             <a href="javascript:void(0)"> #1# *@
-                    @*                 $1$                 <i class="uil uil-heart-alt fs-18"></i> #1# *@
-                    @*                 $1$             </a> #1# *@
-                    @*                 $1$         </div> #1# *@
-                    @*                 $1$     </li> #1# *@
-                    @*                 $1$ </ul> #1# *@
-                    @*             </div> *@
-                    @*             <div class="d-flex mb-4"> *@
-                    @*                 <div class="flex-shrink-0 position-relative"> *@
-                    @*                     <img src="@photoPath" alt="" class="avatar-md rounded"> *@
-                    @*                     <span class="profile-active position-absolute badge rounded-circle bg-success"> *@
-                    @*                         <span class="visually-hidden">active</span> *@
-                    @*                     </span> *@
-                    @*                 </div> *@
-                    @*                 <div class="ms-3"> *@
-                    @*                     <a href="candidate-details.html" class="primary-link"> *@
-                    @*                         <h5 class="fs-15">@post.Title</h5> *@
-                    @*                     </a> *@
-                    @*                     <span class="badge bg-soft-info fs-13">$800/month</span> *@
-                    @*                 </div> *@
-                    @*             </div> *@
-                    @* *@
-                    @*             <div class="border rounded mb-4"> *@
-                    @*                 <div class="row g-0"> *@
-                    @*                     @if (post.PostTypes != null) *@
-                    @*                     { *@
-                    @*                         <div class="col-lg-6"> *@
-                    @*                             <div class="border-end px-3 py-2"> *@
-                    @*                                 <p class="text-muted mb-0">İlan Tipi</p> *@
-                    @*                             </div> *@
-                    @*                         </div> *@
-                    @*                         <!--end col--> *@
-                    @*                         <div class="col-lg-6"> *@
-                    @*                             <div class="px-3 py-2"> *@
-                    @*                                 <p class="text-muted mb-0">@post.PostTypes.Type</p> *@
-                    @*                             </div> *@
-                    @*                         </div> *@
-                    @*                         <!--end col--> *@
-                    @*                     } *@
-                    @*                     @if (post.Instruments != null) *@
-                    @*                     { *@
-                    @*                         <div class="col-lg-6"> *@
-                    @*                             <div class="border-end px-3 py-2"> *@
-                    @*                                 <p class="text-muted mb-0">Enstrüman</p> *@
-                    @*                             </div> *@
-                    @*                         </div> *@
-                    @*                         <!--end col--> *@
-                    @*                         <div class="col-lg-6"> *@
-                    @*                             <div class="px-3 py-2"> *@
-                    @*                                 <p class="text-muted mb-0">@post.Instruments.Instrument</p> *@
-                    @*                             </div> *@
-                    @*                         </div> *@
-                    @*                         <!--end col--> *@
-                    @*                     } *@
-                    @*                     @if (post.CityId != null) *@
-                    @*                     { *@
-                    @*                         <div class="col-lg-6"> *@
-                    @*                             <div class="border-end px-3 py-2"> *@
-                    @*                                 <p class="text-muted mb-0">Şehir</p> *@
-                    @*                             </div> *@
-                    @*                         </div> *@
-                    @*                         <!--end col--> *@
-                    @*                         <div class="col-lg-6"> *@
-                    @*                             <div class="px-3 py-2"> *@
-                    @*                                 <p class="text-muted mb-0">@Cities.GetCities().FirstOrDefault(n => n.Key == post.CityId).Value</p> *@
-                    @*                             </div> *@
-                    @*                         </div> *@
-                    @*                         <!--end col--> *@
-                    @*                     } *@
-                    @*                 </div><!--end row--> *@
-                    @*             </div> *@
-                    @*             <div class="mt-3"> *@
-                    @*                 <a asp-action="Post" asp-route-s="@post.SeoLink" class="btn btn-success btn-hover w-100 mt-2"><i class="mdi mdi-eye"></i> Detaylar</a> *@
-                    @*                 <a href="#hireNow" data-bs-toggle="modal" class="btn btn-primary btn-hover w-100 mt-2"><i class="mdi mdi-message-processing-outline"></i> Mesaj Gönder</a> *@
-                    @* *@
-                    @*             </div> *@
-                    @*         </div> *@
-                    @*     </div> <!--end card--> *@
-                    @* </div> *@
 
                     <div class="candidate-list-box card mt-4">
                    

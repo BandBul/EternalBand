@@ -9,13 +9,13 @@ public class ErrorController : Controller
     {
     }
 
-    [Route("hata-olustu/404")]
+    [HttpGet, Route("hata-olustu/404")]
     public IActionResult PageNotFound()
     {
         return View();
     }
 
-    [Route("hata-olustu/{code}")]
+    [HttpGet, Route("hata-olustu/{code}")]
     public IActionResult Index(int code)
     {
         

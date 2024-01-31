@@ -26,8 +26,7 @@ public class UserController : Controller
         _userService = userService;
     }
 
-    // GET: Posts
-    [Route("ilanlarim")]
+    [HttpGet, Route("ilanlarim")]
     public async Task<IActionResult> PostIndex()
     {
         ViewBag.PostStatusViewModel = Initials.InitialPostStatusViewModelValue;
@@ -38,8 +37,7 @@ public class UserController : Controller
         return View(allPosts);
     }
 
-    [Route("PostCreate")]
-    // GET: Posts/Create
+    [HttpGet, Route("PostCreate")]
     public IActionResult PostCreate()
     {
         var postTypes = new List<PostTypes>() { new PostTypes() { Active = true, Id = null, Type = "Seçiniz", TypeShort = "Default" } };
@@ -57,9 +55,8 @@ public class UserController : Controller
     // POST: Posts/Create
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
     [ValidateAntiForgeryToken]
-    [Route("PostCreate")]
+    [HttpPost, Route("PostCreate")]
     public async Task<IActionResult> PostCreate([Bind("Id,Title,HTMLText,PostTypesId,InstrumentsId,CityId")] Posts posts,
         List<IFormFile>? images)
     {
@@ -79,7 +76,7 @@ public class UserController : Controller
     }
     // TODO please pass PK Id not GUID : since we can use Find method to seek PK as a best practice
     // GET: Posts/Edit/5
-    [Route("ilan-duzenle")]
+    [HttpGet, Route("ilan-duzenle")]
     public async Task<IActionResult> PostEdit(Guid? id)
     {
         try
@@ -104,9 +101,8 @@ public class UserController : Controller
     // POST: Posts/Edit/5
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
     [ValidateAntiForgeryToken]
-    [Route("ilan-duzenle")]
+    [HttpPost,Route("ilan-duzenle")]
     public async Task<IActionResult> PostEdit(
         [Bind(
             "Guid,Title,HTMLText,PostTypesId,InstrumentsId,CityId")]
@@ -137,7 +133,7 @@ public class UserController : Controller
 
 
     //[ValidateAntiForgeryToken]
-    [ActionName("PostArchived")]
+    [HttpPost, ActionName("PostArchived")]
     public async Task<IActionResult> PostArchived(int id)
     {
         try
@@ -151,9 +147,9 @@ public class UserController : Controller
             return BadRequest(ex.Message);
         }
     }
-
+    // TODO it should be POST
     //[ValidateAntiForgeryToken]
-    [ActionName("PostActivated")]
+    [HttpPost, ActionName("PostActivated")]
     public async Task<IActionResult> PostActivated(int id)
     {
         try

@@ -17,7 +17,7 @@ public class MessageController : Controller
     }
 
 
-    [Route("mesajlar/{userId?}")]
+    [HttpGet, Route("mesajlar/{userId?}/{postId?}")]
     // userId : message receiver userId
     // postId : mssage is being sent for related postId
     public async Task<ActionResult> ChatIndex(string? userId, int postId)

@@ -17,7 +17,8 @@ public class Messages : IEntity
     public int? RelatedPostId { get; set; }
     // "mesajlar/id?postid=postid"
     public string RedirectLink => 
-        $"{Constants.MessagesQueryParameter}/{SenderUserId}?{Constants.PostIdQueryParameter}={RelatedPostId}";
+        //$"{Constants.MessagesQueryParameter}/{SenderUserId}?{Constants.PostIdQueryParameter}={RelatedPostId}";
+        $"{Constants.MessagesQueryParameter}/{SenderUserId}/{RelatedPostId}";
 
 
 }

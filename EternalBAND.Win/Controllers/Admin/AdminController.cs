@@ -61,7 +61,7 @@ public class AdminController : Controller
             return View(blogs);
         }
     }
-
+    [HttpGet]
     // GET: Blogs/Edit/5
     public async Task<IActionResult> BlogsEdit(int? id)
     {
@@ -119,7 +119,7 @@ public class AdminController : Controller
         }
     }
 
-
+    [HttpGet]
     // GET: Contacts
     public async Task<IActionResult> ContactsIndex(int pId =1)
     {
@@ -134,6 +134,7 @@ public class AdminController : Controller
         }
     }
 
+    [HttpGet]
     // GET: Contacts/Details/5
     public async Task<IActionResult> ContactsDetails(int? id)
     {
@@ -148,7 +149,7 @@ public class AdminController : Controller
         }
     }
 
-
+    [HttpGet]
     // GET: Contacts/Edit/5
     public async Task<IActionResult> ContactsEdit(int? id)
     {
@@ -190,6 +191,7 @@ public class AdminController : Controller
         }
     }
 
+    [HttpGet]
     // GET: Contacts/Delete/5
     public async Task<IActionResult> ContactsDelete(int? id)
     {
@@ -221,7 +223,7 @@ public class AdminController : Controller
     }
 
 
-
+    [HttpGet]
     // GET: PostTypes
     public async Task<IActionResult> PostTypesIndex(int pId=1)
     {
@@ -236,7 +238,7 @@ public class AdminController : Controller
         }
     }
 
-
+    [HttpGet]
     // GET: PostTypes/Create
     public IActionResult PostTypesCreate()
     {
@@ -261,6 +263,7 @@ public class AdminController : Controller
         }
     }
 
+    [HttpGet]
     // GET: PostTypes/Edit/5
     public async Task<IActionResult> PostTypesEdit(int? id)
     {
@@ -300,6 +303,7 @@ public class AdminController : Controller
         }
     }
 
+    [HttpGet]
     // GET: PostTypes/Delete/5
     public async Task<IActionResult> PostTypesDelete(int? id)
     {
@@ -330,6 +334,7 @@ public class AdminController : Controller
         }
     }
 
+    [HttpGet]
     // GET: SystemInfo
     public async Task<IActionResult> SystemInfoIndex(int pId =1)
     {
@@ -344,7 +349,7 @@ public class AdminController : Controller
         }
     }
 
-
+    [HttpGet]
     // GET: SystemInfo/Create
     public IActionResult SystemInfoCreate()
     {
@@ -366,6 +371,7 @@ public class AdminController : Controller
         }
     }
 
+    [HttpGet]
     // GET: SystemInfo/Edit/5
     public async Task<IActionResult> SystemInfoEdit(int? id)
     {
@@ -406,6 +412,7 @@ public class AdminController : Controller
         }
     }
 
+    [HttpGet]
     // GET: SystemInfo/Delete/5
     public async Task<IActionResult> SystemInfoDelete(int? id)
     {
@@ -436,7 +443,7 @@ public class AdminController : Controller
         }
     }
 
-
+    [HttpGet]
     // GET: Instruments
     public async Task<IActionResult> InstrumentsIndex(int pId=1)
     {
@@ -451,7 +458,7 @@ public class AdminController : Controller
         }
     }
 
-
+    [HttpGet]
     // GET: Instruments/Create
     public IActionResult InstrumentsCreate()
     {
@@ -476,6 +483,7 @@ public class AdminController : Controller
         }
     }
 
+    [HttpGet]
     // GET: Instruments/Edit/5
     public async Task<IActionResult> InstrumentsEdit(int? id)
     {
@@ -515,6 +523,7 @@ public class AdminController : Controller
         }
     }
 
+    [HttpGet]
     // GET: Instruments/Delete/5
     public async Task<IActionResult> InstrumentsDelete(int? id)
     {
