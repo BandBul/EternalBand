@@ -74,7 +74,6 @@
 
         </div>
     </div>
-
      
     <script src="~/js/signalr/dist/browser/signalr.js"></script>
     <script>
@@ -101,9 +100,9 @@
                 countElement.innerText = currentCount + 1;
                 readedNotificationCountId.innerText = `${currentCount + 1} adet okunmamış mesajın var.`
             }
-                            
+
             var innerHTML = `
-                                    <a href="/${notif.RedirectLink}" class="text-dark notification-item d-block active notReaded ">
+                            <a asp-controller="User" asp-action="NotificationRead" asp-route-id="${notif.id}" class="text-dark notification-item d-block active notReaded ">
                                 <div class="d-flex align-items-center">
                                     <div class="flex-shrink-0 me-3">
                                         <div class="avatar-xs bg-primary text-white rounded-circle text-center">

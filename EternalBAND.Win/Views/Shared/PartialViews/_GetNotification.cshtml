@@ -16,7 +16,7 @@
             ReadedNotificationCountIdName = "NotificationCountId"
         };
 }
-
+<partial name="PartialViews/_WarningPopup" model="@TempData["WarningMessage"]" />
 @{
     await Html.RenderPartialAsync("PartialViews/_BaseNotification", input);
 }

@@ -235,6 +235,10 @@ namespace EternalBAND.Api.Services
             {
                 throw new BadRequestException($"There is no notification with this id : {notifId}");
             }
+            if (!IsPostExist(notif.RelatedElementId))
+            {
+                throw new JsonException($"İlgili ilan kullanıcı tarafından kaldırılmıştır.");
+            }
             notif.IsRead = true;
 
             _context.Notification.Update(notif);
@@ -251,6 +255,11 @@ namespace EternalBAND.Api.Services
         public IEnumerable<Instruments> GetInstruments()
         {
             return _context.Instruments;
+        }
+
+        private bool IsPostExist(string seoLink)
+        {
+            return _context.Posts.Any(s => s.SeoLink.Equals(seoLink));
         }
 
         private bool PostsExists(int id)
