@@ -217,5 +217,10 @@ public class UserController : Controller
         {
             return BadRequest(ex.Message);
         }
+        catch (JsonException ex)
+        {
+            TempData["WarningMessage"] = ex.Message;
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
     }
 }

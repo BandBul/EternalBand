@@ -1,0 +1,19 @@
+﻿@using EternalBAND.Api.Options;
+@using EternalBAND.Common;
+@using EternalBAND.DataAccess;
+@using EternalBAND.DomainObjects.ViewModel;
+@using EternalBAND.DomainObjects;
+@using Microsoft.AspNetCore.Identity;
+@model string
+@inject SignInManager<Users> SignInManager
+@{
+   
+}
+@if (SignInManager.IsSignedIn(User) && !String.IsNullOrEmpty(Model))
+{
+    var statusMessageClass = "danger";
+    <div class="alert alert-@statusMessageClass alert-dismissible" role="alert">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        @Model
+    </div>
+}
