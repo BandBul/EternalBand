@@ -210,7 +210,8 @@ public class UserController : Controller
     {
         try
         {
-            var redirectionLink = await _userService.NotificationRead(id);
+            var currentUser = await _controllerHelper.GetUserAsync(User);
+            var redirectionLink = await _userService.NotificationRead(id, currentUser);
             return Redirect("/" + redirectionLink);
         }
         catch (BadRequestException ex)

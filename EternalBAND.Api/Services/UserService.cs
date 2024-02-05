@@ -228,14 +228,14 @@ namespace EternalBAND.Api.Services
                 .ToPagedListAsync(pageId, 10);
         }
 
-        public async Task<string> NotificationRead(int notifId)
+        public async Task<string> NotificationRead(int notifId, Users user)
         {
             var notif = _context.Notification.Find(notifId);
             if (notif == null)
             {
                 throw new BadRequestException($"There is no notification with this id : {notifId}");
             }
-            if (!IsPostExist(notif.RelatedElementId))
+            if (!IsPostAvailable(notif.RelatedElementId, user))
             {
                 throw new JsonException($"İlgili ilan kullanıcı tarafından kaldırılmıştır.");
             }
@@ -257,9 +257,16 @@ namespace EternalBAND.Api.Services
             return _context.Instruments;
         }
 
-        private bool IsPostExist(string seoLink)
+        private bool IsPostAvailable(string seoLink, Users user)
         {
-            return _context.Posts.Any(s => s.SeoLink.Equals(seoLink));
+            var post = _context.Posts.FirstOrDefault(s => s.SeoLink.Equals(seoLink));
+            return post != null &&
+                (IsCurrentUserOwnerOfPost(post, user) || post.Status == PostStatus.Active);
+        }
+
+        private bool IsCurrentUserOwnerOfPost(Posts post, Users user)
+        {
+            return post.AddedByUserId == user.Id;
         }
 
         private bool PostsExists(int id)
