@@ -279,7 +279,7 @@
     connection.start().catch(function (err) {
         return console.error(err.toString());
     });
-
+    // TODO add promise for error purpose and redirect to Error page
     function Send(id,postId){
         var text = $("#messageText").val();
         $.post("/Message/SendMessage/",

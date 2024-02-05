@@ -48,8 +48,7 @@ namespace EternalBAND.Api.Services
                     currentPosts = currentPosts.Where(n => n.CityId == cityId).ToList();
                 }
             }
-
-            return await currentPosts.ToPagedListAsync(pageId, 10);
+            return await currentPosts.OrderByDescending(s => s.AddedDate).ToPagedListAsync(pageId, 10);
         }
 
         public async Task<Posts?> Post(string seoLink)

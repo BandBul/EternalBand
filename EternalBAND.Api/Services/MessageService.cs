@@ -22,10 +22,14 @@ namespace EternalBAND.Api.Services
         public async Task SendAndBroadCastMessageAsync(Users currentUser, Guid receiverUserId, string? message, int postId)
         {
             var msg = await _broadcastingManager.CreateMessage(currentUser, receiverUserId.ToString(), postId, message);
-            
-            var postTitle = _context.Posts.Find(msg.RelatedPostId).Title;
+            var post = _context.Posts.Find(msg.RelatedPostId);
+            if(post == null || post.Status != Common.PostStatus.Active ) 
+            {
+                throw new JsonException("Yayında olmayan yayına mesaj gönderemezsiniz.");
+            }
+            var postTitle = post.Title;
             await _broadcastingManager.CreateMessageNotification(
-                $"{currentUser.Name} '{postTitle}' başıklı ilana mesaj gönderdi.",
+                $"{currentUser.Name} '{postTitle}' başlıklı ilana mesaj gönderdi.",
                 msg);
         }
 
@@ -108,6 +112,5 @@ namespace EternalBAND.Api.Services
                 return false;
             }
         }
-
     }
 }

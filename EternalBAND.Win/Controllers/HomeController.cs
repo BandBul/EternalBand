@@ -59,7 +59,7 @@ public class HomeController : Controller
         return View(await _homeService.Blog(s));
     }
     // TODO change parameter names as understandable strings
-    [HttpGet, Route("ilanlar")]
+    [Route("ilanlar")]
     public async Task<IActionResult> Posts(int pId = 1, string? s = "", int c = 0, string? e = "")
     {
         ViewBag.CityId = c;
@@ -87,10 +87,16 @@ public class HomeController : Controller
         return View(await _homeService.Post(seolink));
     }
 
-    [Route("iletisim")]
+    [HttpGet, Route("iletisim")]
     public IActionResult ContactsCreate()
     {
         return View();
+    }
+
+    [HttpGet, Route("SeeAllPost")]
+    public async Task<IActionResult> SeeAllPost()
+    {
+        return Redirect("/ilanlar");
     }
 
     [HttpPost]
@@ -111,7 +117,6 @@ public class HomeController : Controller
 
         return View(contacts);
     }
-
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
