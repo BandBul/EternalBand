@@ -59,7 +59,7 @@ public class HomeController : Controller
         return View(await _homeService.Blog(s));
     }
     // TODO change parameter names as understandable strings
-    [HttpGet, Route("ilanlar")]
+    [Route("ilanlar")]
     public async Task<IActionResult> Posts(int pId = 1, string? s = "", int c = 0, string? e = "")
     {
         ViewBag.CityId = c;
