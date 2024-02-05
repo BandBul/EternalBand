@@ -231,19 +231,23 @@ namespace EternalBAND.Api.Services
         public async Task<string> NotificationRead(int notifId, Users user)
         {
             var notif = _context.Notification.Find(notifId);
+
             if (notif == null)
             {
                 throw new BadRequestException($"There is no notification with this id : {notifId}");
             }
-            if (!IsPostAvailable(notif.RelatedElementId, user))
+
+            if(!notif.IsRead)
+            {
+                notif.IsRead = true;
+                _context.Notification.Update(notif);
+                await _context.SaveChangesAsync();
+            }
+
+            if (notif.NotificationType == NotificationType.PostSharing && !IsPostAvailable(notif.RelatedElementId, user))
             {
                 throw new JsonException($"İlgili ilan kullanıcı tarafından kaldırılmıştır.");
             }
-            notif.IsRead = true;
-
-            _context.Notification.Update(notif);
-
-            await _context.SaveChangesAsync();
 
             return notif.RedirectLink;
         }

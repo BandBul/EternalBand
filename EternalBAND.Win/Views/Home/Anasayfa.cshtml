@@ -5,9 +5,6 @@
     ViewData["Title"] = "Anasayfa";
 }
 
-
-
-
 <div class="page-content">
 
 <section class="bg-home2" id="home">
@@ -502,7 +499,8 @@
 <!--end job-box-->
 
 <div class="text-center mt-4 pt-2">
-    <a href="job-list.html" class="btn btn-primary text-dark">Hepsini Gör <i class="uil uil-arrow-right"></i></a>
+    @*<a href="job-list.html" class="btn btn-primary text-dark">Hepsini Gör <i class="uil uil-arrow-right"></i></a>*@
+    <a asp-controller="Home" asp-action="SeeAllPost" class="btn btn-primary text-dark">Hepsini Gör <i class="uil uil-arrow-right"></i></a>
 </div>
 
 </div>
@@ -2285,7 +2283,8 @@
             </div>
         </div>
     </div>
-</div><!-- END APPLY MODAL -->
+</div>
+<!-- END APPLY MODAL -->
 
 </div>
 
