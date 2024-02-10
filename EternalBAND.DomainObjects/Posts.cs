@@ -1,6 +1,7 @@
 using EternalBAND.Common;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
+using System.Dynamic;
 
 namespace EternalBAND.DomainObjects;
 
@@ -62,4 +63,19 @@ public class Posts : IEntity
     [Required(ErrorMessage = "Lütfen Şehir seçiniz.")]
     public int? CityId { get; set; }
     public PostStatus Status { get; set; }
+
+    public List<string> AllPhotos =>
+        new List<string>()
+        {
+            Photo1,
+            Photo2,
+            Photo3,
+            Photo4,
+            Photo5,
+        };
+
+    public string? GetTopPhoto()
+    {
+        return AllPhotos.FirstOrDefault(photo => photo != null);
+    }
 }
