@@ -9,6 +9,7 @@ using EternalBAND.DomainObjects.ViewModel;
 using EternalBAND.Api.Services;
 using System.Security.Cryptography;
 using EternalBAND.Api.Helpers;
+using EternalBAND.Common;
 
 namespace EternalBAND.Controllers;
 [Authorize]
@@ -26,16 +27,16 @@ public class HomeController : Controller
     }
     [AllowAnonymous]
     [HttpGet, Route("")]
-    public IActionResult Anasayfa()
+    public async Task<IActionResult> Anasayfa()
     {
-        return View();
+        return View(await _homeService.Posts());
     }
 
     [AllowAnonymous]
     [HttpGet, Route("Anasayfa")]
-    public IActionResult MainPage()
+    public async Task<IActionResult> MainPage()
     {
-        return View();
+        return View(await _homeService.Posts());
     }
 
     [HttpGet, Route("blog-yazilari")]
@@ -97,6 +98,26 @@ public class HomeController : Controller
     public async Task<IActionResult> SeeAllPost()
     {
         return Redirect("/ilanlar");
+    }
+
+    [HttpPost, Route("FilterNewPosts")]
+    public async Task<IActionResult> FilterNewPosts(string postTypeName)
+    {
+        PostTypeName postType;
+        if(!Enum.TryParse(postTypeName, out postType))
+        {
+            return Problem("Invalid posttype value '{}'", postTypeName);
+        }
+
+        var filteredPosts = await _homeService.PostsByPostTypeAsync(postType);
+        return PartialView("PartialViews/_NewPostsList", filteredPosts);
+    }
+
+    [HttpPost, Route("NewPosts")]
+    public async Task<IActionResult> NewPosts()
+    {
+        var filteredPosts = await _homeService.NewPosts();
+        return PartialView("PartialViews/_NewPostsList", filteredPosts);
     }
 
     [HttpPost]

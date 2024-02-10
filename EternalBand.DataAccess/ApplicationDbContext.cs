@@ -37,7 +37,7 @@ public class ApplicationDbContext : IdentityDbContext<Users>
             {
                 Id = 1,
                 Type = "Müzisyen Arıyorum",
-                TypeShort = "Musician",
+                TypeShort = PostTypeName.Musician.ToString(),
                 Active = true,
                 AddedDate = DateTime.Now
             },
@@ -45,7 +45,7 @@ public class ApplicationDbContext : IdentityDbContext<Users>
             {
                 Id = 2,
                 Type = "Grup Arıyorum",
-                TypeShort = "Group",
+                TypeShort = PostTypeName.Group.ToString(),
                 Active = true,
                 AddedDate = DateTime.Now
             },
@@ -53,7 +53,7 @@ public class ApplicationDbContext : IdentityDbContext<Users>
             {
                 Id = 3,
                 Type = "Ders Vermek İstiyorum",
-                TypeShort = "Lesson",
+                TypeShort = PostTypeName.Lesson.ToString(),
                 Active = true,
                 AddedDate = DateTime.Now
             }

@@ -1,5 +1,7 @@
-﻿using EternalBAND.DataAccess;
+﻿using EternalBAND.Common;
+using EternalBAND.DataAccess;
 using EternalBAND.DomainObjects;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using X.PagedList;
 
@@ -23,7 +25,7 @@ namespace EternalBAND.Api.Services
             return await _context.Blogs.FirstOrDefaultAsync(n => n.SeoLink == seoLink);
         }
 
-        public async Task<IPagedList<Posts>> Posts(int pageId, string typeShort, int cityId, string instrument)
+        public async Task<IPagedList<Posts>> Posts(int pageId = 1, string typeShort = "", int cityId = 0, string instrument = "")
         {
             var currentPosts = await _context.Posts.Where(p => p.Status == Common.PostStatus.Active).Include(n => n.PostTypes).Include(n => n.Instruments).ToListAsync();
             if (cityId != 0 || instrument != "" || typeShort != "")
@@ -48,7 +50,7 @@ namespace EternalBAND.Api.Services
                     currentPosts = currentPosts.Where(n => n.CityId == cityId).ToList();
                 }
             }
-            return await currentPosts.OrderByDescending(s => s.AddedDate).ToPagedListAsync(pageId, 10);
+            return await currentPosts.OrderByDescending(s => s.AddedDate).ToPagedListAsync(pageId, Constants.PageSize);
         }
 
         public async Task<Posts?> Post(string seoLink)
@@ -65,6 +67,26 @@ namespace EternalBAND.Api.Services
             await _context.SaveChangesAsync();
 
             return contacts;
+        }
+
+        public async Task<IPagedList<Posts>> PostsByPostTypeAsync(PostTypeName postTypeName)
+        {
+            return await _context.Posts
+                .Include(n => n.PostTypes)
+                .Include(n => n.Instruments)
+                .Where(n => n.PostTypes.TypeShort == postTypeName.ToString() && n.Status == PostStatus.Active )
+                .OrderByDescending(s => s.AddedDate)
+                .ToPagedListAsync(1, Constants.PageSize);
+        }
+
+        public async Task<IPagedList<Posts>> NewPosts()
+        {
+            return await _context.Posts
+                .Include(n => n.PostTypes)
+                .Include(n => n.Instruments)
+                .Where(n => n.Status == PostStatus.Active)
+                .OrderByDescending(s => s.AddedDate)
+                .ToPagedListAsync(1, Constants.PageSize);
         }
     }
 }
