@@ -47,8 +47,9 @@
       
              <div class="form-group m-3">
                 <label asp-for="HtmlText" class="control-label"></label>
-                <input asp-for="HtmlText" type="hidden" class="form-control"/>
-                     <div id="htmlEditor" style="height:250px"></div>
+                <textarea asp-for="HtmlText" class="form-control" rows="3"></textarea>
+@*                <input asp-for="HtmlText" type="hidden" class="form-control"/>
+                     <div id="htmlEditor" style="height:250px"></div>*@
                 <span asp-validation-for="HtmlText" class="text-danger"></span>
             </div>
              <div class="form-group m-3">
@@ -61,10 +62,10 @@
                 <input asp-for="SeoLink" class="form-control"/>
                 <span asp-validation-for="SeoLink" class="text-danger"></span>
             </div>
-                    <div class="form-group m-3">
-                                                                            <label class="control-label">Fotoğraflar</label>
-                                                                            <div class="input-images-2" style="padding-top: .5rem;"></div>
-                                                                        </div>
+                <div class="form-group m-3">
+                    <label class="control-label">Fotoğraflar</label>
+                    <div class="input-images-2" style="padding-top: .5rem;"></div>
+                </div>
              <div class="form-group m-3">
                 <input type="submit" value="Kaydet" class="btn btn-primary"/>
             </div>
@@ -80,7 +81,7 @@
        <partial name="PartialViews/_SwitcherAndTopPartial"/>
    </div>
 <script>
-   RunQuill("HtmlText");
+   //RunQuill("HtmlText");
    </script>>
 <script src="~/imageuploader/image-uploader.js"></script>
 
