@@ -48,18 +48,17 @@
                 
                     @foreach (var blog in Model.ToList())
                     {
-                        string photoPath = blog.PhotoPath != null ? blog.PhotoPath :
-                            (blog.PhotoPath2 != null ? blog.PhotoPath2 : ((blog.PhotoPath3 != null ? blog.PhotoPath3 : ((blog.PhotoPath4 != null ? blog.PhotoPath4 : ((blog.PhotoPath5 != null ? blog.PhotoPath5 : "~/images/hazirlaniyor.jpg")))))));
+                        string photoPath = blog.GetTopPhoto() ?? "../images/hazirlaniyor.jpg";
                         <div class="col-lg-6">
                             <article class="post position-relative mt-4">
                                 <div class="post-preview overflow-hidden mb-3 rounded-3">
-                                    <a asp-action="Blog" asp-route-s="@blog.SeoLink">
+                                    <a asp-action="Blog" asp-route-seolink="@blog.SeoLink">
                                         <img src="@photoPath" alt="" class="img-fluid blog-img">
                                     </a>
                                 </div>
                                 <p class="text-muted mb-2">@blog.AddedDate.ToString("dd/MM/yyyy")</p>
                                 <h5 class="mb-3">
-                                    <a asp-action="Blog" asp-route-s="@blog.SeoLink" class="primary-link">@blog.Title</a>
+                                    <a asp-action="Blog" asp-route-seolink="@blog.SeoLink" class="primary-link">@blog.Title</a>
                                 </h5>
                                 <p class="text-muted">
                                     @if (blog.HtmlText.Length > 150)

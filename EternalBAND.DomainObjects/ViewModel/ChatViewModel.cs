@@ -7,8 +7,6 @@ public class ChatViewModel
     public MessageBox? CurrentChat { get; set; }
     public List<MessageBox>? AllChat { get; set; }
 }
-
-
 public class MessageBox
 {
     public MessageBox(MessageMetadata messageMetadata) : this(messageMetadata, new List<Messages>())
@@ -25,11 +23,8 @@ public class MessageBox
     public IList<Messages>? Messages { get; set; }
 }
 
-
-
 public class MessageMetadata
 {
-
     public MessageMetadata(int? postid, string[] recipientIds)
     {
         RecipientIds = recipientIds;

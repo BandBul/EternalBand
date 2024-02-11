@@ -29,35 +29,35 @@ public class HomeController : Controller
     [HttpGet, Route("")]
     public async Task<IActionResult> Anasayfa()
     {
-        return View(await _homeService.Posts());
+        return View(await _homeService.GetMainPageModel());
     }
 
     [AllowAnonymous]
     [HttpGet, Route("Anasayfa")]
     public async Task<IActionResult> MainPage()
     {
-        return View(await _homeService.Posts());
+        return View(await _homeService.GetMainPageModel());
     }
 
-    [HttpGet, Route("blog-yazilari")]
-    public async Task<IActionResult> Blogs(int pId = 1, string? s = "")
+    [Route("blogs/{seolink?}")]
+    public async Task<IActionResult> Blogs(string? seolink = "", int pId = 1)
     {
-        if (s == null)
+        if (seolink == null)
         {
-            s = "";
+            seolink = "";
         }
-        return View(await _homeService.Blogs(s, pId));
+        return View(await _homeService.Blogs(pId, seolink));
     }
 
-    [HttpGet, Route("blog")]
-    public async Task<IActionResult> Blog(string? s = "")
+    [HttpGet, Route("blog/{seoLink}")]
+    public async Task<IActionResult> Blog(string? seoLink = "")
     {
-        if (s == null)
+        if (seoLink == null)
         {
             return RedirectToAction(nameof(Anasayfa));
         }
 
-        return View(await _homeService.Blog(s));
+        return View(await _homeService.Blog(seoLink));
     }
     // TODO change parameter names as understandable strings
     [Route("ilanlar")]

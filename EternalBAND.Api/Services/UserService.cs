@@ -111,7 +111,7 @@ namespace EternalBAND.Api.Services
                     posts.Status = isAdmin ? PostStatus.Active : post.Status;
                     if (!isAdmin && postStatus == PostStatus.Active)
                     {
-                        post.Status = PostStatus.PendingApproval;
+                        posts.Status = PostStatus.PendingApproval;
                         var message = $"{currentUser?.Name} '{posts.SeoLink}' ilanında güncelleme yaptı";
                         await _notificationManager.CreateAdminNotification(currentUser, post, message);
                         var userMessage = $"'{post.Title}' başlıklı ilanınız onay sürecindedir. En kısa sürede onay sürecini tamamlayacağız";

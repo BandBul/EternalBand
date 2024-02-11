@@ -45,8 +45,9 @@
                                 </div>
                                 <div class="form-group m-3">
                                     <label asp-for="HTMLText" class="control-label"></label>
-                                    <input asp-for="HTMLText" type="hidden" class="form-control"/>
-                                    <div id="htmlEditor" style="height:250px"></div>
+                                    <textarea asp-for="HTMLText" class="form-control" rows="3"></textarea>
+                                    <@*input asp-for="HTMLText" type="hidden" class="form-control"/>
+                                    <div id="htmlEditor" style="height:250px"></div>*@
                                     <span asp-validation-for="HTMLText" class="text-danger"></span>
                                 </div>
                                 <div class="form-group m-3">
@@ -129,7 +130,7 @@
 </div>
 
 <script>
-RunQuill("HTMLText");
+//RunQuill("HTMLText");
 </script>
 
 <script src="~/imageuploader/image-uploader.js"></script>

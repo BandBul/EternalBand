@@ -44,9 +44,8 @@
                     {
                         @foreach (var item in Model)
                         {
+
                             <div class="col-lg-4 col-md-6 mt-4">
-
-
                                 <div class="card job-grid-box bookmark-post">
                                     <div class="card-body p-4">
                                         <div class="favorite-icon">
@@ -54,23 +53,10 @@
                                                 <i class="uil uil-trash-alt"></i>
                                             </a>
                                         </div>
-                                        @* <div> *@
-                                        @*     <a href="company-details.html"> *@
-                                        @*         <img src="~/images/featured-job/img-01.png" alt="" class="img-fluid rounded-3"> *@
-                                        @*     </a> *@
-                                        @* </div> *@
                                         <div class="mt-4">
-                                            <a asp-action="Blog" asp-controller="Home" asp-route-s="@item.SeoLink" class="primary-link">
+                                            <a asp-action="Blog" asp-controller="Home" asp-route-seoLink="@item.SeoLink" class="primary-link">
                                                 <h5 class="fs-17 mb-1">@item.Title</h5>
                                             </a>
-                                            @* <ul class="list-inline"> *@
-                                            @*     @if(item.PostTypes != null){ *@
-                                            @*         <li class="list-inline-item"> *@
-                                            @*             <span class="badge bg-soft-success fs-13 mt-1">@item.PostTypes.Type</span> *@
-                                            @*         </li> *@
-                                            @*     } *@
-                                            @*       *@
-                                            @* </ul> *@
                                         </div>
                                         <div class="job-grid-content mt-3">
                                             <p class="text-muted">

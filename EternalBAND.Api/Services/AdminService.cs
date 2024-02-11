@@ -39,8 +39,10 @@ namespace EternalBAND.Api.Services
         public async Task BlogsCreate(Blogs blogs, List<IFormFile>? images)
         {
             await BlogPhotoAdd(blogs, images);
-            blogs.SeoLink = StrConvert.TRToEnDeleteAllSpacesAndToLower(blogs.Title) + "-" + new Random().Next(0, 999999);
+            var source = blogs.SeoLink ?? blogs.Title;
+            blogs.SeoLink = StrConvert.TRToEnDeleteAllSpacesAndToLower(source) + "-" + new Random().Next(0, 999999);
             blogs.AddedDate = DateTime.Now;
+            // TODO check if this seoLink is unique or not 
             _context.Add(blogs);
             await _context.SaveChangesAsync();
         }
