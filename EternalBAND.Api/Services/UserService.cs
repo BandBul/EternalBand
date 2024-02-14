@@ -265,7 +265,7 @@ namespace EternalBAND.Api.Services
         {
             var post = _context.Posts.FirstOrDefault(s => s.SeoLink.Equals(seoLink));
             return post != null &&
-                (IsCurrentUserOwnerOfPost(post, user) || post.Status == PostStatus.Active);
+                (IsCurrentUserOwnerOfPost(post, user) || (post.Status == PostStatus.Active || post.Status == PostStatus.PendingApproval));
         }
 
         private bool IsCurrentUserOwnerOfPost(Posts post, Users user)

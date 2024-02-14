@@ -75,7 +75,7 @@ public class HomeController : Controller
         if (approvalPurpose)
         {
             var isAdmin = await _controllerHelper.IsUserAdmin(User);
-            if(isAdmin)
+            if(!isAdmin)
             {
                 approvalPurpose = false;
             }
