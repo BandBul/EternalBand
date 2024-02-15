@@ -19,4 +19,7 @@ function RunQuill(textId, editor = 'htmlEditor') {
     quill.on('text-change', () => {
         $("#"+textId).val(quill.root.innerHTML);
     });
+    document.addEventListener('DOMContentLoaded', function () {
+        quill.root.innerHTML = $("#" + textId).val();
+    });
 }
