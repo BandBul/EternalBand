@@ -36,53 +36,52 @@
 
                     <div class="col-12 col-lg-12">
                         <div class="card p-3" id="typography">
-        <form asp-action="BlogsEdit" enctype="multipart/form-data" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id"/>
-             <div class="form-group m-3">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control"/>
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
+                            <form asp-action="BlogsEdit" enctype="multipart/form-data" method="post">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input type="hidden" asp-for="Id"/>
+                                 <div class="form-group m-3">
+                                    <label asp-for="Title" class="control-label"></label>
+                                    <input asp-for="Title" class="form-control"/>
+                                    <span asp-validation-for="Title" class="text-danger"></span>
+                                </div>
       
-             <div class="form-group m-3">
-                <label asp-for="HtmlText" class="control-label"></label>
-                <textarea asp-for="HtmlText" class="form-control" rows="3"></textarea>
-@*                <input asp-for="HtmlText" type="hidden" class="form-control"/>
-                     <div id="htmlEditor" style="height:250px"></div>*@
-                <span asp-validation-for="HtmlText" class="text-danger"></span>
-            </div>
-             <div class="form-group m-3">
-                <label asp-for="Tags" class="control-label"></label>
-                <input asp-for="Tags" class="form-control"/>
-                <span asp-validation-for="Tags" class="text-danger"></span>
-            </div>
-             <div class="form-group m-3">
-                <label asp-for="SeoLink" class="control-label"></label>
-                <input asp-for="SeoLink" class="form-control"/>
-                <span asp-validation-for="SeoLink" class="text-danger"></span>
-            </div>
-                <div class="form-group m-3">
-                    <label class="control-label">Fotoğraflar</label>
-                    <div class="input-images-2" style="padding-top: .5rem;"></div>
+                                 <div class="form-group m-3">
+                                    <label asp-for="HtmlText" class="control-label"></label>
+                                    <input asp-for="HtmlText" type="hidden" class="form-control"/>
+                                    <div id="htmlEditor" style="height:250px"></div>
+                                    <span asp-validation-for="HtmlText" class="text-danger"></span>
+                                </div>
+                                 <div class="form-group m-3">
+                                    <label asp-for="Tags" class="control-label"></label>
+                                    <input asp-for="Tags" class="form-control"/>
+                                    <span asp-validation-for="Tags" class="text-danger"></span>
+                                </div>
+                                 <div class="form-group m-3">
+                                    <label asp-for="SeoLink" class="control-label"></label>
+                                    <input asp-for="SeoLink" class="form-control"/>
+                                    <span asp-validation-for="SeoLink" class="text-danger"></span>
+                                </div>
+                                    <div class="form-group m-3">
+                                        <label class="control-label">Fotoğraflar</label>
+                                        <div class="input-images-2" style="padding-top: .5rem;"></div>
+                                    </div>
+                                 <div class="form-group m-3">
+                                    <input type="submit" value="Kaydet" class="btn btn-primary"/>
+                                </div>
+                            </form>
+                         </div>
+                    </div>
                 </div>
-             <div class="form-group m-3">
-                <input type="submit" value="Kaydet" class="btn btn-primary"/>
             </div>
-        </form>
-   </div>
-                       </div>
-                   </div>
-               </div>
-           </section>
+        </section>
    
        </div>
    
        <partial name="PartialViews/_SwitcherAndTopPartial"/>
    </div>
 <script>
-   //RunQuill("HtmlText");
-   </script>>
+    RunQuill("HtmlText");
+</script>>
 <script src="~/imageuploader/image-uploader.js"></script>
 
 <script>

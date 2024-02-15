@@ -46,9 +46,8 @@
 
                                 <div class="form-group m-3">
                                     <label asp-for="HtmlText" class="control-label"></label>
-                                    <textarea asp-for="HtmlText" class="form-control" rows="3"></textarea>
-@*                                    <input asp-for="HtmlText" type="hidden" class="form-control"/>
-                                    <div id="htmlEditor" style="height:250px"></div>*@
+                                    <input asp-for="HtmlText" type="hidden" class="form-control"/>
+                                    <div id="htmlEditor" style="height:250px"></div>
                                     <span asp-validation-for="HtmlText" class="text-danger"></span>
                                 </div>
                                 <div class="form-group m-3">
@@ -81,7 +80,7 @@
     <partial name="PartialViews/_SwitcherAndTopPartial"/>
 </div>
 <script>
-    //RunQuill("htmlEditor");
+    RunQuill("HtmlText");
 </script>
 <script src="~/imageuploader/image-uploader.js"></script>
 
