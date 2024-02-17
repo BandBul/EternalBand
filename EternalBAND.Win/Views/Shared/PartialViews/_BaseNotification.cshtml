@@ -6,6 +6,7 @@
 @using Microsoft.AspNetCore.Identity;
 @using Microsoft.EntityFrameworkCore;
 @using Microsoft.Extensions.Options;
+@using System.Text.RegularExpressions;
 <link href="/Css/NotificationPopUp.css" rel="stylesheet" type="text/css">
 @model BaseNotificationModel
 @inject ApplicationDbContext _context
@@ -49,7 +50,7 @@
                                 </div>
                             </div>
                             <div class="flex-grow-1">
-                                <h6 class="mt-0 mb-1 fs-14">@ms.Message</h6>
+                                <h6 class="mt-0 mb-1 fs-14">@Html.Raw(@ms.Message)</h6>
 
                             </div>
                         </div>
@@ -100,7 +101,6 @@
                 countElement.innerText = currentCount + 1;
                 readedNotificationCountId.innerText = `${currentCount + 1} adet okunmamış mesajın var.`
             }
-
             var innerHTML = `
                             <a asp-controller="User" asp-action="NotificationRead" asp-route-id="${notif.id}" class="text-dark notification-item d-block active notReaded ">
                                 <div class="d-flex align-items-center">

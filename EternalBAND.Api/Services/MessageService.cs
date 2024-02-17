@@ -40,7 +40,7 @@ namespace EternalBAND.Api.Services
             return GroupByMetadata(allMessages);
         }
 
-        public async Task<MessageBox> GetOrCreteMessageBox(string receiverUserId, string senderUSerId, int postId)
+        public async Task<MessageBox> GetOrCreateMessageBox(string receiverUserId, string senderUSerId, int postId)
         {
             var messageBox = GetMessageBox(receiverUserId, senderUSerId, postId);
             foreach (var msg in messageBox.Messages.Where(n => !n.IsRead).ToList())
@@ -78,6 +78,11 @@ namespace EternalBAND.Api.Services
                     && (n.SenderUserId == senderUserId || n.SenderUserId == receiverUserId)
                     && n.RelatedPostId == postId);
             return GroupByMetadata(allMessages).FirstOrDefault() ?? new MessageBox(new MessageMetadata(postId, new[] { senderUserId, receiverUserId }.OrderBy(s => s).ToArray()));
+        }
+
+        public bool IsPostsExists(int id)
+        {
+            return (_context.Posts?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
         private async Task<Messages> SaveMessage(Users currentUser, Guid receiverUserId, string? message, int postId)

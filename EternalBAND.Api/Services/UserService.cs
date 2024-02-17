@@ -52,7 +52,7 @@ namespace EternalBAND.Api.Services
             if (!isAdmin)
             {
                 var adminMessage = $"{currentUser?.Name} '{post.SeoLink}' id li yeni bir ilan paylaştı.";
-                var userMessage = $"'{post.Title}' başlıklı ilanınız onay sürecindedir. En kısa sürede onay sürecini tamamlayacağız";
+                var userMessage = $"<strong>'{post.Title}'</strong> başlıklı ilanınız onay sürecindedir. En kısa sürede onay sürecini tamamlayacağız";
                 await _notificationManager.CreateAdminNotification(currentUser, post, adminMessage);
                 await _notificationManager.CreateUserNotification(currentUser, post, userMessage);
             }
@@ -114,7 +114,7 @@ namespace EternalBAND.Api.Services
                         posts.Status = PostStatus.PendingApproval;
                         var message = $"{currentUser?.Name} '{posts.SeoLink}' ilanında güncelleme yaptı";
                         await _notificationManager.CreateAdminNotification(currentUser, post, message);
-                        var userMessage = $"'{post.Title}' başlıklı ilanınız onay sürecindedir. En kısa sürede onay sürecini tamamlayacağız";
+                        var userMessage = $"<strong>'{post.Title}'</strong> başlıklı ilanınız onay sürecindedir. En kısa sürede onay sürecini tamamlayacağız";
                         await _notificationManager.CreateUserNotification(currentUser, post, userMessage);
                     }
 
@@ -124,7 +124,7 @@ namespace EternalBAND.Api.Services
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PostsExists(posts.Id))
+                if (!IsPostsExists(posts.Id))
                 {
                     throw new NotFoundException();
                 }
@@ -167,7 +167,7 @@ namespace EternalBAND.Api.Services
             {
                 var message = $"{currentUser?.Name} '{post.SeoLink}' ilanını arşivden yayına almak istiyor";
                 await _notificationManager.CreateAdminNotification(currentUser, post, message);
-                var userMessage = $"'{post.Title}' başlıklı ilanınız onay sürecindedir. En kısa sürede onay sürecini tamamlayacağız";
+                var userMessage = $"<strong>'{post.Title}'</strong> başlıklı ilanınız onay sürecindedir. En kısa sürede onay sürecini tamamlayacağız";
                 await _notificationManager.CreateUserNotification(currentUser, post, userMessage);
             }
 
@@ -244,9 +244,13 @@ namespace EternalBAND.Api.Services
                 await _context.SaveChangesAsync();
             }
 
-            if (notif.NotificationType == NotificationType.PostSharing && !IsPostAvailable(notif.RelatedElementId, user))
+            if (notif.NotificationType == NotificationType.PostSharing)
             {
-                throw new JsonException($"İlgili ilan kullanıcı tarafından kaldırılmıştır.");
+                string warningMessage = "";
+                if(TryToGetWarningMessage(notif.RelatedElementId, user, out warningMessage))
+                {
+                    throw new JsonException(warningMessage);
+                }
             }
 
             return notif.RedirectLink;
@@ -261,11 +265,37 @@ namespace EternalBAND.Api.Services
             return _context.Instruments;
         }
 
-        private bool IsPostAvailable(string seoLink, Users user)
+        private bool TryToGetWarningMessage(string seoLink, Users user, out string warningMessage)
         {
             var post = _context.Posts.FirstOrDefault(s => s.SeoLink.Equals(seoLink));
-            return post != null &&
-                (IsCurrentUserOwnerOfPost(post, user) || (post.Status == PostStatus.Active || post.Status == PostStatus.PendingApproval));
+            
+            if (post == null)
+            {
+                warningMessage = "İlgili ilan silindiği için yayında değildir";
+                return true;
+            }
+
+            else
+            {
+                var isPostYourOwn = IsCurrentUserOwnerOfPost(post, user);
+                var title = post.Title;
+                if (isPostYourOwn || (post.Status == PostStatus.Active || post.Status == PostStatus.PendingApproval))
+                {
+                    warningMessage = "";
+                    return false;
+                }
+
+                else if (post.Status == PostStatus.DeActive)
+                {
+                    warningMessage = $"'{title}' başlıklı ilan, kullanıcı tarafından arşive alınmıştır.";
+                }
+                else
+                {
+                    warningMessage = $"'{title}' başlıklı ilan yayından kaldırılmıştır";
+                }
+                return true;
+            }
+            
         }
 
         private bool IsCurrentUserOwnerOfPost(Posts post, Users user)
@@ -273,7 +303,7 @@ namespace EternalBAND.Api.Services
             return post.AddedByUserId == user.Id;
         }
 
-        private bool PostsExists(int id)
+        private bool IsPostsExists(int id)
         {
             return (_context.Posts?.Any(e => e.Id == id)).GetValueOrDefault();
         }
