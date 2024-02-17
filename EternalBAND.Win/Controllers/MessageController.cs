@@ -34,8 +34,8 @@ public class MessageController : Controller
             {
                 ViewBag.ReceiverUserId = userId;
                 ViewBag.PostId = postId;
-
-                var messageBox = await _messageService.GetOrCreteMessageBox(userId, user.Id, postId);
+                postId = _messageService.IsPostsExists(postId) ? postId : -1*postId;
+                var messageBox = await _messageService.GetOrCreateMessageBox(userId, user.Id, postId);
                 viewModel.CurrentChat = messageBox;
             }
             return View(viewModel);

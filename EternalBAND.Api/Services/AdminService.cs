@@ -484,7 +484,7 @@ namespace EternalBAND.Api.Services
 
             _context.UpdateRange(allNotifOnAdmin);
             await _context.SaveChangesAsync();
-            var message = $"'{post.Title}' başlıklı ilanınız yayına alınmıştır";
+            var message = $"<strong>'{post.Title}'</strong> başlıklı ilanınız yayına alınmıştır";
             await _broadcastingManager.CreateCustomNotification(
                 currentUser.Id,
                 post.AddedByUserId,
