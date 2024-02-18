@@ -250,14 +250,15 @@ body[data-layout-mode=dark] .top-bar .topbar-social-menu .social-link:hover {
   }
 }
 
-.page-title-box {
-  background-image: url("../images/home/page-title.png");
-  background-size: cover;
-  background-color: #6055f2;
-  position: relative;
-  padding-top: 225px;
-  padding-bottom: 75px;
-  background-position: center;
+.page-title-box
+{
+    background-image: url("../images/home/page-title.png");
+    background-size: cover;
+    background-color: #29292a;
+    position: relative;
+    padding-top: 225px;
+    padding-bottom: 75px;
+    background-position: center;
 }
 
 .shape {
@@ -908,7 +909,7 @@ body[data-layout-mode=dark] .form-control:checked, body[data-layout-mode=dark] .
 #status ul li:nth-child(5) {
   -webkit-animation-delay: 0.5s;
           animation-delay: 0.5s;
-  background-color: #6055f2;
+  background-color: #29292a;
 }
 #status ul li:nth-child(6) {
   -webkit-animation-delay: 0.1s;
@@ -1081,7 +1082,7 @@ body[data-layout-mode=dark] .choices__list--dropdown .choices__item--selectable.
 
 .bg-home {
   padding: 300px 0px 240px 0px;
-  background-color: #6055f2;
+  background-color: #29292a;
 }
 @media (max-width: 767.98px) {
   .bg-home {
