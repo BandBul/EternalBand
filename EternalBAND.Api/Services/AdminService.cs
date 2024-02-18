@@ -493,6 +493,17 @@ namespace EternalBAND.Api.Services
                 );
         }
 
+        public async Task<Posts?> Post(string seoLink)
+        {
+            return await _context.Posts.Include(n => n.PostTypes).Include(n => n.Instruments)
+            .FirstOrDefaultAsync(n => n.SeoLink == seoLink);
+        }
+
+        public IEnumerable<Posts> GetFilteredPosts(Func<Posts,bool> predicate)
+        {
+            return _context.Posts.Where(predicate);
+        }
+
         private bool InstrumentsExists(int? id)
         {
             return (_context.Instruments?.Any(e => e.Id == id)).GetValueOrDefault();
