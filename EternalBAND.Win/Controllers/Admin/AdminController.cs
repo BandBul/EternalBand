@@ -5,6 +5,8 @@ using EternalBAND.Common;
 using EternalBAND.DomainObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography;
+using X.PagedList;
 
 namespace EternalBAND.Controllers.Admin;
 
@@ -564,7 +566,7 @@ public class AdminController : Controller
         {
             var currentUser = await _controllerHelper.GetUserAsync(User);
             await _adminService.ApprovePost(postSeoLink, currentUser);
-            return RedirectToAction(actionName: Constants.MainPage, controllerName: "Home");
+            return RedirectToAction(nameof(PostApprovePanelIndex));
         }
         catch (Exception ex )
         {
@@ -573,4 +575,39 @@ public class AdminController : Controller
             throw;
         }
     }
+    public async Task<IActionResult> PostApprovePanelIndex(int pId=1)
+    {
+        return View(await GetApprovalPageData(pId));
+    }
+    [ActionName("PostForApproval")]
+    [HttpGet]
+    public async Task<IActionResult> PostForApproval(string? seolink)
+    {
+        if (seolink == null)
+        {
+            // TODO return error like post is not exist or null 
+            return RedirectToAction(nameof(Constants.MainPage));
+        }
+        ViewBag.ApprovalPurpose = true;
+        var model = await _adminService.Post(seolink);
+        if (model == null)
+        {
+            TempData["WarningMessage"] = $"'{seolink}' id li ilan yayýndan kaldýrýlmýþtýr";
+            return RedirectToAction(nameof(PostApprovePanelIndex));
+        }
+
+        if(model.Status != PostStatus.PendingApproval)
+        {
+            TempData["WarningMessage"] = $"'{seolink}' id li ilan onay aþamasýnda deðildir. Status : {model.Status.ToString()}";
+            return RedirectToAction(nameof(PostApprovePanelIndex));
+        }
+
+        return View("~/Views/Home/Post.cshtml", model);
+    }
+
+    private async Task<IPagedList<Posts>> GetApprovalPageData(int pId = 1)
+    {
+        return await _adminService.GetFilteredPosts(s => s.Status == PostStatus.PendingApproval).ToPagedListAsync(1, 10);
+    }
+
 }
