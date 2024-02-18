@@ -101,8 +101,7 @@
                 countElement.innerText = currentCount + 1;
                 readedNotificationCountId.innerText = `${currentCount + 1} adet okunmamış mesajın var.`
             }
-            var innerHTML = `
-                            <a asp-controller="User" asp-action="NotificationRead" asp-route-id="${notif.id}" class="text-dark notification-item d-block active notReaded ">
+            var innerHTML = `<a href="/User/NotificationRead/${notif.Id}" class="text-dark notification-item d-block active notReaded ">
                                 <div class="d-flex align-items-center">
                                     <div class="flex-shrink-0 me-3">
                                         <div class="avatar-xs bg-primary text-white rounded-circle text-center">
