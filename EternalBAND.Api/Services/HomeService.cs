@@ -62,16 +62,16 @@ namespace EternalBAND.Api.Services
         public async Task<IPagedList<Posts>> Posts(int pageId = 1, string typeShort = "", int cityId = 0, string instrument = "")
         {
             var currentPosts = await _context.Posts.Where(p => p.Status == Common.PostStatus.Active).Include(n => n.PostTypes).Include(n => n.Instruments).ToListAsync();
-            if (cityId != 0 || instrument != "" || typeShort != "")
+            if (cityId != 0 || instrument != "0" || typeShort != "0")
             {
                 if (instrument != "0" && typeShort != "0")
                 {
-                    currentPosts = currentPosts.Where(n => n.Instruments.InstrumentShort.Contains(instrument) || n.PostTypes.TypeShort.Contains(typeShort))
+                    currentPosts = currentPosts.Where(n => n.Instruments.InstrumentShort == instrument || n.PostTypes.TypeShort.Contains(typeShort))
                         .ToList();
                 }
                 else if (instrument != "0")
                 {
-                    currentPosts = currentPosts.Where(n => n.Instruments.InstrumentShort.Contains(instrument))
+                    currentPosts = currentPosts.Where(n => n.Instruments.InstrumentShort == instrument)
                         .ToList();
                 }
                 else if (typeShort != "0")

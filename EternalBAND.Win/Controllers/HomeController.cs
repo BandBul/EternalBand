@@ -66,7 +66,19 @@ public class HomeController : Controller
         ViewBag.CityId = c;
         ViewBag.TypeShort = s;
         ViewBag.Instrument = e;
-        return View(await _homeService.Posts(pId, s, c, e));
+        var model = new PostViewModel()
+        {
+            Posts = await _homeService.Posts(pId, s, c, e),
+            PostFilterContracts = new PostFilterContracts()
+            {
+                PageID = pId,
+                CityId = c,
+                Instrument = e,
+                TypeShort = s,
+
+            }
+        };
+        return View(model);
     }
 
     [HttpGet, Route("ilan/{seolink}")]
