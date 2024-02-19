@@ -13,213 +13,195 @@
 }
 
 <div class="main-content">
+    <div class="page-content">
+        <section class="page-title-box">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="text-center text-white">
+                            <h3 class="mb-4">@ViewData["Title"]</h3>
 
-<div class="page-content">
-
-<!-- Start home -->
-<section class="page-title-box">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="text-center text-white">
-                    <h3 class="mb-4">@ViewData["Title"]</h3>
-
+                        </div>
+                    </div>
+                    <!--end col-->
                 </div>
+                <!--end row-->
             </div>
-            <!--end col-->
+            <!--end container-->
+        </section>
+        <div class="position-relative" style="z-index: 1">
+            <div class="shape">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 250">
+                    <path fill="#FFFFFF" fill-opacity="1"
+                          d="M0,192L120,202.7C240,213,480,235,720,234.7C960,235,1200,213,1320,202.7L1440,192L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z">
+                    </path>
+                </svg>
+            </div>
         </div>
-        <!--end row-->
-    </div>
-    <!--end container-->
-</section>
-<!-- end home -->
+        <section class="section">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-12">
+                        <div class="candidate-list-widgets mb-4">
+                            <form asp-action="Posts" asp-controller="Home">
+                                <div class="row g-2">
+                                    <div class="col-lg-3">
+                                        <div class="filler-job-form">
+                                            <i class="uil uil-briefcase-alt"></i>
+                                            <select class="form-select filter-input-box" data-trigger name="s" id="choices-single-locationn" aria-label="Default select example" placeholder="NE ARIYORSUN?">
+                                                <option disabled="disabled" selected="" value="0">NE ARIYORSUN</option>
+                                                <option value=" ">Hepsini Seç</option>
+                                                @foreach (var i in _context.PostTypes.Where(n => n.Active))
+                                                {
+                                                    if(i.TypeShort == Model.PostFilterContracts.TypeShort)
+                                                    {
+                                                        <option value="@i.TypeShort" selected >@i.Type</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@i.TypeShort"  >@i.Type</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="filler-job-form">
+                                            <i class="uil uil-clipboard-notes"></i>
+                                            <select class="form-select filter-input-box" data-trigger name="e" id="choices-single-categories" aria-label="Default select example" placeholder="ENSTRÜMAN?">
+                                                <option disabled="disabled" selected="" value="0">ENSTRÜMAN</option>
+                                                <option value=" ">Hepsini Seç</option>
+                                                @foreach (var i in _context.Instruments.Where(n => n.IsActive))
+                                                {
+                                                    if (i.InstrumentShort == Model.PostFilterContracts.Instrument)
+                                                    {
+                                                        <option value="@i.InstrumentShort" selected>@i.Instrument</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@i.InstrumentShort">@i.Instrument</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="filler-job-form">
+                                            <i class="uil uil-location-point"></i>
+                                            <select class="form-select filter-input-box" data-trigger name="c" id="choices-single-locationn" aria-label="Default select example" placeholder="ŞEHİR?">
 
-<!-- START SHAPE -->
-<div class="position-relative" style="z-index: 1">
-    <div class="shape">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 250">
-            <path fill="#FFFFFF" fill-opacity="1"
-                  d="M0,192L120,202.7C240,213,480,235,720,234.7C960,235,1200,213,1320,202.7L1440,192L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z">
-            </path>
-        </svg>
-    </div>
-</div>
-<!-- END SHAPE -->
+                                                <option disabled="disabled" selected="">ŞEHİR</option>
+                                                <option value="0">Hepsini Seç</option>
+                                                @foreach (var city in Cities.GetCities().Skip(1))
+                                                {
+                                                    if (city.Id == Model.PostFilterContracts.CityId)
+                                                    {
+                                                        <option value="@city.Id" selected>@city.Name</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@city.Id" >@city.Name</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
 
-
-<!-- START CANDIDATE-GRID -->
-<section class="section">
-<div class="container">
-<div class="row justify-content-center">
-    <div class="col-lg-12">
-        <div class="candidate-list-widgets mb-4">
-            <form asp-action="Posts" asp-controller="Home">
-                <div class="row g-2">
-                    <div class="col-lg-3">
-                        <div class="filler-job-form">
-                            <i class="uil uil-briefcase-alt"></i>
-                            <select class="form-select filter-input-box" data-trigger name="s" id="choices-single-locationn" aria-label="Default select example" placeholder="NE ARIYORSUN?">
-                                <option disabled="disabled" selected="" value="0">NE ARIYORSUN</option>
-                                <option value=" ">Hepsini Seç</option>
-                                @foreach (var i in _context.PostTypes.Where(n => n.Active))
-                                {
-                                    if(i.TypeShort == Model.PostFilterContracts.TypeShort)
-                                    {
-                                        <option value="@i.TypeShort" selected >@i.Type</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@i.TypeShort"  >@i.Type</option>
-                                    }
-                                }
-                            </select>
-                        </div>
-                    </div><!--end col-->
-                    <div class="col-lg-3">
-                        <div class="filler-job-form">
-                            <i class="uil uil-clipboard-notes"></i>
-                            <select class="form-select filter-input-box" data-trigger name="e" id="choices-single-categories" aria-label="Default select example" placeholder="ENSTRÜMAN?">
-                                <option disabled="disabled" selected="" value="0">ENSTRÜMAN</option>
-                                <option value=" ">Hepsini Seç</option>
-                                @foreach (var i in _context.Instruments.Where(n => n.IsActive))
-                                {
-                                    if (i.InstrumentShort == Model.PostFilterContracts.Instrument)
-                                    {
-                                        <option value="@i.InstrumentShort" selected>@i.Instrument</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@i.InstrumentShort">@i.Instrument</option>
-                                    }
-                                }
-                            </select>
-                        </div>
-                    </div><!--end col-->
-                    <div class="col-lg-3">
-                        <div class="filler-job-form">
-                            <i class="uil uil-location-point"></i>
-                            <select class="form-select filter-input-box" data-trigger name="c" id="choices-single-locationn" aria-label="Default select example" placeholder="ŞEHİR?">
-
-                                <option disabled="disabled" selected="">ŞEHİR</option>
-                                <option value="0">Hepsini Seç</option>
-                                @foreach (var city in Cities.GetCities().Skip(1))
-                                {
-                                    if (city.Id == Model.PostFilterContracts.CityId)
-                                    {
-                                        <option value="@city.Id" selected>@city.Name</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@city.Id" >@city.Name</option>
-                                    }
-                                }
-                            </select>
-                        </div>
-                    </div><!--end col-->
-
-                    <div class="col-lg-3">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <button class="btn btn-primary form-control" type="submit"><i class="uil uil-filter"></i> Filtrele</button>
-                            </div>
+                                    <div class="col-lg-3">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <button class="btn btn-primary form-control" type="submit"><i class="uil uil-filter"></i> Filtrele</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                </div><!--end row-->
-            </form><!--end form-->
-        </div>
-    </div><!--end col-->
-</div><!--end row-->
+                </div>
 
-<div class="candidate-list">
-    <div class="row">
-        @{
-            if (Model.Posts.Count != 0)
-            {
-                foreach (var post in Model.Posts)
-                {
-                    string photoPath = post.Photo1 != null ? post.Photo1 :
-                        (post.Photo2 != null ? post.Photo2 : ((post.Photo3 != null ? post.Photo3 : ((post.Photo4 != null ? post.Photo4 : ((post.Photo5 != null ? post.Photo5 : "~/images/hazirlaniyor.jpg")))))));
+                <div class="candidate-list">
+                    <div class="row">
+                        @{
+                            if (Model.Posts.Count != 0)
+                            {
+                                foreach (var post in Model.Posts)
+                                {
+                                    string photoPath = post.Photo1 != null ? post.Photo1 :
+                                        (post.Photo2 != null ? post.Photo2 : ((post.Photo3 != null ? post.Photo3 : ((post.Photo4 != null ? post.Photo4 : ((post.Photo5 != null ? post.Photo5 : "~/images/hazirlaniyor.jpg")))))));
 
-                    <div class="candidate-list-box card mt-4">
+                                    <div class="candidate-list-box card mt-4">
                    
-                        <div class="card-body p-4">
-                                 <a asp-controller="Home" asp-action="Post" asp-route-seolink="@post.SeoLink">
-                            <div class="row align-items-center">
-                                <div class="col-auto">
-                                    <div class="candidate-list-images">
-                                        <img src="@photoPath" alt="" class="avatar-md img-thumbnail rounded-circle">
-                                    </div>
-                                </div><!--end col-->
+                                        <div class="card-body p-4">
+                                                 <a asp-controller="Home" asp-action="Post" asp-route-seolink="@post.SeoLink">
+                                            <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                    <div class="candidate-list-images">
+                                                        <img src="@photoPath" alt="" class="avatar-md img-thumbnail rounded-circle">
+                                                    </div>
+                                                </div>
 
-                                <div class="col-lg-5">
-                                    <div class="candidate-list-content mt-3 mt-lg-0">
-                                        <h5 class="fs-19 mb-0">@post.Title</h5>
-                                        <ul class="list-inline mb-0 text-muted">
-                                            @if (post.PostTypes != null)
-                                            {
-                                                <li class="list-inline-item">
-                                                    <i class="uil uil-map-marker-question"></i> @post.PostTypes.Type
-                                                </li>
-                                            }
-                                            @if (post.Instruments != null)
-                                            {
-                                                <li class="list-inline-item">
-                                                    <i class="uil uil-music"></i> @post.Instruments.Instrument
-                                                </li>
-                                            }
-                                            @if (post.CityId != null && post.CityId != 0)
-                                            {
-                                                <li class="list-inline-item">
-                                                    <i class="uil uil-location-pin-alt"></i> @Cities.GetCities().FirstOrDefault(n => n.Id == post.CityId).Name
-                                                </li>
-                                            }
-                                        </ul>
-                                    </div>
-                                </div><!--end col-->
-
-                            </div><!--end row-->
-                            </a>
+                                                <div class="col-lg-5">
+                                                    <div class="candidate-list-content mt-3 mt-lg-0">
+                                                        <h5 class="fs-19 mb-0">@post.Title</h5>
+                                                        <ul class="list-inline mb-0 text-muted">
+                                                            @if (post.PostTypes != null)
+                                                            {
+                                                                <li class="list-inline-item">
+                                                                    <i class="uil uil-map-marker-question"></i> @post.PostTypes.Type
+                                                                </li>
+                                                            }
+                                                            @if (post.Instruments != null)
+                                                            {
+                                                                <li class="list-inline-item">
+                                                                    <i class="uil uil-music"></i> @post.Instruments.Instrument
+                                                                </li>
+                                                            }
+                                                            @if (post.CityId != null && post.CityId != 0)
+                                                            {
+                                                                <li class="list-inline-item">
+                                                                    <i class="uil uil-location-pin-alt"></i> @Cities.GetCities().FirstOrDefault(n => n.Id == post.CityId).Name
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </a>
                             
-                        </div>
+                                        </div>
                   
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <h3 class="text-center">İlan bulunmuyor.</h3>
+                            }
+                        }
                     </div>
-                    <!--end card-->
-                }
-            }
-            else
-            {
-                <h3 class="text-center">İlan bulunmuyor.</h3>
-            }
-        }
-    </div><!--end row-->
-</div><!--end candidate-list-->
+                </div>
 
-<div class="row mt-5 pt-2">
-    <div class="col-lg-12">
-        <nav aria-label="Navigation">
-            <ul class="pagination job-pagination mb-0 justify-content-center">
-                @{
-                    @Html.PagedListPager((IPagedList) Model.Posts, pId => GetLink(pId),
-                        new PagedListRenderOptions
-                        {
-                            LiElementClasses = new string[] {"page-item"},
-                            PageClasses = new string[] {"page-link"},
-                        })
-                }
-            </ul>
-        </nav>
-    </div><!--end col-->
-</div><!-- end row -->
+                <div class="row mt-5 pt-2">
+                    <div class="col-lg-12">
+                        <nav aria-label="Navigation">
+                            <ul class="pagination job-pagination mb-0 justify-content-center">
+                                @{
+                                    @Html.PagedListPager((IPagedList) Model.Posts, pId => GetLink(pId),
+                                        new PagedListRenderOptions
+                                        {
+                                            LiElementClasses = new string[] {"page-item"},
+                                            PageClasses = new string[] {"page-link"},
+                                        })
+                                }
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
 
-</div><!--end container-->
-</section>
-<!-- END CANDIDATE-GRID -->
-
-
-</div>
-<!-- End Page-content -->
-
-<!--end back-to-top-->
+            </div>
+        </section>
+    </div>
 </div>
 @functions {
 
