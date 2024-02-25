@@ -53,6 +53,7 @@
       <Content Remove="wwwroot\css\Login-page.css" />
     </ItemGroup>
     <ItemGroup>
+      <None Remove="Css\Anasayfa.css" />
       <None Remove="Css\NotificationIndex.css" />
       <None Remove="Css\NotificationPopUp.css" />
       <None Remove="Css\PostIndex.css" />
@@ -100,6 +101,9 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
       <Content Include="Css\NotificationIndex.css">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Css\Anasayfa.css">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
       <Content Include="Css\SiteLogo.css">

@@ -1,22 +1,17 @@
 @model EternalBAND.DomainObjects.Posts
-
+<link href="~/imageuploader/image-uploader.css" rel="stylesheet" type="text/css">
 @{
     ViewData["Title"] = "İlan Oluştur";
 }
 
-@* <link href="~/photo_uploader/css/main.css" rel="stylesheet" type="text/css"> *@
-<link href="~/imageuploader/image-uploader.css" rel="stylesheet" type="text/css">
 <div class="main-content">
-
     <div class="page-content">
-
         <section class="page-title-box">
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-md-6">
                         <div class="text-center text-white">
                             <h3 class="mb-4">@ViewData["Title"]</h3>
-
                         </div>
                     </div>
                 </div>
@@ -34,7 +29,6 @@
         <section class="section">
             <div class="container">
                 <div class="row">
-
                     <div class="col-12 col-lg-12">
                         <div class="card p-3" id="typography">
                             <form asp-action="PostCreate" enctype="multipart/form-data" method="post" id="postForm">
@@ -64,48 +58,10 @@
                                     <select asp-for="CityId" class="form-control" asp-items="ViewBag.CityId"></select>
                                     <span asp-validation-for="CityId" class="text-danger"></span>
                                 </div>
-                                @* <div class="form-group m-3"> *@
-                                @*     <label asp-for="Photo1" class="control-label"></label> *@
-                                @*     <input asp-for="Photo1" class="form-control"  type="file" accept="image/*"/> *@
-                                @*     <span asp-validation-for="Photo1" class="text-danger"></span> *@
-                                @* </div> *@
-                                @* <div class="form-group m-3"> *@
-                                @*     <label asp-for="Photo2" class="control-label"></label> *@
-                                @*     <input asp-for="Photo2" class="form-control"  type="file" accept="image/*"/> *@
-                                @*     <span asp-validation-for="Photo2" class="text-danger"></span> *@
-                                @* </div> *@
-                                @* <div class="form-group m-3"> *@
-                                @*     <label asp-for="Photo3" class="control-label"></label> *@
-                                @*     <input asp-for="Photo3" class="form-control"  type="file" accept="image/*"/> *@
-                                @*     <span asp-validation-for="Photo3" class="text-danger"></span> *@
-                                @* </div> *@
-                                @* <div class="form-group m-3"> *@
-                                @*     <label asp-for="Photo4" class="control-label"></label> *@
-                                @*     <input asp-for="Photo4" class="form-control"  type="file" accept="image/*"/> *@
-                                @*     <span asp-validation-for="Photo4" class="text-danger"></span> *@
-                                @* </div> *@
-                                @* <div class="form-group m-3"> *@
-                                @*     <label asp-for="Photo5" class="control-label"></label> *@
-                                @*     <input asp-for="Photo5" class="form-control"  type="file" accept="image/*"/> *@
-                                @*     <span asp-validation-for="Photo5" class="text-danger"></span> *@
-                                @* </div> *@
-                                @* <div class="form-group m-3"> *@
-                                @*       <label  class="control-label">Fotoğraflar</label> *@
-                                @*     <div class="multiple-uploader" id="multiple-uploader"> *@
-                                @* *@
-                                @*         <div class="mup-msg"> *@
-                                @*             <span class="mup-main-msg">Tıklayarak fotoğraf ekleyebilirsiniz.</span> *@
-                                @*             <span class="mup-msg" id="max-upload-number">En fazla 5 fotoğraf.</span> *@
-                                @*             <span class="mup-msg">Sadece resim.</span> *@
-                                @*         </div> *@
-                                @*     </div> *@
-                                @* </div>  *@
                                 <div class="form-group m-3">
                                     <label class="control-label">Fotoğraflar</label>
                                     <div class="input-images-2" style="padding-top: .5rem;"></div>
                                 </div>
-
-
                                 <div class="form-group m-3">
                                     <input type="submit" value="Oluştur" class="btn btn-primary"/>
                                 </div>
@@ -115,9 +71,7 @@
                 </div>
             </div>
         </section>
-
     </div>
-
     <partial name="PartialViews/_SwitcherAndTopPartial"/>
 </div>
 
