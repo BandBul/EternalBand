@@ -18,8 +18,7 @@ public class ErrorController : Controller
     [HttpGet, Route("hata-olustu/{code}")]
     public IActionResult Index(int code)
     {
-        
         //TODO: loglanacak
-        return View();
+        return View(code);
     }
 }
