@@ -12,7 +12,6 @@ using EternalBAND.Api.Helpers;
 using EternalBAND.Common;
 
 namespace EternalBAND.Controllers;
-[Authorize]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
@@ -25,14 +24,12 @@ public class HomeController : Controller
         _homeService = homeService;
         _controllerHelper = controllerHelper;
     }
-    [AllowAnonymous]
     [HttpGet, Route("")]
     public async Task<IActionResult> Anasayfa()
     {
         return View(await _homeService.GetMainPageModel());
     }
 
-    [AllowAnonymous]
     [HttpGet, Route("Anasayfa")]
     public async Task<IActionResult> MainPage()
     {
@@ -59,6 +56,7 @@ public class HomeController : Controller
 
         return View(await _homeService.Blog(seoLink));
     }
+
     // TODO change parameter names as understandable strings
     [Route("ilanlar")]
     public async Task<IActionResult> Posts(int pId = 1, string? s = "", int c = 0, string? e = "")
@@ -149,6 +147,13 @@ public class HomeController : Controller
         }
 
         return View(contacts);
+    }
+
+    [Route("SendSupportMessage")]
+    [Authorize]
+    public IActionResult SendSupportMessage(string message)
+    {
+        return RedirectToAction(nameof(Anasayfa));
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
