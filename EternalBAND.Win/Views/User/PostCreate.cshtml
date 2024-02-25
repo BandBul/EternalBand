@@ -71,6 +71,8 @@
                 </div>
             </div>
         </section>
+        <partial name="PartialViews/_PostRules" />
+
     </div>
     <partial name="PartialViews/_SwitcherAndTopPartial"/>
 </div>
@@ -82,14 +84,13 @@
 <script src="~/imageuploader/image-uploader.js"></script>
 
 <script>
-  
-        $('.input-images-2').imageUploader({
-            // preloaded: preloaded,
-            imagesInputName: 'images',
-            preloadedInputName: 'old',
-            maxSize: 2 * 1024 * 1024,
-            maxFiles: 5
-        });
+    $('.input-images-2').imageUploader({
+        // preloaded: preloaded,
+        imagesInputName: 'images',
+        preloadedInputName: 'old',
+        maxSize: 2 * 1024 * 1024,
+        maxFiles: 5
+    });
 </script>
 
 @section Scripts {
