@@ -575,6 +575,27 @@ public class AdminController : Controller
             throw;
         }
     }
+
+    [ActionName("RejectPost")]
+    // TODO pass post PK id not seoLink 
+    // TODO check token validation
+    //[ValidateAntiForgeryToken]
+    public async Task<IActionResult> RejectPost(string postSeoLink)
+    {
+        try
+        {
+            var currentUser = await _controllerHelper.GetUserAsync(User);
+            await _adminService.RejectPost(postSeoLink, currentUser);
+            return RedirectToAction(nameof(PostApprovePanelIndex));
+        }
+        catch (Exception ex)
+        {
+            // TO DO 
+            // logger.LogError(ex,"Problem happens during approving the post. {ex.Message}");
+            throw;
+        }
+    }
+
     public async Task<IActionResult> PostApprovePanelIndex(int pId=1)
     {
         return View(await GetApprovalPageData(pId));

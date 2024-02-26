@@ -5,7 +5,7 @@
         Initial = 0,
         Active,
         PendingApproval,
-        DeActive
-        
+        DeActive,
+        Rejected
     }
 }

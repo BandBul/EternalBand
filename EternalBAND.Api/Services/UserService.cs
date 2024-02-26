@@ -88,7 +88,6 @@ namespace EternalBAND.Api.Services
 
                 PostAddPhoto(posts, images);
                 var post = await _context.Posts.AsNoTracking().FirstOrDefaultAsync(n => n.Guid == posts.Guid);
-                var postStatus = post.Status;
                 if ((currentUser.Id == post.AddedByUserId))
                 {
                     var isAdmin = await _userManager.IsInRoleAsync(currentUser, Constants.AdminRoleName);
@@ -108,8 +107,8 @@ namespace EternalBAND.Api.Services
                     posts.AddedDate = post.AddedDate;
                     posts.SeoLink = post.SeoLink;
                     posts.Guid = post.Guid;
-                    posts.Status = isAdmin ? PostStatus.Active : post.Status;
-                    if (!isAdmin && postStatus == PostStatus.Active)
+                    posts.Status = isAdmin ? PostStatus.Active : PostStatus.PendingApproval;
+                    if (!isAdmin)
                     {
                         posts.Status = PostStatus.PendingApproval;
                         var message = $"{currentUser?.Name} '{posts.SeoLink}' ilanında güncelleme yaptı";
@@ -288,6 +287,10 @@ namespace EternalBAND.Api.Services
                 else if (post.Status == PostStatus.DeActive)
                 {
                     warningMessage = $"'{title}' başlıklı ilan, kullanıcı tarafından arşive alınmıştır.";
+                }
+                else if (post.Status == PostStatus.Rejected)
+                {
+                    warningMessage = $"'{title}' başlıklı ilan, düzenleme gerektirdiği için arşivdedir";
                 }
                 else
                 {

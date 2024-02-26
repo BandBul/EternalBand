@@ -266,6 +266,9 @@
             <div class="mt-3">
                 <a asp-controller="Admin" asp-action="ApprovePost" asp-route-postSeoLink="@Model.SeoLink" class="btn btn-primary btn-hover w-100"><i class="uil-thumbs-up"></i>İlanı Onayla</a>
             </div>
+            <div class="mt-3">
+                <a asp-controller="Admin" asp-action="RejectPost" asp-route-postSeoLink="@Model.SeoLink" class="btn btn-danger btn-hover w-100"><i class="uil-thumbs-down"></i>İlanı Reddet</a>
+            </div>
         }
     </div><!--end card-->
 </div><!--end col-->

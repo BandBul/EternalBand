@@ -10,11 +10,19 @@
     }
 
     IEnumerable<PostByStatusModel> postsByStatus = Enum.GetValues(typeof(PostStatus))
-    .Cast<PostStatus>().Skip(1)
-    .Select(status => new PostByStatusModel
+    .Cast<PostStatus>().Skip(1).Where(s => s != PostStatus.Rejected)
+    .Select(status =>
     {
-        Status = status,
-        Posts = Model.Where(post => post.Status == status).ToList()
+        var posts = status != PostStatus.DeActive ?
+            Model.Where(post => post.Status == status) :
+            Model.Where(post => post.Status == status || post.Status == PostStatus.Rejected);
+
+        return new PostByStatusModel
+        {
+            Status = status,
+            Posts = posts.ToList()
+        };
+
     });
 }
 
@@ -79,16 +87,10 @@
                                                     <i class="uil uil-trash-alt"></i>
                                                 </a>
                                             </div>
-                                            @* <div> *@
-                                            @*     <a href="company-details.html"> *@
-                                            @*         <img src="~/images/featured-job/img-01.png" alt="" class="img-fluid rounded-3"> *@
-                                            @*     </a> *@
-                                            @* </div> *@
                                             <div class="mt-4">
                                                 <a href="ilan/@item.SeoLink" class="primary-link">
                                                     <h5 class="fs-17 mb-1">@item.Title</h5>
                                                 </a>
-                                                @* <p class="text-link">Görüntüle</p> *@
                                                 <ul class="list-inline">
                                                     @if (item.PostTypes != null)
                                                     {
@@ -136,7 +138,7 @@
                                                             </form>
                                                         }
 
-                                                        @if (item.Status == PostStatus.DeActive)
+                                                        @if (item.Status == PostStatus.DeActive || item.Status == PostStatus.Rejected)
                                                         {
                                                             <form method="post" asp-controller="User" asp-action="PostActivated" asp-route-id="@item.Id">
                                                                 <div class="row">
@@ -149,13 +151,11 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div><!--end card-body-->
-                                    </div><!--end job-grid-box-->
-
+                                        </div>
+                                    </div>
                                 </div>
                             }
                         }
-                       
                     }
                     else
                     {
@@ -164,43 +164,41 @@
                 </div>
             </div>
         </section>
-
     </div>
-
     <partial name="PartialViews/_SwitcherAndTopPartial"/>
 </div>
 
 <script>
 
-function DeletePost(id)
-{
+    function DeletePost(id)
+    {
 
-    Swal.fire({
-      title: 'İlan silinecektir emin misiniz?',
-      showDenyButton: true,
-      confirmButtonText: 'Sil',
-      denyButtonText: `Silme`,
-    }).then((result) => {
-      if (result.isConfirmed) {
-          $.post( "/User/PostDelete/"+id, function( data ) {
-              var message = "";
-              if (data.includes('silindi')){
-                  message = 'success';
-              }
-              else
-                  {
-                      message ='info';
-                      }
-              Swal.fire({
-                title: data,confirmButtonText: 'Kapat'}).then((result) => {
-                                                            if (result['isConfirmed']){
-                                                                  setTimeout( location.reload(), 2000);
-                                                            }
-                                                          });
+        Swal.fire({
+          title: 'İlan silinecektir emin misiniz?',
+          showDenyButton: true,
+          confirmButtonText: 'Sil',
+          denyButtonText: `Silme`,
+        }).then((result) => {
+          if (result.isConfirmed) {
+              $.post( "/User/PostDelete/"+id, function( data ) {
+                  var message = "";
+                  if (data.includes('silindi')){
+                      message = 'success';
+                  }
+                  else
+                      {
+                          message ='info';
+                          }
+                  Swal.fire({
+                    title: data,confirmButtonText: 'Kapat'}).then((result) => {
+                                                                if (result['isConfirmed']){
+                                                                      setTimeout( location.reload(), 2000);
+                                                                }
+                                                              });
   
-          });
-      } 
-    })
-}
+              });
+          } 
+        })
+    }
 
 </script>

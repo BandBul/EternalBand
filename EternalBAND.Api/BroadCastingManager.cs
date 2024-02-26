@@ -23,19 +23,7 @@ namespace EternalBAND.Api
             // Engin-TODO need to send all admins
             // Engin-TODO pass SignalR hub and use ReceiveNotification broadcasting title to send message to front end
             var adminUsers = await _userManager.GetUsersInRoleAsync(Constants.AdminRoleName);
-            var notif =  new Notification()
-            {
-                IsRead = false,
-                AddedDate = DateTime.Now,
-                NotificationType = NotificationType.PostSharing,
-                ReceiveUserId = currentUser.Id,
-                Message = message,
-                SenderUserId = adminUsers.ElementAt(0).Id,
-                RedirectLink = $"ilan/{post.SeoLink}",
-                RelatedElementId = post.SeoLink
-            };
-
-            await SaveAndBroadCastNotification(notif, BroadCastingTitle.ReceiveNotification);
+            await CreateCustomNotification(adminUsers.ElementAt(0).Id, currentUser.Id, post, message);
         }
 
         public async Task CreateCustomNotification(string senderUserId, string receiverUserId, Posts post, string message)

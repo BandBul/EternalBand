@@ -5,16 +5,13 @@
 }
 <link href="~/imageuploader/image-uploader.css" rel="stylesheet" type="text/css">
 <div class="main-content">
-
     <div class="page-content">
-
         <section class="page-title-box">
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-md-6">
                         <div class="text-center text-white">
                             <h3 class="mb-4">@ViewData["Title"]</h3>
-
                         </div>
                     </div>
                 </div>
@@ -32,7 +29,6 @@
         <section class="section">
             <div class="container">
                 <div class="row">
-
                     <div class="col-12 col-lg-12">
                         <div class="card p-3" id="typography">
                             <form asp-action="PostEdit" enctype="multipart/form-data" method="post">
@@ -46,8 +42,6 @@
                                 <div class="form-group m-3">
                                     <label asp-for="HTMLText" class="control-label"></label>
                                     <textarea asp-for="HTMLText" class="form-control" rows="3"></textarea>
-                                    <@*input asp-for="HTMLText" type="hidden" class="form-control"/>
-                                    <div id="htmlEditor" style="height:250px"></div>*@
                                     <span asp-validation-for="HTMLText" class="text-danger"></span>
                                 </div>
                                 <div class="form-group m-3">
@@ -64,56 +58,10 @@
                                     <select asp-for="CityId" class="form-control" asp-items="ViewBag.CityId"></select>
                                     <span asp-validation-for="CityId" class="text-danger"></span>
                                 </div>
-                                @* <div class="form-group m-3"> *@
-                                @*     <label asp-for="Photo1" class="control-label"></label> *@
-                                @*     <input asp-for="Photo1" class="form-control"/> *@
-                                @*     <span asp-validation-for="Photo1" class="text-danger"></span> *@
-                                @* </div> *@
-                                @* <div class="form-group m-3"> *@
-                                @*     <label asp-for="Photo2" class="control-label"></label> *@
-                                @*     <input asp-for="Photo2" class="form-control"/> *@
-                                @*     <span asp-validation-for="Photo2" class="text-danger"></span> *@
-                                @* </div> *@
-                                @* <div class="form-group m-3"> *@
-                                @*     <label asp-for="Photo3" class="control-label"></label> *@
-                                @*     <input asp-for="Photo3" class="form-control"/> *@
-                                @*     <span asp-validation-for="Photo3" class="text-danger"></span> *@
-                                @* </div> *@
-                                @* <div class="form-group m-3"> *@
-                                @*     <label asp-for="Photo4" class="control-label"></label> *@
-                                @*     <input asp-for="Photo4" class="form-control"/> *@
-                                @*     <span asp-validation-for="Photo4" class="text-danger"></span> *@
-                                @* </div> *@
-                                @* <div class="form-group m-3"> *@
-                                @*     <label asp-for="Photo5" class="control-label"></label> *@
-                                @*     <input asp-for="Photo5" class="form-control"/> *@
-                                @*     <span asp-validation-for="Photo5" class="text-danger"></span> *@
-                                @* </div> *@
-                                @* *@
-                                @* <div class="form-group m-3"> *@
-                                @*     <label asp-for="AddedByUserId" class="control-label"></label> *@
-                                @*     <select asp-for="AddedByUserId" class="form-control" asp-items="ViewBag.AddedByUserId"></select> *@
-                                @*     <span asp-validation-for="AddedByUserId" class="text-danger"></span> *@
-                                @* </div> *@
-                                @* <div class="form-group m-3"> *@
-                                @*     <label asp-for="AdminConfirmationDate" class="control-label"></label> *@
-                                @*     <input asp-for="AdminConfirmationDate" class="form-control"/> *@
-                                @*     <span asp-validation-for="AdminConfirmationDate" class="text-danger"></span> *@
-                                @* </div> *@
-                                @* <div class="form-group form-check"> *@
-                                @*     <label class="form-check-label"> *@
-                                @*         <input class="form-check-input" asp-for="AdminConfirmation"/> @Html.DisplayNameFor(model => model.AdminConfirmation) *@
-                                @*     </label> *@
-                                @* </div> *@
-                                @* <div class="form-group m-3"> *@
-                                @*     <label asp-for="AdminConfirmationUserId" class="control-label"></label> *@
-                                @*     <select asp-for="AdminConfirmationUserId" class="form-control" asp-items="ViewBag.AdminConfirmationUserId"></select> *@
-                                @*     <span asp-validation-for="AdminConfirmationUserId" class="text-danger"></span> *@
-                                @* </div> *@
-                                   <div class="form-group m-3">
-                                                                    <label class="control-label">Fotoğraflar</label>
-                                                                    <div class="input-images-2" style="padding-top: .5rem;"></div>
-                                                                </div>
+                                <div class="form-group m-3">
+                                    <label class="control-label">Fotoğraflar</label>
+                                    <div class="input-images-2" style="padding-top: .5rem;"></div>
+                                </div>
                                 <div class="form-group m-3">
                                     <input type="submit" value="Kaydet" class="btn btn-primary"/>
                                 </div>
@@ -123,9 +71,8 @@
                 </div>
             </div>
         </section>
-
+        <partial name="PartialViews/_PostRules" />
     </div>
-
     <partial name="PartialViews/_SwitcherAndTopPartial"/>
 </div>
 
@@ -136,37 +83,37 @@
 <script src="~/imageuploader/image-uploader.js"></script>
 
 <script>
-  let preloaded = [
-      @{
-          if (Model.Photo1 != null)
-          {
-              @:{id: 1, src: '@Model.Photo1'},
-          }
-          if (Model.Photo2 != null)
-          {
-              @:{id: 2, src: '@Model.Photo2'},
-          }
-          if (Model.Photo3 != null)
-          {
-              @:{id: 3, src: '@Model.Photo3'},
-          }
-          if (Model.Photo4 != null)
-          {
-              @:{id: 4, src: '@Model.Photo4'},
-          }
-          if (Model.Photo5 != null)
-          {
-              @:{id: 5, src: '@Model.Photo5'},
-          }
-      }
-            // {id: 1, src: 'https://picsum.photos/500/500?random=1'},
-        ];
+    let preloaded = 
+    [
+        @{
+            if (Model.Photo1 != null)
+            {
+                @:{id: 1, src: '@Model.Photo1'},
+            }
+            if (Model.Photo2 != null)
+            {
+                @:{id: 2, src: '@Model.Photo2'},
+            }
+            if (Model.Photo3 != null)
+            {
+                @:{id: 3, src: '@Model.Photo3'},
+            }
+            if (Model.Photo4 != null)
+            {
+                @:{id: 4, src: '@Model.Photo4'},
+            }
+            if (Model.Photo5 != null)
+            {
+                @:{id: 5, src: '@Model.Photo5'},
+            }
+        }
+    ];
 
-        $('.input-images-2').imageUploader({
-            preloaded: preloaded,
-            imagesInputName: 'images',
-            preloadedInputName: 'old',
-            maxSize: 2 * 1024 * 1024,
-            maxFiles: 5
-        });
+    $('.input-images-2').imageUploader({
+        preloaded: preloaded,
+        imagesInputName: 'images',
+        preloadedInputName: 'old',
+        maxSize: 2 * 1024 * 1024,
+        maxFiles: 5
+    });
 </script>
