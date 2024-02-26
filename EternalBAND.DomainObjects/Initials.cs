@@ -33,6 +33,13 @@ namespace EternalBAND.DomainObjects
                     Color = "purple",
                     HeaderDisplayText = "Arşivlenen"
                 }
+            },
+            { PostStatus.Rejected, new PostStatusViewModel()
+                {
+                    DisplayText = "Onaylanmamış İlan",
+                    Color = "red",
+                    HeaderDisplayText = "Arşivlenen"
+                }
             }
         };
 

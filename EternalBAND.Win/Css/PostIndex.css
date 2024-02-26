@@ -11,6 +11,11 @@
     background-color: orange !important;
 }
 
+.status-red, .header-status-red
+{
+    background-color: red !important;
+}
+
 .archive-button
 {
     background-color: rebeccapurple !important;

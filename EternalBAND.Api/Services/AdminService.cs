@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using X.PagedList;
 using EternalBAND.Api.Exceptions;
+using Microsoft.Extensions.Hosting;
 
 namespace EternalBAND.Api.Services
 {
@@ -471,12 +472,31 @@ namespace EternalBAND.Api.Services
 
         public async Task ApprovePost(string postSeoLink, Users currentUser)
         {
-            var post = _context.Posts.Where(p => p.SeoLink.Equals(postSeoLink)).FirstOrDefault();
-            post.Status = PostStatus.Active;
-            _context.Update(post);
+            var post = await ChangePostTypeAndGetPost(postSeoLink, PostStatus.Active);
+            var message = $"<strong>'{post.Title}'</strong> başlıklı ilanınız yayına alınmıştır.";
+            await InternalApproveRejectPost(post, currentUser, message);
+        }
 
-            // TODO getting all seolink of current post we need to add an check also received user is admin or not
-            var allNotifOnAdmin = _context.Notification.Where(not => not.RelatedElementId.Equals(postSeoLink) && not.IsRead == false).ToList();
+        public async Task RejectPost(string postSeoLink, Users currentUser)
+        {
+            var post = await ChangePostTypeAndGetPost(postSeoLink, PostStatus.Rejected);
+            var message = $"<strong>'{post.Title}'</strong> başlıklı ilaniniz, ilan kurallarına uymadığı için onaylanmamıştır. Lütfen ilan kurallarına uygun olacak şekilde tekrar düzenleyiniz.";
+            await InternalApproveRejectPost(post, currentUser, message);
+        }
+
+        private async Task<Posts> ChangePostTypeAndGetPost(string postSeoLink, PostStatus status)
+        {
+            var post = _context.Posts.Where(p => p.SeoLink.Equals(postSeoLink)).FirstOrDefault();
+            post.Status = status;
+            _context.Posts.Update(post);
+            await _context.SaveChangesAsync();
+            return post;
+        }
+
+        public async Task InternalApproveRejectPost(Posts post, Users currentUser, string message)
+        {
+            // TODO remove admin notification
+            var allNotifOnAdmin = _context.Notification.Where(not => not.RelatedElementId.Equals(post.SeoLink) && not.IsRead == false).ToList();
             allNotifOnAdmin.ForEach(n =>
             {
                 n.IsRead = true;
@@ -484,9 +504,10 @@ namespace EternalBAND.Api.Services
 
             _context.UpdateRange(allNotifOnAdmin);
             await _context.SaveChangesAsync();
-            var message = $"<strong>'{post.Title}'</strong> başlıklı ilanınız yayına alınmıştır";
+
+
             await _broadcastingManager.CreateCustomNotification(
-                currentUser.Id,
+            currentUser.Id,
                 post.AddedByUserId,
                 post,
                 message
