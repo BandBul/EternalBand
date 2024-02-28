@@ -1,4 +1,6 @@
 ﻿@using EternalBAND.Common;
+@using EternalBAND.DataAccess;
+@inject ApplicationDbContext _context
 <link href="/Css/NavMenu.css" rel="stylesheet" type="text/css">
 <div class="collapse navbar-collapse" id="navbarCollapse">
     <ul class="navbar-nav mx-auto navbar-center">
@@ -11,15 +13,17 @@
         <li class="nav-item">
             <a asp-action="Anasayfa" asp-controller="Home" class="nav-link">Anasayfa</a>
         </li>
-        <li class="nav-item">
-            <a asp-action="Posts" asp-controller="Home" asp-route-s="@PostTypeName.Musician" class="nav-link">Müzisyen Arıyorum</a>
-        </li>
-        <li class="nav-item">
-            <a asp-action="Posts" asp-controller="Home" asp-route-s="@PostTypeName.Group" class="nav-link">Grup Arıyorum</a>
-        </li>
-        <li class="nav-item">
-            <a asp-action="Posts" asp-controller="Home" asp-route-s="@PostTypeName.Lesson" class="nav-link">Ders Almak İstiyorum</a>
-        </li>
+        @{
+            var postTypes = _context.PostTypes.Where(n => n.Active);
+            foreach(var type in postTypes)
+            {
+                var isLessonType = type.TypeShort == PostTypeName.Lesson.ToString();
+                var name = isLessonType ? type.TargetGroupName : type.Type;
+                <li class="nav-item">
+                    <a asp-action="Posts" asp-controller="Home" asp-route-s="@type.TypeShort" class="nav-link">@name</a>
+                </li>
+            }
+        }
         <li class="nav-item" hidden>
             <a asp-action="Posts" asp-controller="Home" asp-route-s="2.-el-enstruman" class="nav-link">2. El Enstrüman</a>
         </li>

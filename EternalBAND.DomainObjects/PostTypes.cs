@@ -1,3 +1,4 @@
+using EternalBAND.Common;
 using System.ComponentModel;
 
 namespace EternalBAND.DomainObjects;
@@ -13,4 +14,6 @@ public class PostTypes : IEntity
     public bool Active { get; set; }
     [DisplayName("Eklenme Tarihi")]
     public DateTime AddedDate { get; set; }
+    public PostTypeName TargetGroup { get; set; }
+    public string TargetGroupName { get; set; }
 }

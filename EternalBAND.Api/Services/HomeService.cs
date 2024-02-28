@@ -61,15 +61,15 @@ namespace EternalBAND.Api.Services
             };
         }
 
-        public async Task<IPagedList<Posts>> Posts(int pageId, string typeShort, int cityId, string instrument)
+        public async Task<IPagedList<Posts>> Posts(int pageId, string targetGroup, int cityId, string instrument)
         {
             var filters = new List<Func<Posts, bool>>();
 
             var currentPosts2 = _context.Posts.Where(p => p.Status == PostStatus.Active).Include(n => n.PostTypes).Include(n => n.Instruments);
 
-            if(typeShort != "0" && typeShort != "")
+            if(targetGroup != "0" && targetGroup != "")
             {
-                filters.Add(n => n.PostTypes.TypeShort.ToString().Contains(typeShort));
+                filters.Add(n => n.PostTypes.TargetGroup.ToString().Contains(targetGroup));
             }
 
             if (instrument != "0" && instrument != "")
