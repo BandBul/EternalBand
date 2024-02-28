@@ -39,7 +39,9 @@ public class ApplicationDbContext : IdentityDbContext<Users>
                 Type = "Müzisyen Arıyorum",
                 TypeShort = PostTypeName.Musician.ToString(),
                 Active = true,
-                AddedDate = DateTime.Now
+                AddedDate = DateTime.Now,
+                TargetGroup = PostTypeName.Group,
+                TargetGroupName = "Grup Arıyorum"
             },
             new PostTypes
             {
@@ -47,7 +49,9 @@ public class ApplicationDbContext : IdentityDbContext<Users>
                 Type = "Grup Arıyorum",
                 TypeShort = PostTypeName.Group.ToString(),
                 Active = true,
-                AddedDate = DateTime.Now
+                AddedDate = DateTime.Now,
+                TargetGroup = PostTypeName.Musician,
+                TargetGroupName = "Müzisyen Arıyorum"
             },
             new PostTypes
             {
@@ -55,7 +59,9 @@ public class ApplicationDbContext : IdentityDbContext<Users>
                 Type = "Ders Vermek İstiyorum",
                 TypeShort = PostTypeName.Lesson.ToString(),
                 Active = true,
-                AddedDate = DateTime.Now
+                AddedDate = DateTime.Now,
+                TargetGroup = PostTypeName.Lesson,
+                TargetGroupName = "Ders Almak İstiyorum"
             }
         );
 

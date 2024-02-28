@@ -53,13 +53,15 @@
                                                 <option value=" ">Hepsini Seç</option>
                                                 @foreach (var i in _context.PostTypes.Where(n => n.Active))
                                                 {
+                                                    var isLessonType = i.TypeShort == PostTypeName.Lesson.ToString();
+                                                    var name = isLessonType ? i.TargetGroupName : i.Type;
                                                     if(i.TypeShort == Model.PostFilterContracts.TypeShort)
                                                     {
-                                                        <option value="@i.TypeShort" selected >@i.Type</option>
+                                                        <option value="@i.TypeShort" selected>@name</option>
                                                     }
                                                     else
                                                     {
-                                                        <option value="@i.TypeShort"  >@i.Type</option>
+                                                        <option value="@i.TypeShort">@name</option>
                                                     }
                                                 }
                                             </select>
@@ -149,6 +151,9 @@
                                                             {
                                                                 <li class="list-inline-item">
                                                                     <i class="uil uil-map-marker-question"></i> @post.PostTypes.Type
+                                                                </li>
+                                                                <li class="list-inline-item">
+                                                                    <i class="uil uil-map-marker-question"></i> Hedef Kitle : @post.PostTypes.TargetGroupName
                                                                 </li>
                                                             }
                                                             @if (post.Instruments != null)

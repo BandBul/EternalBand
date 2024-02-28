@@ -4,6 +4,8 @@ using EternalBAND.DomainObjects;
 using EternalBAND.DomainObjects.ViewModel;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
+using System.Linq.Expressions;
 using X.PagedList;
 
 namespace EternalBAND.Api.Services
@@ -59,32 +61,32 @@ namespace EternalBAND.Api.Services
             };
         }
 
-        public async Task<IPagedList<Posts>> Posts(int pageId = 1, string typeShort = "", int cityId = 0, string instrument = "")
+        public async Task<IPagedList<Posts>> Posts(int pageId, string targetGroup, int cityId, string instrument)
         {
-            var currentPosts = await _context.Posts.Where(p => p.Status == Common.PostStatus.Active).Include(n => n.PostTypes).Include(n => n.Instruments).ToListAsync();
-            if (cityId != 0 || instrument != "0" || typeShort != "0")
+            var filters = new List<Func<Posts, bool>>();
+
+            var currentPosts2 = _context.Posts.Where(p => p.Status == PostStatus.Active).Include(n => n.PostTypes).Include(n => n.Instruments);
+
+            if(targetGroup != "0")
             {
-                if (instrument != "0" && typeShort != "0")
-                {
-                    currentPosts = currentPosts.Where(n => n.Instruments.InstrumentShort == instrument || n.PostTypes.TypeShort.Contains(typeShort))
-                        .ToList();
-                }
-                else if (instrument != "0")
-                {
-                    currentPosts = currentPosts.Where(n => n.Instruments.InstrumentShort == instrument)
-                        .ToList();
-                }
-                else if (typeShort != "0")
-                {
-                    currentPosts = currentPosts.Where(n => n.PostTypes.TypeShort.Contains(typeShort))
-                        .ToList();
-                }
-                if (cityId != 0)
-                {
-                    currentPosts = currentPosts.Where(n => n.CityId == cityId).ToList();
-                }
+                filters.Add(n => n.PostTypes.TargetGroup.ToString().Contains(targetGroup));
             }
-            return await currentPosts.OrderByDescending(s => s.AddedDate).ToPagedListAsync(pageId, Constants.PageSizeForElements);
+
+            if (instrument != "0")
+            {
+                filters.Add(n => n.Instruments.InstrumentShort == instrument);
+            }
+
+            if (cityId != 0)
+            {
+                filters.Add(n => n.CityId == cityId);
+            }
+
+            Func<Posts, bool> predicate = post => filters.All(filter => filter(post));
+
+            return await currentPosts2.Where(predicate)
+                    .OrderByDescending(s => s.AddedDate)
+                    .ToPagedListAsync(pageId, Constants.PageSizeForElements);
         }
 
         public async Task<Posts?> Post(string seoLink)
