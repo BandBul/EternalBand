@@ -17,10 +17,11 @@
             var postTypes = _context.PostTypes.Where(n => n.Active);
             foreach(var type in postTypes)
             {
-                var isLessonType = type.TypeShort == PostTypeName.Lesson.ToString();
-                var name = isLessonType ? type.TargetGroupName : type.Type;
+                var postTypeName = Enum.Parse<PostTypeName>(type.Type);
+                var title = Constants.PostSearchTitleMapping[postTypeName];
+
                 <li class="nav-item">
-                    <a asp-action="Posts" asp-controller="Home" asp-route-s="@type.TypeShort" class="nav-link">@name</a>
+                    <a asp-action="FilterByPostType" asp-controller="Home" asp-route-postType="@type.Type" class="nav-link">@title</a>
                 </li>
             }
         }

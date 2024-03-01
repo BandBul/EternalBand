@@ -27,7 +27,9 @@
                                          <option disabled="disabled" selected="" value="0">NE ARIYORSUN</option>
                                             @foreach (var i in _context.PostTypes.Where(n=> n.Active))
                                             {
-                                                <option value="@i.TypeShort">@i.Type</option>
+                                                var isLessonType = i.Type == PostTypeName.Lesson.ToString();
+                                                var name = isLessonType ? i.TargetGroupName : i.SearchName;
+                                                <option value="@i.Type">@name</option>
                                             }
                                         </select>
                                     </div>
@@ -105,9 +107,24 @@
                         role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="all-post-tab" data-bs-toggle="pill" aria-selected="false">
-                                Tüm Kategoriler
+                                Tüm İlanlar
                             </button>
                         </li>
+                        @{
+                            var postTypes = _context.PostTypes.Where(n => n.Active);
+                            foreach (var type in postTypes)
+                            {
+                                var postTypeName = Enum.Parse<PostTypeName>(type.Type);
+                                var title = Constants.PostSearchTitleMapping[postTypeName];
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="@type.Type-tab" data-bs-toggle="pill" aria-selected="false">
+                                        @title
+                                    </button>
+                                </li>
+                            }
+                        }
+
+                       @* 
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="musician-tab" data-bs-toggle="pill" aria-selected="false">
                                 Müzisyen Arıyorum
@@ -123,6 +140,7 @@
                                 Ders Almak İstiyorum
                             </button>
                         </li>           
+                        *@
                     </ul>
                 </div>
             </div>
@@ -393,17 +411,17 @@
                 });
             }
 
-            $("#group-tab").click(function () {
+            $("#Group-tab").click(function () {
                 FilterNewPosts("@PostTypeName.Group");
             });
 
             // Button 2 click event
-            $("#musician-tab").click(function () {
+            $("#Musician-tab").click(function () {
                 FilterNewPosts("@PostTypeName.Musician");
             });
 
             // Button 3 click event
-            $("#lesson-tab").click(function () {
+            $("#Lesson-tab").click(function () {
                 FilterNewPosts("@PostTypeName.Lesson");
             });
             $("#all-post-tab").click(function () {

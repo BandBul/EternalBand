@@ -61,11 +61,11 @@ namespace EternalBAND.Api.Services
             };
         }
 
-        public async Task<IPagedList<Posts>> Posts(int pageId, string targetGroup, int cityId, string instrument)
+        public async Task<IPagedList<Posts>> FilterPosts(int pageId, string targetGroup, int cityId, string instrument)
         {
             var filters = new List<Func<Posts, bool>>();
 
-            var currentPosts2 = _context.Posts.Where(p => p.Status == PostStatus.Active).Include(n => n.PostTypes).Include(n => n.Instruments);
+            var posts = _context.Posts.Where(p => p.Status == PostStatus.Active).Include(n => n.PostTypes).Include(n => n.Instruments);
 
             if(targetGroup != "0" && targetGroup != "")
             {
@@ -84,9 +84,19 @@ namespace EternalBAND.Api.Services
 
             Func<Posts, bool> predicate = post => filters.All(filter => filter(post));
 
-            return await currentPosts2.Where(predicate)
+            return await posts.Where(predicate)
                     .OrderByDescending(s => s.AddedDate)
                     .ToPagedListAsync(pageId, Constants.PageSizeForElements);
+        }
+
+        public async Task<IPagedList<Posts>> FilterPostsByType(PostTypeName postType)
+        {
+            var posts = _context.Posts.Where(p => p.Status == PostStatus.Active).Include(n => n.PostTypes).Include(n => n.Instruments);
+            if(postType != PostTypeName.Unknown)
+            {
+                return await posts.Where(s => s.PostTypes.Type == postType.ToString()).ToPagedListAsync(1, Constants.PageSizeForElements);
+            }
+            return await posts.ToPagedListAsync(1, Constants.PageSizeForElements);
         }
 
         public async Task<Posts?> Post(string seoLink)
@@ -110,7 +120,7 @@ namespace EternalBAND.Api.Services
             return await _context.Posts
                 .Include(n => n.PostTypes)
                 .Include(n => n.Instruments)
-                .Where(n => n.PostTypes.TypeShort == postTypeName.ToString() && n.Status == PostStatus.Active )
+                .Where(n => n.PostTypes.Type == postTypeName.ToString() && n.Status == PostStatus.Active )
                 .OrderByDescending(s => s.AddedDate)
                 .ToPagedListAsync(1, Constants.PageSizeForElements);
         }

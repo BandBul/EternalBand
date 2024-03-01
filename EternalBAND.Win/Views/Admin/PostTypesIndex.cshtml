@@ -45,7 +45,7 @@
                                 <thead>
                                 <tr>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.FirstOrDefault().Type)
+                                        @Html.DisplayNameFor(model => model.FirstOrDefault().SearchName)
                                     </th>
                                     <th>
                                         @Html.DisplayNameFor(model => model.FirstOrDefault().Active)
@@ -61,7 +61,7 @@
                                 {
                                     <tr>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.Type)
+                                            @Html.DisplayFor(modelItem => item.SearchName)
                                         </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.Active)

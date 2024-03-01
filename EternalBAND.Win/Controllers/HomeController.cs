@@ -79,6 +79,17 @@ public class HomeController : Controller
         return View(model);
     }
 
+    [Route("FilterByPostType/{postType}")]
+    public async Task<IActionResult> FilterByPostType(string postType)
+    {
+        var model = new PostViewModel()
+        {
+            Posts = await _homeService.FilterPostsByType(Enum.Parse<PostTypeName>(postType)),
+            PostFilterContracts = new PostFilterContracts() { TypeShort = postType }
+        };
+        return View(nameof(Posts), model);
+    }
+
     [HttpGet, Route("ilan/{seolink}")]
     public async Task<IActionResult> Post(string? seolink , bool approvalPurpose = false)
     {

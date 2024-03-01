@@ -7,9 +7,9 @@ public class PostTypes : IEntity
 {
     public int? Id { get; set; }
     [DisplayName("Tip")]
-    public string Type { get; set; }
+    public string SearchName { get; set; }
     [DisplayName("Tip Kısa")]
-    public string? TypeShort { get; set; }
+    public string? Type { get; set; }
     [DisplayName("Aktif")]
     public bool Active { get; set; }
     [DisplayName("Eklenme Tarihi")]

@@ -40,7 +40,7 @@ public class UserController : Controller
     [HttpGet, Route("PostCreate")]
     public IActionResult PostCreate()
     {
-        var postTypes = new List<PostTypes>() { new PostTypes() { Active = true, Id = null, Type = "Seçiniz", TypeShort = "Default" } };
+        var postTypes = new List<PostTypes>() { new PostTypes() { Active = true, Id = null, SearchName = "Seçiniz", Type = "Default" } };
         postTypes.AddRange(_userService.GetPostTypes());
 
         var instruments = new List<Instruments>() { new Instruments() { Id = null, Instrument = "Seçiniz", InstrumentShort = "Default" } };
