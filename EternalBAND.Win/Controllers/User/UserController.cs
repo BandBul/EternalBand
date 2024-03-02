@@ -40,13 +40,13 @@ public class UserController : Controller
     [HttpGet, Route("PostCreate")]
     public IActionResult PostCreate()
     {
-        var postTypes = new List<PostTypes>() { new PostTypes() { Active = true, Id = null, SearchName = "Seçiniz", Type = "Default" } };
+        var postTypes = new List<PostTypes>() { new PostTypes() { Active = true, Id = null, FilterText = "Seçiniz", Type = "Default" } };
         postTypes.AddRange(_userService.GetPostTypes());
 
         var instruments = new List<Instruments>() { new Instruments() { Id = null, Instrument = "Seçiniz", InstrumentShort = "Default" } };
         instruments.AddRange(_userService.GetInstruments());
 
-        ViewData["PostTypesId"] = new SelectList(postTypes, "Id", "Type");
+        ViewData["PostTypesId"] = new SelectList(postTypes, "Id", "FilterText");
         ViewData["InstrumentsId"] = new SelectList(instruments, "Id", "Instrument");
         ViewData["CityId"] = new SelectList(Cities.GetCities(), "Id", "Name");
         return View();
@@ -82,7 +82,7 @@ public class UserController : Controller
         try
         {
             var post = await _userService.PostEditInitial(id);
-            ViewData["PostTypesId"] = new SelectList(_userService.GetPostTypes(), "Id", "Type", post.PostTypesId);
+            ViewData["PostTypesId"] = new SelectList(_userService.GetPostTypes(), "Id", "FilterText", post.PostTypesId);
             ViewData["InstrumentsId"] = new SelectList(_userService.GetInstruments(), "Id", "Instrument", post.InstrumentsId);
             ViewData["CityId"] = new SelectList(Cities.GetCities(), "Id", "Name", post.CityId);
             return View(post);
@@ -125,7 +125,7 @@ public class UserController : Controller
             
         }
 
-        ViewData["PostTypesId"] = new SelectList(_userService.GetPostTypes(), "Id", "Type", posts.PostTypesId);
+        ViewData["PostTypesId"] = new SelectList(_userService.GetPostTypes(), "Id", "FilterText", posts.PostTypesId);
         ViewData["InstrumentsId"] = new SelectList(_userService.GetInstruments(), "Id", "Instrument", posts.InstrumentsId);
         ViewData["CityId"] = new SelectList(Cities.GetCities(), "Id", "Name", posts.CityId);
         return View(posts);

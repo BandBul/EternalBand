@@ -10,7 +10,6 @@
 @{
     foreach (var post in Model)
     {
-
         var photo = post.GetTopPhoto() ?? "/images/featured-job/img-01.png";
         <div class="job-box card mt-4">
             <div class="p-4">
@@ -21,11 +20,6 @@
                                 <img src="@photo" alt="" class="img-fluid rounded-3">
                             </a>
                         </div>
-                        @*
-                        <div>
-                            <span class="badge bg-soft-secondary fs-13 mt-1">Hedef Kitle :@post.PostTypes.TargetGroupName</span>
-                        </div>
-                        *@
                     </div>
 
                     <div class="col-md-3">
@@ -47,26 +41,13 @@
 
                     <div class="col-md-2">
                         <div>
-                            @* <span class="badge bg-soft-success fs-13 mt-1">İlan türü : @post.PostTypes.Type</span> *@
+                            <span class="badge bg-soft-success fs-13 mt-1">İlan türü : @post.PostTypes.FilterText</span>
                             <span class="badge bg-soft-danger fs-13 mt-1">Enstrüman : @post.Instruments.Instrument</span>
                         </div>
                     </div>
 
                 </div>
             </div>
-@*
-            <div class="p-3 bg-light">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div>
-                            <p class="text-muted mb-0">
-                                <span class="text-dark">Eklenme Tarihi:</span> @post.AddedDate.ToString("dd.MM.yyyy")
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-*@
         </div>
     }
 }

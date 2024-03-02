@@ -66,28 +66,17 @@ public class HomeController : Controller
         ViewBag.Instrument = e;
         var model = new PostViewModel()
         {
-            Posts = await _homeService.FilterPosts(pId, s, c, e),
+            Posts = await _homeService.FilterPostsByType(pId, s, c, e),
             PostFilterContracts = new PostFilterContracts()
             {
                 PageID = pId,
                 CityId = c,
                 Instrument = e,
-                TypeShort = s,
+                Type = s,
 
             }
         };
         return View(model);
-    }
-
-    [Route("FilterByPostType/{postType}")]
-    public async Task<IActionResult> FilterByPostType(string postType)
-    {
-        var model = new PostViewModel()
-        {
-            Posts = await _homeService.FilterPostsByType(Enum.Parse<PostTypeName>(postType)),
-            PostFilterContracts = new PostFilterContracts() { TypeShort = postType }
-        };
-        return View(nameof(Posts), model);
     }
 
     [HttpGet, Route("ilan/{seolink}")]
@@ -131,14 +120,14 @@ public class HomeController : Controller
         }
 
         var filteredPosts = await _homeService.PostsByPostTypeAsync(postType);
-        return PartialView("PartialViews/_NewPostsList", filteredPosts);
+        return PartialView("PartialViews/_PostsListPartial", filteredPosts);
     }
 
     [HttpPost, Route("NewPosts")]
     public async Task<IActionResult> NewPosts()
     {
         var filteredPosts = await _homeService.NewPosts();
-        return PartialView("PartialViews/_NewPostsList", filteredPosts);
+        return PartialView("PartialViews/_PostsListPartial", filteredPosts);
     }
 
     [HttpPost]

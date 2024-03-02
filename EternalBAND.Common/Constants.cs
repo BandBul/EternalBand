@@ -12,15 +12,5 @@
         public static string PostIdQueryParameter = "postid";
         public static int PageSizeForElements = 10;
         public static int PageSizeForBlogs = 3;
-
-        public static Dictionary<PostTypeName, string> PostSearchTitleMapping = new()
-        {
-            { PostTypeName.Musician, "Müzisyen İlanları" },
-            { PostTypeName.Group, "Grup İlanları" },
-            { PostTypeName.Lesson, "Ders İlanları" },
-        };
-
-
-
     }
 }

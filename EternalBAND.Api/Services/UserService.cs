@@ -257,7 +257,17 @@ namespace EternalBAND.Api.Services
 
         public IEnumerable<PostTypes> GetPostTypes() 
         {
-            return _context.PostTypes;
+            var postTypes = _context.PostTypes.ToList();
+            return postTypes.Select(s =>
+                {
+                    var newTitle = s.TypeText + $" ({s.PostCreateText})";
+                    return new PostTypes()
+                    {
+                        Id = s.Id,
+                        FilterText = newTitle
+                    };
+                }
+            );
         }
         public IEnumerable<Instruments> GetInstruments()
         {

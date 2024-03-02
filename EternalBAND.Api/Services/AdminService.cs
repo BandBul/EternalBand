@@ -214,7 +214,7 @@ namespace EternalBAND.Api.Services
 
         public async Task PostTypesCreate(PostTypes postTypes)
         {
-            postTypes.Type = StrConvert.TRToEnDeleteAllSpacesAndToLower(postTypes.SearchName);
+            postTypes.Type = StrConvert.TRToEnDeleteAllSpacesAndToLower(postTypes.FilterText);
             postTypes.Active = true;
             postTypes.AddedDate = DateTime.Now;
             _context.Add(postTypes);
@@ -248,8 +248,8 @@ namespace EternalBAND.Api.Services
             {
                 var post = await _context.PostTypes.FirstOrDefaultAsync(n => n.Id == id);
                 post.Active = postTypes.Active;
-                post.SearchName = postTypes.SearchName;
-                post.Type = StrConvert.TRToEnDeleteAllSpacesAndToLower(postTypes.SearchName);
+                post.FilterText = postTypes.FilterText;
+                post.Type = StrConvert.TRToEnDeleteAllSpacesAndToLower(postTypes.FilterText);
                 _context.Update(post);
                 await _context.SaveChangesAsync();
             }

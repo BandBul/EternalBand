@@ -61,15 +61,15 @@ namespace EternalBAND.Api.Services
             };
         }
 
-        public async Task<IPagedList<Posts>> FilterPosts(int pageId, string targetGroup, int cityId, string instrument)
+        public async Task<IPagedList<Posts>> FilterPostsByType(int pageId, string type, int cityId, string instrument)
         {
             var filters = new List<Func<Posts, bool>>();
 
             var posts = _context.Posts.Where(p => p.Status == PostStatus.Active).Include(n => n.PostTypes).Include(n => n.Instruments);
 
-            if(targetGroup != "0" && targetGroup != "")
+            if(type != "0" && type != "")
             {
-                filters.Add(n => n.PostTypes.TargetGroup.ToString().Contains(targetGroup));
+                filters.Add(n => n.PostTypes.Type.Contains(type));
             }
 
             if (instrument != "0" && instrument != "")
@@ -87,16 +87,6 @@ namespace EternalBAND.Api.Services
             return await posts.Where(predicate)
                     .OrderByDescending(s => s.AddedDate)
                     .ToPagedListAsync(pageId, Constants.PageSizeForElements);
-        }
-
-        public async Task<IPagedList<Posts>> FilterPostsByType(PostTypeName postType)
-        {
-            var posts = _context.Posts.Where(p => p.Status == PostStatus.Active).Include(n => n.PostTypes).Include(n => n.Instruments);
-            if(postType != PostTypeName.Unknown)
-            {
-                return await posts.Where(s => s.PostTypes.Type == postType.ToString()).ToPagedListAsync(1, Constants.PageSizeForElements);
-            }
-            return await posts.ToPagedListAsync(1, Constants.PageSizeForElements);
         }
 
         public async Task<Posts?> Post(string seoLink)

@@ -45,7 +45,7 @@
                                 <thead>
                                 <tr>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.FirstOrDefault().SearchName)
+                                        @Html.DisplayNameFor(model => model.FirstOrDefault().FilterText)
                                     </th>
                                     <th>
                                         @Html.DisplayNameFor(model => model.FirstOrDefault().Active)
@@ -61,7 +61,7 @@
                                 {
                                     <tr>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.SearchName)
+                                            @Html.DisplayFor(modelItem => item.FilterText)
                                         </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.Active)

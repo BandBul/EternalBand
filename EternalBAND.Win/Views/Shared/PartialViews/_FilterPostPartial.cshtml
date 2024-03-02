@@ -1,0 +1,86 @@
+﻿@using EternalBAND.Api.Options;
+@using EternalBAND.Business;
+@using EternalBAND.Common;
+@using EternalBAND.DataAccess;
+@using EternalBAND.DomainObjects.ViewModel;
+@using EternalBAND.DomainObjects;
+@using Microsoft.AspNetCore.Identity;
+<link href="/Css/FilterPostPartial.css" rel="stylesheet" type="text/css">
+@inject ApplicationDbContext _context
+@model PostFilterContracts
+@inject SignInManager<Users> SignInManager
+
+<form asp-action="Posts" asp-controller="Home">
+    <div class="row g-2">
+        <div class="col-lg-3">
+            <div class="filler-job-form">
+                <i class="uil uil-briefcase-alt"></i>
+                <select class="form-select filter-input-box" data-trigger name="s" id="choices-single-locationn" aria-label="Default select example" placeholder="NE ARIYORSUN?">
+                    <option disabled="disabled" selected="" value="0">NE ARIYORSUN</option>
+                    <option value=" ">Hepsini Seç</option>
+                    @foreach (var type in _context.PostTypes.Where(n => n.Active))
+                    {
+                        if (type.Type == Model.Type)
+                        {
+                            <option value="@type.Type" selected>@type.FilterText</option>
+                        }
+                        else
+                        {
+                            <option value="@type.Type">@type.FilterText</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="filler-job-form">
+                <i class="uil uil-clipboard-notes"></i>
+                <select class="form-select filter-input-box" data-trigger name="e" id="choices-single-categories" aria-label="Default select example" placeholder="ENSTRÜMAN?">
+                    <option disabled="disabled" selected="" value="0">ENSTRÜMAN</option>
+                    <option value=" ">Hepsini Seç</option>
+                    @foreach (var i in _context.Instruments.Where(n => n.IsActive))
+                    {
+                        var x = "";
+                        if (i.InstrumentShort == Model.Instrument)
+                        {
+                            <option value="@i.InstrumentShort" selected>@i.Instrument</option>
+                        }
+                        else
+                        {
+                            <option value="@i.InstrumentShort" >@i.Instrument</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="filler-job-form">
+                <i class="uil uil-location-point"></i>
+                <select class="form-select filter-input-box" data-trigger name="c" id="choices-single-locationn" aria-label="Default select example" placeholder="ŞEHİR?">
+
+                    <option disabled="disabled" selected="">ŞEHİR</option>
+                    <option value="0">Hepsini Seç</option>
+                    @foreach (var city in Cities.GetCities().Skip(1))
+                    {
+                        if (city.Id == Model.CityId)
+                        {
+                            <option value="@city.Id" selected>@city.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@city.Id">@city.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="col-lg-3">
+            <div class="row">
+                <div class="col-md-12">
+                    <button class="btn btn-primary form-control filter-post" type="submit"><i class="uil uil-filter"></i> Filtrele</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

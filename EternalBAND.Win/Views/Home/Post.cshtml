@@ -14,270 +14,245 @@
     var user = _context.Users.FirstOrDefault(n => n.Id == Model.AddedByUserId);
 }
 <div class="main-content">
-
-<div class="page-content">
-
-<!-- Start home -->
-<section class="page-title-box">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="text-center text-white">
-                    <h3 class="mb-4">@Model.Title</h3>
-                    <div class="page-next">
-                        <nav class="d-inline-block" aria-label="breadcrumb text-center">
-                            <ol class="breadcrumb justify-content-center">
-                                <li class="breadcrumb-item">
-                                    <a asp-action="Anasayfa">Anasayfa</a>
-                                </li>
-                                <li class="breadcrumb-item">
-                                    <a asp-action="Posts">İlanlar</a>
-                                </li>
-                            </ol>
-                        </nav>
+    <div class="page-content">
+        <section class="page-title-box">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="text-center text-white">
+                            <h3 class="mb-4">@Model.Title</h3>
+                            <div class="page-next">
+                                <nav class="d-inline-block" aria-label="breadcrumb text-center">
+                                    <ol class="breadcrumb justify-content-center">
+                                        <li class="breadcrumb-item">
+                                            <a asp-action="Anasayfa">Anasayfa</a>
+                                        </li>
+                                        <li class="breadcrumb-item">
+                                            <a asp-action="Posts">İlanlar</a>
+                                        </li>
+                                    </ol>
+                                </nav>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <!--end col-->
+        </section>
+        <div class="position-relative" style="z-index: 1">
+            <div class="shape">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 250">
+                    <path fill="#FFFFFF" fill-opacity="1"
+                          d="M0,192L120,202.7C240,213,480,235,720,234.7C960,235,1200,213,1320,202.7L1440,192L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z">
+                    </path>
+                </svg>
+            </div>
         </div>
-        <!--end row-->
-    </div>
-    <!--end container-->
-</section>
-<!-- end home -->
-
-<!-- START SHAPE -->
-<div class="position-relative" style="z-index: 1">
-    <div class="shape">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 250">
-            <path fill="#FFFFFF" fill-opacity="1"
-                  d="M0,192L120,202.7C240,213,480,235,720,234.7C960,235,1200,213,1320,202.7L1440,192L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z">
-            </path>
-        </svg>
-    </div>
-</div>
-<!-- END SHAPE -->
-
-
-<!-- START CANDIDATE-DETAILS -->
-<section class="section">
-<div class="container">
-<div class="row">
-<div class="col-lg-4">
-    <div class="card side-bar">
-        <div class="card-body p-4">
-            <div class="candidate-profile text-center">
-                <img src="@user.PhotoPath" alt="" class="avatar-lg rounded-circle">
-                <h6 class="fs-18 mb-0 mt-4">@user.Name @user.Surname</h6>
-                @* <p class="text-muted mb-4">Ünvan</p> *@
-                <ul class="candidate-detail-social-menu list-inline mb-0 mt-3">
-                    <li class="list-inline-item">
-                        <a href="javascript:void(0)" class="social-link">
-                            <i class="uil uil-twitter-alt"></i>
-                        </a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="javascript:void(0)" class="social-link">
-                            <i class="uil uil-whatsapp"></i>
-                        </a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="javascript:void(0)" class="social-link">
-                            <i class="uil uil-phone-alt"></i>
-                        </a>
-                    </li>
-                </ul>
-                 @{
-                    user = await _userManager.GetUserAsync(User);
-                    if (user.Id != Model.AddedByUserId)
-                    {
-                                            <div class="mt-3">
-                                                <a asp-controller="Message" asp-action="ChatIndex" asp-route-userId="@Model.AddedByUserId" asp-route-postId="@Model.Id" class="btn btn-danger btn-hover w-100"><i class="uil uil-message"></i> Mesaj Gönder</a>
-                                            </div>
-                    }
-                 }
+        <section class="section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="card side-bar">
+                            <div class="card-body p-4">
+                                <div class="candidate-profile text-center">
+                                    <img src="@user.PhotoPath" alt="" class="avatar-lg rounded-circle">
+                                    <h6 class="fs-18 mb-0 mt-4">@user.Name @user.Surname</h6>
+                                    <ul class="candidate-detail-social-menu list-inline mb-0 mt-3">
+                                        <li class="list-inline-item">
+                                            <a href="javascript:void(0)" class="social-link">
+                                                <i class="uil uil-twitter-alt"></i>
+                                            </a>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <a href="javascript:void(0)" class="social-link">
+                                                <i class="uil uil-whatsapp"></i>
+                                            </a>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <a href="javascript:void(0)" class="social-link">
+                                                <i class="uil uil-phone-alt"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                        @{
+                                        user = await _userManager.GetUserAsync(User);
+                                        if (user.Id != Model.AddedByUserId)
+                                        {
+                                                                <div class="mt-3">
+                                                                    <a asp-controller="Message" asp-action="ChatIndex" asp-route-userId="@Model.AddedByUserId" asp-route-postId="@Model.Id" class="btn btn-danger btn-hover w-100"><i class="uil uil-message"></i> Mesaj Gönder</a>
+                                                                </div>
+                                        }
+                                        }
 
                    
                 
-            </div>
-        </div><!--end candidate-profile-->
+                                </div>
+                            </div>
 
-        <div class="candidate-profile-overview  card-body border-top p-4">
-            <h6 class="fs-17 fw-semibold mb-3">Detaylar</h6>
-            <ul class="list-unstyled mb-0">
- @if (Model.PostTypes != null)
-                {
+                            <div class="candidate-profile-overview  card-body border-top p-4">
+                                <h6 class="fs-17 fw-semibold mb-3">Detaylar</h6>
+                                <ul class="list-unstyled mb-0">
+                                    @if (Model.PostTypes != null)
+                                    {
+                                        <li>
+                                            <div class="d-flex">
+                                                <label class="text-dark">İlan Tipi</label>
+                                                <div>
+                                                    <p class="text-muted mb-0">@Model.PostTypes.TypeText</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    }
+                                    @if (Model.Instruments != null)
+                                    {
                     
-                <li>
+                                    <li>
+                                        <div class="d-flex">
+                                            <label class="text-dark">Enstrüman</label>
+                                            <div>
+                                                <p class="text-muted mb-0">@Model.Instruments.Instrument</p>
+                                            </div>
+                                        </div>
 
-                    <div class="d-flex">
-                        <label class="text-dark">İlan Tipi</label>
-                        <div>
-                            <p class="text-muted mb-0">@Model.PostTypes.SearchName</p>
+                                    </li>
+                                    }
+                                    @if (Model.CityId != null)
+                                    {
+                    
+                                    <li>
+                                        <div class="d-flex">
+                                            <label class="text-dark">Şehir</label>
+                                            <div>
+                                                <p class="text-muted mb-0">@Cities.GetCities().FirstOrDefault(n => n.Id == Model.CityId).Name</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    }
+                                </ul>
+                            </div>
                         </div>
                     </div>
 
-                </li>
-                }
-                @if (Model.Instruments != null)
-                {
-                    
-                <li>
+                    <div class="col-lg-8">
+                        <div class="card candidate-details ms-lg-4 mt-4 mt-lg-0">
+                            <div class="card-body p-4 candidate-personal-detail">
+                                <div>
+                                    <h6 class="fs-17 fw-semibold mb-3">Açıklama</h6>
+                                    @Html.Raw(Model.HTMLText)
+                                </div>
+                            </div>
+                            <div class="card-body p-4 candidate-personal-detail">
+                                <h6 class="fs-17 fw-bold mb-0">Fotoğraflar</h6>
+                                <div class="row">
 
-                    <div class="d-flex">
-                        <label class="text-dark">Enstrüman</label>
-                        <div>
-                            <p class="text-muted mb-0">@Model.Instruments.Instrument</p>
-                        </div>
+                                    @{
+                                        var index = 0;
+                                        if (Model.Photo1 != null)
+                                        {
+                                            index++;
+                                            <div class="col-lg-4 mt-4">
+                                                <div class="candidate-portfolio-box card border-0">
+                                                    <img src="@Model.Photo1" alt="" class="img-fluid">
+                                                    <div class="bg-overlay"></div>
+                                                    <div class="zoom-icon">
+                                                        <a href="@Model.Photo1" class="image-popup text-white">
+                                                            <i class="uil uil-search-alt"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        if (Model.Photo2 != null)
+                                        {
+                                            index++;
+                                            <div class="col-lg-4 mt-4">
+                                                <div class="candidate-portfolio-box card border-0">
+                                                    <img src="@Model.Photo2" alt="" class="img-fluid">
+                                                    <div class="bg-overlay"></div>
+                                                    <div class="zoom-icon">
+                                                        <a href="@Model.Photo2" class="image-popup text-white">
+                                                            <i class="uil uil-search-alt"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        if (Model.Photo3 != null)
+                                        {
+                                            index++;
+                                            <div class="col-lg-4 mt-4">
+                                                <div class="candidate-portfolio-box card border-0">
+                                                    <img src="@Model.Photo3" alt="" class="img-fluid">
+                                                    <div class="bg-overlay"></div>
+                                                    <div class="zoom-icon">
+                                                        <a href="@Model.Photo3" class="image-popup text-white">
+                                                            <i class="uil uil-search-alt"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        if (Model.Photo4 != null)
+                                        {
+                                            index++;
+                                            <div class="col-lg-4 mt-4">
+                                                <div class="candidate-portfolio-box card border-0">
+                                                    <img src="@Model.Photo4" alt="" class="img-fluid">
+                                                    <div class="bg-overlay"></div>
+                                                    <div class="zoom-icon">
+                                                        <a href="@Model.Photo4" class="image-popup text-white">
+                                                            <i class="uil uil-search-alt"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        if (Model.Photo5 != null)
+                                        {
+                                            index++;
+                                            <div class="col-lg-4 mt-4">
+                                                <div class="candidate-portfolio-box card border-0">
+                                                    <img src="@Model.Photo5" alt="" class="img-fluid">
+                                                    <div class="bg-overlay"></div>
+                                                    <div class="zoom-icon">
+                                                        <a href="@Model.Photo5" class="image-popup text-white">
+                                                            <i class="uil uil-search-alt"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        if (index == 0)
+                                        {
+                                            <div class="col-lg-4 mt-4">
+                                                <div class="candidate-portfolio-box card border-0">
+                                                    <img src="~/images/hazirlaniyor.jpg" alt="" class="img-fluid">
+                                                    <div class="bg-overlay"></div>
+                                                    <div class="zoom-icon">
+                                                        <a href="~/images/hazirlaniyor.jpg" class="image-popup text-white">
+                                                            <i class="uil uil-search-alt"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+
+                                </div>
+                            </div><!--end candidate-portfolio-->
+                            @if (ViewBag.ApprovalPurpose)
+                            {
+                                // TODO-Engin arrange the style of button
+                                <div class="mt-3">
+                                    <a asp-controller="Admin" asp-action="ApprovePost" asp-route-postSeoLink="@Model.SeoLink" class="btn btn-primary btn-hover w-100"><i class="uil-thumbs-up"></i>İlanı Onayla</a>
+                                </div>
+                                <div class="mt-3">
+                                    <a asp-controller="Admin" asp-action="RejectPost" asp-route-postSeoLink="@Model.SeoLink" class="btn btn-danger btn-hover w-100"><i class="uil-thumbs-down"></i>İlanı Reddet</a>
+                                </div>
+                            }
+                        </div><!--end card-->
                     </div>
-
-                </li>
-                }
-                @if (Model.CityId != null)
-                {
-                    
-                <li>
-
-                    <div class="d-flex">
-                        <label class="text-dark">Şehir</label>
-                        <div>
-                            <p class="text-muted mb-0">@Cities.GetCities().FirstOrDefault(n => n.Id == Model.CityId).Name</p>
-                        </div>
-                    </div>
-
-                </li>
-                }
-            </ul>
-
-        </div>
-    </div><!--end card-->
-</div><!--end col-->
-
-<div class="col-lg-8">
-    <div class="card candidate-details ms-lg-4 mt-4 mt-lg-0">
-        <div class="card-body p-4 candidate-personal-detail">
-            <div>
-                <h6 class="fs-17 fw-semibold mb-3">Açıklama</h6>
-                @Html.Raw(Model.HTMLText)
+                </div>
             </div>
-        </div><!--end card-body-->
-        <div class="card-body p-4 candidate-personal-detail">
-            <h6 class="fs-17 fw-bold mb-0">Fotoğraflar</h6>
-            <div class="row">
-
-                @{
-                    var index = 0;
-                    if (Model.Photo1 != null)
-                    {
-                        index++;
-                        <div class="col-lg-4 mt-4">
-                            <div class="candidate-portfolio-box card border-0">
-                                <img src="@Model.Photo1" alt="" class="img-fluid">
-                                <div class="bg-overlay"></div>
-                                <div class="zoom-icon">
-                                    <a href="@Model.Photo1" class="image-popup text-white">
-                                        <i class="uil uil-search-alt"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                    if (Model.Photo2 != null)
-                    {
-                        index++;
-                        <div class="col-lg-4 mt-4">
-                            <div class="candidate-portfolio-box card border-0">
-                                <img src="@Model.Photo2" alt="" class="img-fluid">
-                                <div class="bg-overlay"></div>
-                                <div class="zoom-icon">
-                                    <a href="@Model.Photo2" class="image-popup text-white">
-                                        <i class="uil uil-search-alt"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                    if (Model.Photo3 != null)
-                    {
-                        index++;
-                        <div class="col-lg-4 mt-4">
-                            <div class="candidate-portfolio-box card border-0">
-                                <img src="@Model.Photo3" alt="" class="img-fluid">
-                                <div class="bg-overlay"></div>
-                                <div class="zoom-icon">
-                                    <a href="@Model.Photo3" class="image-popup text-white">
-                                        <i class="uil uil-search-alt"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                    if (Model.Photo4 != null)
-                    {
-                        index++;
-                        <div class="col-lg-4 mt-4">
-                            <div class="candidate-portfolio-box card border-0">
-                                <img src="@Model.Photo4" alt="" class="img-fluid">
-                                <div class="bg-overlay"></div>
-                                <div class="zoom-icon">
-                                    <a href="@Model.Photo4" class="image-popup text-white">
-                                        <i class="uil uil-search-alt"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                    if (Model.Photo5 != null)
-                    {
-                        index++;
-                        <div class="col-lg-4 mt-4">
-                            <div class="candidate-portfolio-box card border-0">
-                                <img src="@Model.Photo5" alt="" class="img-fluid">
-                                <div class="bg-overlay"></div>
-                                <div class="zoom-icon">
-                                    <a href="@Model.Photo5" class="image-popup text-white">
-                                        <i class="uil uil-search-alt"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                    if (index == 0)
-                    {
-                        <div class="col-lg-4 mt-4">
-                            <div class="candidate-portfolio-box card border-0">
-                                <img src="~/images/hazirlaniyor.jpg" alt="" class="img-fluid">
-                                <div class="bg-overlay"></div>
-                                <div class="zoom-icon">
-                                    <a href="~/images/hazirlaniyor.jpg" class="image-popup text-white">
-                                        <i class="uil uil-search-alt"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                }
-
-            </div>
-        </div><!--end candidate-portfolio-->
-        @if (ViewBag.ApprovalPurpose)
-        {
-            // TODO-Engin arrange the style of button
-            <div class="mt-3">
-                <a asp-controller="Admin" asp-action="ApprovePost" asp-route-postSeoLink="@Model.SeoLink" class="btn btn-primary btn-hover w-100"><i class="uil-thumbs-up"></i>İlanı Onayla</a>
-            </div>
-            <div class="mt-3">
-                <a asp-controller="Admin" asp-action="RejectPost" asp-route-postSeoLink="@Model.SeoLink" class="btn btn-danger btn-hover w-100"><i class="uil-thumbs-down"></i>İlanı Reddet</a>
-            </div>
-        }
-    </div><!--end card-->
-</div><!--end col-->
-</div><!--end row-->
-</div><!--end container-->
-</section>
-<!-- END CANDIDATE-DETAILS -->
-
-</div>
-<!-- End Page-content -->
-
+        </section>
+    </div>
 </div>
