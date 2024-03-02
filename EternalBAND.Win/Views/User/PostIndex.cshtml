@@ -22,14 +22,11 @@
             Status = status,
             Posts = posts.ToList()
         };
-
     });
 }
 
 <div class="main-content">
-
     <div class="page-content">
-
         <section class="page-title-box">
             <div class="container">
                 <div class="row justify-content-center">
@@ -68,7 +65,7 @@
                             var style = GetPostStatusStyle(postsWithStatus.Status);
                             <header class="header-status-@style.Color">
                                 <h1>@style.HeaderDisplayText İlanlar</h1>
-                                </header>
+                            </header>
                             @if (postsWithStatus.Posts.Count == 0)
                             {
                                 <h2><br>@style.HeaderDisplayText İlanınız bulunmamaktadır</h2>
@@ -104,7 +101,6 @@
                                                             <span class="badge bg-soft-danger fs-13 mt-1">@item.Instruments.Instrument</span>
                                                         </li>
                                                     }
-
                                                 </ul>
                                             </div>
                                             <div class="job-grid-content mt-3">
@@ -169,7 +165,6 @@
 </div>
 
 <script>
-
     function DeletePost(id)
     {
 
@@ -200,5 +195,4 @@
           } 
         })
     }
-
 </script>

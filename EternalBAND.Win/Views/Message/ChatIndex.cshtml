@@ -14,9 +14,7 @@
 }
 <link href="~/css/chat.css" rel="stylesheet" type="text/css"/>
 <div class="main-content">
-
     <div class="page-content">
-
         <section class="page-title-box">
             <div class="container">
                 <div class="row justify-content-center">
@@ -42,7 +40,6 @@
         </div>
         <section class="section">
             <div class="container p-0">
-
                 <div class="card">
                     <div class="row g-0">
                         @{
@@ -127,7 +124,6 @@
                                     }
                                 }
                             }
-
                             <hr class="d-block d-lg-none mt-1 mb-0">
                         </div>
                         @if (Model.CurrentChat != null)
@@ -150,7 +146,6 @@
                                     }
 
                                 </div>
-
                                 <div class="position-relative">
                                     <div class="chat-messages p-4">
                                         @if (Model.CurrentChat.Messages.Any())
@@ -188,7 +183,6 @@
                                                 }
                                             }
                                         }
-
                                     </div>
                                 </div>
                                 @{
@@ -201,17 +195,13 @@
                                         </div>
                                     </div>
                                 }
-
                             </div>
                         }
-                    
                     </div>
                 </div>
             </div>
         </section>
-
     </div>
-
     <partial name="PartialViews/_SwitcherAndTopPartial"/>
 </div>
 <script src="~/js/signalr/dist/browser/signalr.js"></script>

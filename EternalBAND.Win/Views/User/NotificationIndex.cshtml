@@ -10,18 +10,13 @@
 
 @{
     ViewData["Title"] = "Bildirimler";
-}
-
-@{
     var user = await _userManager.GetUserAsync(User);
     var notAllReaded = _context.Notification.Where(n => n.ReceiveUserId == user.Id).Any(s => !s.IsRead);
     var classAllReaded = notAllReaded ? "activeAllRead" : "disabledAllRead";
 }
 
 <div class="main-content">
-
     <div class="page-content">
-
         <section class="page-title-box">
             <div class="container">
                 <div class="row justify-content-center">
@@ -63,22 +58,16 @@
                                     <div class="card-body p-4">
                                         <a href="@noti.RedirectLink">
                                             <div class="row align-items-center">
-                                              
-               
                                                 <div class="col-lg-5">
                                                     <div class="candidate-list-content mt-3 mt-lg-0">
                                                         <h5 class="fs-19 mb-0">@Html.Raw(@noti.Message)</h5>
                                                       
                                                     </div>
-                                                </div><!--end col-->
-               
-                                            </div><!--end row-->
+                                                </div>
+                                            </div>
                                         </a>
-                                           
                                     </div>
-                                 
                                 </div>
-                                <!--end card-->
                             }
                         }
                         else
@@ -91,56 +80,52 @@
                     <div class="col-lg-12">
                         <nav aria-label="Navigation">
                             <ul class="pagination job-pagination mb-0 justify-content-center">
-                               
-                             
                                 @{
-                                                            @Html.PagedListPager((IPagedList) Model, pId => Url.Action("NotificationIndex", new {@pId = pId}),
-                                                                new PagedListRenderOptions
-                                                                {
-                                                                    LiElementClasses = new string[] {"page-item"},
-                                                                    PageClasses = new string[] {"page-link"},
-                                                                })
-                                                        }
-                              
+                                    @Html.PagedListPager((IPagedList) Model, pId => Url.Action("NotificationIndex", new {@pId = pId}),
+                                        new PagedListRenderOptions
+                                        {
+                                            LiElementClasses = new string[] {"page-item"},
+                                            PageClasses = new string[] {"page-link"},
+                                        })
+                                }
                             </ul>
                         </nav>
-                    </div><!--end col-->
-                </div><!-- end row -->
+                    </div>
+                </div>
             </div>
         </section>
-
     </div>
-
     <partial name="PartialViews/_SwitcherAndTopPartial"/>
 </div>
 <script>
 function AllRead(){
-Swal.fire({
-  title: 'Tümü okundu yapılacaktır emin misiniz?',
-  showDenyButton: true,
-  confirmButtonText: 'Evet',
-  denyButtonText: `Hayır`,
-}).then((result) => {
-  if (result.isConfirmed) {
-      $.post( "/User/AllReadNotification", function( data ) {
-          var message = "";
-          if (data.includes('başarılı')){
-              message = 'success';
-          }
-          else
-              {
-                  message ='info';
-                  }
-          Swal.fire({
-            title: data,confirmButtonText: 'Kapat'}).then((result) => {
-                                                        if (result['isConfirmed']){
-                                                              setTimeout( location.reload(), 2000);
-                                                        }
-                                                      });
-  
-      });
-  } 
-})
+    Swal.fire({
+      title: 'Tümü okundu yapılacaktır emin misiniz?',
+      showDenyButton: true,
+      confirmButtonText: 'Evet',
+      denyButtonText: `Hayır`,
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.post( "/User/AllReadNotification", function( data ) 
+            {
+                var message = "";
+                if (data.includes('başarılı')){
+                    message = 'success';
+                }
+                else
+                {
+                    message ='info';
+                }
+                Swal.fire({title: data,confirmButtonText: 'Kapat'})
+                .then((result) => 
+                {
+                    if (result['isConfirmed'])
+                    {
+                        setTimeout( location.reload(), 2000);
+                    }
+                });
+            });
+        } 
+    })
 }
-
 </script>
