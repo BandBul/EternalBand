@@ -4,6 +4,7 @@ using EternalBAND.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EternalBAND.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240227233001_Add_TargetGroup_For_PostsType")]
+    partial class Add_TargetGroup_For_PostsType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -347,18 +350,18 @@ namespace EternalBAND.Migrations
                     b.Property<DateTime>("AddedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FilterText")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("TargetGroup")
+                        .HasColumnType("int");
 
-                    b.Property<string>("PostCreateText")
+                    b.Property<string>("TargetGroupName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Type")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TypeText")
+                    b.Property<string>("TypeShort")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -370,31 +373,31 @@ namespace EternalBAND.Migrations
                         {
                             Id = 1,
                             Active = true,
-                            AddedDate = new DateTime(2024, 3, 2, 16, 9, 8, 526, DateTimeKind.Local).AddTicks(5186),
-                            FilterText = "Grup Arıyorum",
-                            PostCreateText = "Grup Arıyorum",
-                            Type = "Group",
-                            TypeText = "Grup İlanları"
+                            AddedDate = new DateTime(2024, 2, 28, 0, 30, 1, 660, DateTimeKind.Local).AddTicks(8016),
+                            TargetGroup = 2,
+                            TargetGroupName = "Grup Arıyorum",
+                            Type = "Müzisyen Arıyorum",
+                            TypeShort = "Musician"
                         },
                         new
                         {
                             Id = 2,
                             Active = true,
-                            AddedDate = new DateTime(2024, 3, 2, 16, 9, 8, 526, DateTimeKind.Local).AddTicks(5248),
-                            FilterText = "Müzisyen Arıyorum",
-                            PostCreateText = "Müzisyen Arıyorum",
-                            Type = "Musician",
-                            TypeText = "Müzisyen İlanları"
+                            AddedDate = new DateTime(2024, 2, 28, 0, 30, 1, 660, DateTimeKind.Local).AddTicks(8071),
+                            TargetGroup = 1,
+                            TargetGroupName = "Müzisyen Arıyorum",
+                            Type = "Grup Arıyorum",
+                            TypeShort = "Group"
                         },
                         new
                         {
                             Id = 3,
                             Active = true,
-                            AddedDate = new DateTime(2024, 3, 2, 16, 9, 8, 526, DateTimeKind.Local).AddTicks(5252),
-                            FilterText = "Ders Almak İstiyorum",
-                            PostCreateText = "Ders Vermek İstiyorum",
-                            Type = "Lesson",
-                            TypeText = "Ders İlanları"
+                            AddedDate = new DateTime(2024, 2, 28, 0, 30, 1, 660, DateTimeKind.Local).AddTicks(8075),
+                            TargetGroup = 3,
+                            TargetGroupName = "Ders Almak İstiyorum",
+                            Type = "Ders Vermek İstiyorum",
+                            TypeShort = "Lesson"
                         });
                 });
 

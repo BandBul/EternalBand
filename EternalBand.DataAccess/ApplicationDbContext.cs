@@ -36,26 +36,35 @@ public class ApplicationDbContext : IdentityDbContext<Users>
             new PostTypes
             {
                 Id = 1,
-                Type = "Müzisyen Arıyorum",
-                TypeShort = PostTypeName.Musician.ToString(),
+                FilterText = "Grup Arıyorum",
+                Type = PostTypeName.Group.ToString(),
+                TypeText = "Grup İlanları",
                 Active = true,
-                AddedDate = DateTime.Now
+                AddedDate = DateTime.Now,
+                PostCreateText = "Grup Arıyorum"
+
             },
             new PostTypes
             {
                 Id = 2,
-                Type = "Grup Arıyorum",
-                TypeShort = PostTypeName.Group.ToString(),
+                FilterText = "Müzisyen Arıyorum",
+                Type = PostTypeName.Musician.ToString(),
+                TypeText = "Müzisyen İlanları",
                 Active = true,
-                AddedDate = DateTime.Now
+                AddedDate = DateTime.Now,
+                PostCreateText = "Müzisyen Arıyorum",
+               
             },
             new PostTypes
             {
                 Id = 3,
-                Type = "Ders Vermek İstiyorum",
-                TypeShort = PostTypeName.Lesson.ToString(),
+                FilterText = "Ders Almak İstiyorum",
+                TypeText = "Ders İlanları",
+                Type = PostTypeName.Lesson.ToString(),
                 Active = true,
-                AddedDate = DateTime.Now
+                AddedDate = DateTime.Now,
+                PostCreateText = "Ders Vermek İstiyorum",
+                
             }
         );
 

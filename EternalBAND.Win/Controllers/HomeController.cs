@@ -59,20 +59,20 @@ public class HomeController : Controller
 
     // TODO change parameter names as understandable strings
     [Route("ilanlar")]
-    public async Task<IActionResult> Posts(int pId = 1, string? s = "", int c = 0, string? e = "")
+    public async Task<IActionResult> Posts(int pId = 1, string? s = "0", int c = 0, string? e = "0")
     {
         ViewBag.CityId = c;
         ViewBag.TypeShort = s;
         ViewBag.Instrument = e;
         var model = new PostViewModel()
         {
-            Posts = await _homeService.Posts(pId, s, c, e),
+            Posts = await _homeService.FilterPostsByType(pId, s, c, e),
             PostFilterContracts = new PostFilterContracts()
             {
                 PageID = pId,
                 CityId = c,
                 Instrument = e,
-                TypeShort = s,
+                Type = s,
 
             }
         };
@@ -120,14 +120,14 @@ public class HomeController : Controller
         }
 
         var filteredPosts = await _homeService.PostsByPostTypeAsync(postType);
-        return PartialView("PartialViews/_NewPostsList", filteredPosts);
+        return PartialView("PartialViews/_PostsListPartial", filteredPosts);
     }
 
     [HttpPost, Route("NewPosts")]
     public async Task<IActionResult> NewPosts()
     {
         var filteredPosts = await _homeService.NewPosts();
-        return PartialView("PartialViews/_NewPostsList", filteredPosts);
+        return PartialView("PartialViews/_PostsListPartial", filteredPosts);
     }
 
     [HttpPost]

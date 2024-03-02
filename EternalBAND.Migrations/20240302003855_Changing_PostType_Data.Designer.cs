@@ -4,6 +4,7 @@ using EternalBAND.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EternalBAND.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240302003855_Changing_PostType_Data")]
+    partial class Changing_PostType_Data
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -347,18 +350,14 @@ namespace EternalBAND.Migrations
                     b.Property<DateTime>("AddedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FilterText")
+                    b.Property<string>("SearchName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PostCreateText")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("TargetGroup")
+                        .HasColumnType("int");
 
                     b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TypeText")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -370,31 +369,28 @@ namespace EternalBAND.Migrations
                         {
                             Id = 1,
                             Active = true,
-                            AddedDate = new DateTime(2024, 3, 2, 16, 9, 8, 526, DateTimeKind.Local).AddTicks(5186),
-                            FilterText = "Grup Arıyorum",
-                            PostCreateText = "Grup Arıyorum",
-                            Type = "Group",
-                            TypeText = "Grup İlanları"
+                            AddedDate = new DateTime(2024, 3, 2, 1, 38, 55, 78, DateTimeKind.Local).AddTicks(5732),
+                            SearchName = "Grup Arıyorum",
+                            TargetGroup = 2,
+                            Type = "Musician"
                         },
                         new
                         {
                             Id = 2,
                             Active = true,
-                            AddedDate = new DateTime(2024, 3, 2, 16, 9, 8, 526, DateTimeKind.Local).AddTicks(5248),
-                            FilterText = "Müzisyen Arıyorum",
-                            PostCreateText = "Müzisyen Arıyorum",
-                            Type = "Musician",
-                            TypeText = "Müzisyen İlanları"
+                            AddedDate = new DateTime(2024, 3, 2, 1, 38, 55, 78, DateTimeKind.Local).AddTicks(5787),
+                            SearchName = "Müzisyen Arıyorum",
+                            TargetGroup = 1,
+                            Type = "Group"
                         },
                         new
                         {
                             Id = 3,
                             Active = true,
-                            AddedDate = new DateTime(2024, 3, 2, 16, 9, 8, 526, DateTimeKind.Local).AddTicks(5252),
-                            FilterText = "Ders Almak İstiyorum",
-                            PostCreateText = "Ders Vermek İstiyorum",
-                            Type = "Lesson",
-                            TypeText = "Ders İlanları"
+                            AddedDate = new DateTime(2024, 3, 2, 1, 38, 55, 78, DateTimeKind.Local).AddTicks(5791),
+                            SearchName = "Ders Almak İstiyorum",
+                            TargetGroup = 3,
+                            Type = "Lesson"
                         });
                 });
 

@@ -191,7 +191,6 @@
 
                                     </div>
                                 </div>
-                                @*@if (Model.CurrentChat != null)*@
                                 @{
                                     var userinfo = Model.CurrentChat.MessageMetadata.RecipientIds.First(s => s != ViewBag.LoginUserId);
                                     <div class="flex-grow-0 py-3 px-4 border-top">

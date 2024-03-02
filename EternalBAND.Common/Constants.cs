@@ -12,6 +12,5 @@
         public static string PostIdQueryParameter = "postid";
         public static int PageSizeForElements = 10;
         public static int PageSizeForBlogs = 3;
-
     }
 }

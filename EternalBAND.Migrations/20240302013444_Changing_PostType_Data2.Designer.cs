@@ -4,6 +4,7 @@ using EternalBAND.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EternalBAND.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240302013444_Changing_PostType_Data2")]
+    partial class Changing_PostType_Data2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -347,13 +350,12 @@ namespace EternalBAND.Migrations
                     b.Property<DateTime>("AddedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FilterText")
+                    b.Property<string>("SearchName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PostCreateText")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("TargetGroup")
+                        .HasColumnType("int");
 
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
@@ -370,29 +372,29 @@ namespace EternalBAND.Migrations
                         {
                             Id = 1,
                             Active = true,
-                            AddedDate = new DateTime(2024, 3, 2, 16, 9, 8, 526, DateTimeKind.Local).AddTicks(5186),
-                            FilterText = "Grup Arıyorum",
-                            PostCreateText = "Grup Arıyorum",
-                            Type = "Group",
-                            TypeText = "Grup İlanları"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Active = true,
-                            AddedDate = new DateTime(2024, 3, 2, 16, 9, 8, 526, DateTimeKind.Local).AddTicks(5248),
-                            FilterText = "Müzisyen Arıyorum",
-                            PostCreateText = "Müzisyen Arıyorum",
+                            AddedDate = new DateTime(2024, 3, 2, 2, 34, 43, 806, DateTimeKind.Local).AddTicks(82),
+                            SearchName = "Grup Arıyorum",
+                            TargetGroup = 2,
                             Type = "Musician",
                             TypeText = "Müzisyen İlanları"
                         },
                         new
                         {
+                            Id = 2,
+                            Active = true,
+                            AddedDate = new DateTime(2024, 3, 2, 2, 34, 43, 806, DateTimeKind.Local).AddTicks(134),
+                            SearchName = "Müzisyen Arıyorum",
+                            TargetGroup = 1,
+                            Type = "Group",
+                            TypeText = "Grup İlanları"
+                        },
+                        new
+                        {
                             Id = 3,
                             Active = true,
-                            AddedDate = new DateTime(2024, 3, 2, 16, 9, 8, 526, DateTimeKind.Local).AddTicks(5252),
-                            FilterText = "Ders Almak İstiyorum",
-                            PostCreateText = "Ders Vermek İstiyorum",
+                            AddedDate = new DateTime(2024, 3, 2, 2, 34, 43, 806, DateTimeKind.Local).AddTicks(138),
+                            SearchName = "Ders Almak İstiyorum",
+                            TargetGroup = 3,
                             Type = "Lesson",
                             TypeText = "Ders İlanları"
                         });

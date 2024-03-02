@@ -7,63 +7,21 @@
 @model MainPageViewModel
 @{
     ViewData["Title"] = "Anasayfa";
+    var postFilterContracts = new PostFilterContracts();
 }
 
 <div class="page-content">
     <section class="bg-home2" id="home">
         <div class="container">
             <div class="row align-items-center">
-                <div class="col-lg-7">
-                    <div class="mb-4 pb-3 me-lg-5">
+                <div class="col-lg-10">
+                    <div class="candidate-list-widgets mb-4">
                         <h1 class="display-5 fw-semibold mb-3 text-white">YENİ BİR <span class="text-yellow fw-bold">İLAN</span> VER</h1>
                         <p class="lead text-white mb-0">Yeni bir ilan verirken<br/>Kendini en iyi şekilde ifade etmeyi unutma</p>
                     </div>
-                    <form asp-action="Posts" asp-controller="Home">
-                        <div class="registration-form">
-                            <div class="row g-0">
-                                <div class="col-md-3 group-choice">
-                                    <div class="filter-search-form mt-3 mt-md-0">
-                                        <select class="form-select filter-input-box" data-trigger name="s" id="choices-single-locationn" aria-label="Default select example" placeholder="NE ARIYORSUN?">
-                                         <option disabled="disabled" selected="" value="0">NE ARIYORSUN</option>
-                                            @foreach (var i in _context.PostTypes.Where(n=> n.Active))
-                                            {
-                                                <option value="@i.TypeShort">@i.Type</option>
-                                            }
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="filter-search-form mt-3 mt-md-0">
-                                        <select class="form-select  filter-input-box" data-trigger name="e"  id="choices-single-locationnn" aria-label="Default select example" placeholder="ENSTRÜMAN?">
-                                              <option disabled="disabled" selected="" value="0">ENSTRÜMAN</option>
-                                            @foreach (var i in _context.Instruments.Where(n=> n.IsActive))
-                                            {
-                                                <option value="@i.InstrumentShort">@i.Instrument</option>
-                                            }
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="filter-search-form mt-3 mt-md-0">
-                                        <select class="form-select  filter-input-box" data-trigger name="c"  id="choices-single-locationn" aria-label="Default select example" placeholder="ŞEHİR?">
-                                            <option disabled="disabled" selected="">ŞEHİR</option>
-                                           @foreach (var city in Cities.GetCities())
-                                           {
-                                               <option id="@city.Id">@city.Name</option>
-                                           }
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="mt-3 mt-md-0 h-100">
-                                        <button class="btn  bg-yellow submit-btn w-100 h-100" type="submit"><i class="uil uil-search me-1"></i> ARA</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+                    <partial name="PartialViews/_FilterPostPartial" model="@postFilterContracts"></partial>
                 </div>
-                <div class="col-lg-5">
+                <div class="col-lg-2">
                     <div class="mt-5 mt-md-0">
                         <img src="/images/main/emre.png" alt="" class="home-img"/>
                     </div>
@@ -105,24 +63,20 @@
                         role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="all-post-tab" data-bs-toggle="pill" aria-selected="false">
-                                Tüm Kategoriler
+                                Tüm İlanlar
                             </button>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="musician-tab" data-bs-toggle="pill" aria-selected="false">
-                                Müzisyen Arıyorum
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="group-tab" data-bs-toggle="pill" aria-selected="false">
-                                Grup Arıyorum
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="lesson-tab" data-bs-toggle="pill" aria-selected="false">
-                                Ders Almak İstiyorum
-                            </button>
-                        </li>           
+                        @{
+                            var postTypes = _context.PostTypes.Where(n => n.Active);
+                            foreach (var type in postTypes)
+                            {
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="@type.Type-tab" data-bs-toggle="pill" aria-selected="false">
+                                        @type.FilterText
+                                    </button>
+                                </li>
+                            }
+                        }
                     </ul>
                 </div>
             </div>
@@ -133,7 +87,7 @@
                         <div class="tab-pane fade show active" id="recent-jobs" role="tabpanel"
                              aria-labelledby="recent-jobs-tab">
                             <div id="itemlist">
-                                <partial name="PartialViews/_NewPostsList" model="@Model.NewPosts"></partial>
+                                <partial name="PartialViews/_PostsListPartial" model="@Model.NewPosts"></partial>
                             </div>
                             <div class="text-center mt-4 pt-2">
                                 <a asp-controller="Home" asp-action="SeeAllPost" class="btn btn-primary btn-hover">Hepsini Gör <i class="uil uil-arrow-right"></i></a>
@@ -218,14 +172,6 @@
                             Eğer birşeylerin eksik veya hatalı olduğunu düşünüyorsan, bize mesaj atabilirsin.
                         </p>
                         <form method="post" asp-action="SendSupportMessage" asp-controller="Home">
-@*                            <input class="form-control text-center border-dark" style="border-radius: 2rem;" placeholder="Mesajınızı Yazınız" />
-                            <div class="mt-4 pt-2">
-                                <a asp-controller="Home" asp-action="SendSupportMessage" class="btn btn-primary btn-hover">
-                                    Gönder
-                                    <i class="uil uil-rocket align-middle ms-1"></i>
-                                </a>
-                            </div>
-*@
                             <div>
                                 <textarea class="form-control text-center border-dark" placeholder="Mesajınızı Yazınız" type="text" id="message" name="message"></textarea>
                                 <div class="mt-4 pt-2">
@@ -393,17 +339,17 @@
                 });
             }
 
-            $("#group-tab").click(function () {
+            $("#Group-tab").click(function () {
                 FilterNewPosts("@PostTypeName.Group");
             });
 
             // Button 2 click event
-            $("#musician-tab").click(function () {
+            $("#Musician-tab").click(function () {
                 FilterNewPosts("@PostTypeName.Musician");
             });
 
             // Button 3 click event
-            $("#lesson-tab").click(function () {
+            $("#Lesson-tab").click(function () {
                 FilterNewPosts("@PostTypeName.Lesson");
             });
             $("#all-post-tab").click(function () {
