@@ -22,7 +22,6 @@ public class MessageController : Controller
     // postId : mssage is being sent for related postId
     public async Task<ActionResult> ChatIndex(string? userId, int postId)
     {
-
         var user = await _controllerHelper.GetUserAsync(User);
         if (user != null)
         {
@@ -34,9 +33,7 @@ public class MessageController : Controller
             {
                 ViewBag.ReceiverUserId = userId;
                 ViewBag.PostId = postId;
-                postId = _messageService.IsPostsExists(postId) ? postId : -1*postId;
-                var messageBox = await _messageService.GetOrCreateMessageBox(userId, user.Id, postId);
-                viewModel.CurrentChat = messageBox;
+                viewModel.CurrentChat = await _messageService.GetOrCreateMessageBox(userId, user.Id, postId); ;
             }
             return View(viewModel);
         }
@@ -45,9 +42,10 @@ public class MessageController : Controller
             return Redirect("/giris-yap");
         }
     }
+
     // TODO : add logging before each return
     [HttpPost, ActionName("SendMessage")]
-    public async Task<ActionResult> SendMessage(Guid id, string message, int postId)
+    public async Task<ActionResult> SendMessage(Guid id, string message, int postId, int messageBoxId)
     {
         bool isUserExist = await _controllerHelper.IsUserExist(id.ToString());
         if (!isUserExist)
@@ -61,7 +59,7 @@ public class MessageController : Controller
         }
         try
         {
-            await _messageService.SendAndBroadCastMessageAsync(currentUser, id, message, postId);
+            await _messageService.SendAndBroadCastMessageAsync(currentUser, id, message, postId, messageBoxId);
             return Ok();
         }
         catch (Exception ex)

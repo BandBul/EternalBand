@@ -82,7 +82,7 @@ namespace EternalBAND.Api
             await SaveAndBroadCastNotification(notif, BroadCastingTitle.ReceiveMessageNotification);
         }
 
-        public async Task<Messages> CreateMessage(Users currentUser, string receiverUserId, int postId, string message)
+        public async Task<Messages> CreateMessage(Users currentUser, string receiverUserId, int postId, string message, int messageBoxId)
         {
             var msg = new Messages()
             {
@@ -92,7 +92,8 @@ namespace EternalBAND.Api
                 Message = message,
                 MessageGuid = Guid.NewGuid(),
                 ReceiverUserId = receiverUserId,
-                RelatedPostId = postId
+                RelatedPostId = postId,
+                MessageBoxId = messageBoxId
             };
 
             await _context.Messages.AddAsync(msg);

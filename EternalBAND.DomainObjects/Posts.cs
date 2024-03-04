@@ -1,4 +1,5 @@
 using EternalBAND.Common;
+using EternalBAND.DomainObjects.ViewModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Dynamic;
@@ -63,6 +64,8 @@ public class Posts : IEntity
     [Required(ErrorMessage = "Lütfen Şehir seçiniz.")]
     public int? CityId { get; set; }
     public PostStatus Status { get; set; }
+
+    public virtual IList<MessageBox>? MessageBoxes { get; set; }
 
     public List<string> AllPhotos =>
         new List<string>()

@@ -9,10 +9,9 @@
 @model EternalBAND.DomainObjects.Posts
 @{
     ViewData["Title"] = Model.Title;
-}
-@{
     var user = _context.Users.FirstOrDefault(n => n.Id == Model.AddedByUserId);
 }
+
 <div class="main-content">
     <div class="page-content">
         <section class="page-title-box">
@@ -74,17 +73,15 @@
                                         </li>
                                     </ul>
                                         @{
-                                        user = await _userManager.GetUserAsync(User);
-                                        if (user.Id != Model.AddedByUserId)
-                                        {
-                                                                <div class="mt-3">
-                                                                    <a asp-controller="Message" asp-action="ChatIndex" asp-route-userId="@Model.AddedByUserId" asp-route-postId="@Model.Id" class="btn btn-danger btn-hover w-100"><i class="uil uil-message"></i> Mesaj Gönder</a>
-                                                                </div>
+                                            user = await _userManager.GetUserAsync(User);
+                                            if (user.Id != Model.AddedByUserId)
+                                            {
+                                                <div class="mt-3">
+                                                    @*Sending Message button in Post page*@
+                                                    <a asp-controller="Message" asp-action="ChatIndex" asp-route-userId="@Model.AddedByUserId" asp-route-postId="@Model.Id" class="btn btn-danger btn-hover w-100"><i class="uil uil-message"></i> Mesaj Gönder</a>
+                                                </div>
+                                            }
                                         }
-                                        }
-
-                   
-                
                                 </div>
                             </div>
 
@@ -238,10 +235,9 @@
                                     }
 
                                 </div>
-                            </div><!--end candidate-portfolio-->
+                            </div>
                             @if (ViewBag.ApprovalPurpose)
                             {
-                                // TODO-Engin arrange the style of button
                                 <div class="mt-3">
                                     <a asp-controller="Admin" asp-action="ApprovePost" asp-route-postSeoLink="@Model.SeoLink" class="btn btn-primary btn-hover w-100"><i class="uil-thumbs-up"></i>İlanı Onayla</a>
                                 </div>
@@ -249,7 +245,7 @@
                                     <a asp-controller="Admin" asp-action="RejectPost" asp-route-postSeoLink="@Model.SeoLink" class="btn btn-danger btn-hover w-100"><i class="uil-thumbs-down"></i>İlanı Reddet</a>
                                 </div>
                             }
-                        </div><!--end card-->
+                        </div>
                     </div>
                 </div>
             </div>

@@ -167,7 +167,7 @@ public class UserController : Controller
 
     // TODO please pass PK Id not GUID : since we can use Find method to seek PK as a best practice
     [HttpPost, ActionName("PostDelete")]
-    public async Task<JsonResult> DeleteConfirmed(Guid id)
+    public async Task<JsonResult> DeleteConfirmed(int id)
     {
         try
         {

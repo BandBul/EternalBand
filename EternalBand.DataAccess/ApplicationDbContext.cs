@@ -25,6 +25,7 @@ public class ApplicationDbContext : IdentityDbContext<Users>
     public DbSet<Logs> Logs { get; set; }
     public DbSet<ErrorLogs> ErrorLogs { get; set; }
     public DbSet<Blogs> Blogs { get; set; }
+    public DbSet<MessageBox> MessageBoxes { get; set; }
 
     public async Task Commit()
     {
@@ -40,7 +41,8 @@ public class ApplicationDbContext : IdentityDbContext<Users>
                 Type = PostTypeName.Group.ToString(),
                 TypeText = "Grup İlanları",
                 Active = true,
-                AddedDate = DateTime.Now,
+                // 3 March 2024 00.16.00
+                AddedDate = new DateTime(2024,3,3,0,16,0),
                 PostCreateText = "Grup Arıyorum"
 
             },
@@ -51,7 +53,8 @@ public class ApplicationDbContext : IdentityDbContext<Users>
                 Type = PostTypeName.Musician.ToString(),
                 TypeText = "Müzisyen İlanları",
                 Active = true,
-                AddedDate = DateTime.Now,
+                // 3 March 2024 00.16.00
+                AddedDate = new DateTime(2024, 3, 3, 0, 16, 0),
                 PostCreateText = "Müzisyen Arıyorum",
                
             },
@@ -62,7 +65,8 @@ public class ApplicationDbContext : IdentityDbContext<Users>
                 TypeText = "Ders İlanları",
                 Type = PostTypeName.Lesson.ToString(),
                 Active = true,
-                AddedDate = DateTime.Now,
+                // 3 March 2024 00.16.00
+                AddedDate = new DateTime(2024, 3, 3, 0, 16, 0),
                 PostCreateText = "Ders Vermek İstiyorum",
                 
             }
