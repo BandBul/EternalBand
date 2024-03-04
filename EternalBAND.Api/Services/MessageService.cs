@@ -11,17 +11,15 @@ namespace EternalBAND.Api.Services
     {
         private readonly BroadCastingManager _broadcastingManager;
         private readonly ApplicationDbContext _context;
-        private readonly IEmailSender _mailsender;
-        public MessageService(ApplicationDbContext context, IEmailSender mailsender, BroadCastingManager broadCastingManager)
+        public MessageService(ApplicationDbContext context, BroadCastingManager broadCastingManager)
         {
             _context = context;
-            _mailsender = mailsender;
             _broadcastingManager = broadCastingManager;
         }
 
-        public async Task SendAndBroadCastMessageAsync(Users currentUser, Guid receiverUserId, string? message, int postId)
+        public async Task SendAndBroadCastMessageAsync(Users currentUser, Guid receiverUserId, string? message, int postId, int messageBoxId)
         {
-            var msg = await _broadcastingManager.CreateMessage(currentUser, receiverUserId.ToString(), postId, message);
+            var msg = await _broadcastingManager.CreateMessage(currentUser, receiverUserId.ToString(), postId, message, messageBoxId);
             var post = _context.Posts.Find(msg.RelatedPostId);
             if(post == null || post.Status != Common.PostStatus.Active ) 
             {
@@ -35,87 +33,59 @@ namespace EternalBAND.Api.Services
 
         public IEnumerable<MessageBox> GetAllMessageBoxes(string userId)
         {
-            var allMessages = _context.Messages.Include(n => n.ReceiverUser).Include(n => n.SenderUser)
-                .Where(n => n.SenderUserId == userId || n.ReceiverUserId == userId);
-            return GroupByMetadata(allMessages);
+            return _context.MessageBoxes.Where(MessageBox.IsRecipientPredicate(userId));
         }
 
         public async Task<MessageBox> GetOrCreateMessageBox(string receiverUserId, string senderUSerId, int postId)
         {
             var messageBox = GetMessageBox(receiverUserId, senderUSerId, postId);
-            foreach (var msg in messageBox.Messages.Where(n => !n.IsRead).ToList())
+            if(messageBox == null)
             {
-                msg.IsRead = true;
-
-                var notifs = _context.Notification.Where(s =>
-                    s.NotificationType == Common.NotificationType.Message &&
-                    s.RelatedElementId == msg.Id.ToString() &&
-                    !s.IsRead
-                );
-                foreach (var not in notifs)
+                messageBox = new MessageBox()
                 {
-                    not.IsRead = true;
-                }
+                    Recipient1 = receiverUserId,
+                    Recipient2 = senderUSerId,
+                    PostId = postId,
+                    PostIdBackup = postId,
+                    PostTitle = _context.Posts.Find(postId).Title,
+                    IsPostDeleted = false
+                };
+                _context.Add(messageBox);
                 await _context.Commit();
             }
-            return messageBox;
-        }
+            else
+            {
+                if(messageBox.Messages != null)
+                {
+                    foreach (var msg in messageBox.Messages.Where(n => !n.IsRead).ToList())
+                    {
+                        msg.IsRead = true;
 
-        private IEnumerable<MessageBox> GroupByMetadata(IEnumerable<Messages> messages)
-        {
-            return messages
-                .GroupBy(n => new { n.RelatedPostId, Recipients = string.Join(",", new[] { n.SenderUserId, n.ReceiverUserId }.OrderBy(s => s)) })
-                .Select(s => new MessageBox(new MessageMetadata(s.Key.RelatedPostId, s.Key.Recipients.Split(",")), s.Select(s => s).ToList()));
+                        var notifs = _context.Notification.Where(s =>
+                            s.NotificationType == Common.NotificationType.Message &&
+                            s.RelatedElementId == msg.Id.ToString() &&
+                            !s.IsRead
+                        );
+                        foreach (var not in notifs)
+                        {
+                            not.IsRead = true;
+                        }
+                        await _context.Commit();
+                    }
+                }
+            }
+            return _context.MessageBoxes.Include(s => s.Messages).FirstOrDefault(s => s.Id == messageBox.Id);
         }
 
         private MessageBox? GetMessageBox(string receiverUserId, string senderUserId, int postId)
         {
-            var allMessages = _context.Messages
-                .Include(n => n.ReceiverUser)
-                .Include(n => n.SenderUser)
-                .Where(n =>
-                    (n.ReceiverUserId == receiverUserId || n.ReceiverUserId == senderUserId)
-                    && (n.SenderUserId == senderUserId || n.SenderUserId == receiverUserId)
-                    && n.RelatedPostId == postId);
-            return GroupByMetadata(allMessages).FirstOrDefault() ?? new MessageBox(new MessageMetadata(postId, new[] { senderUserId, receiverUserId }.OrderBy(s => s).ToArray()));
+            var isPostExist = IsPostsExists(postId);
+            return _context.MessageBoxes.FirstOrDefault(MessageBox.IsMessageBoxExistPredicate(receiverUserId, senderUserId, postId, isPostExist));
         }
 
         public bool IsPostsExists(int id)
         {
             return (_context.Posts?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
-
-        private async Task<Messages> SaveMessage(Users currentUser, Guid receiverUserId, string? message, int postId)
-        {
-            var messages = new Messages()
-            {
-                SenderUserId = currentUser.Id,
-                IsRead = false,
-                Date = DateTime.Now,
-                Message = message,
-                MessageGuid = Guid.NewGuid(),
-                ReceiverUserId = receiverUserId.ToString(),
-                RelatedPostId = postId
-            };
-            await _context.Messages.AddAsync(messages);
-            messages.SenderUser = currentUser;
-            await _context.SaveChangesAsync();
-            return messages;
-        }
-
-        // TODO remove SMTP related function
-        public async Task<bool> SendMessageAsync(string message, string receiverUserId)
-        {
-            try
-            {
-                var user = await _context.Users.FirstOrDefaultAsync(n => n.Id == receiverUserId);
-                await _mailsender.SendEmailAsync(user.Email, "Yeni Bir Bildirimin Var", message);
-                return true;
-            }
-            catch (Exception ex)//TODO:log
-            {
-                return false;
-            }
         }
     }
 }

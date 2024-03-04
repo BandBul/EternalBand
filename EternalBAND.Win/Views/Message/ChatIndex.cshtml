@@ -46,43 +46,33 @@
                             bool IsSendButtonActive()
                             {
                                 return Model.CurrentChat != null
-                                && Model.CurrentChat.MessageMetadata.PostId > 0
-                                && _context.Posts.Find(Model.CurrentChat.MessageMetadata.PostId).Status == EternalBAND.Common.PostStatus.Active;
+                                && !Model.CurrentChat.IsPostDeleted
+                                && Model.CurrentChat.Post.Status == EternalBAND.Common.PostStatus.Active;
                             }
 
-                            Users GetUserInfo(MessageBox msBox)
+                            Users GetRecipientInfo(MessageBox msBox)
                             {
-                                if (msBox.Messages.Any())
-                                {
-                                    var message = msBox.Messages.First();
-                                    var senderUser = message.SenderUser;
-                                    var receiverUser = message.ReceiverUser;
-                                    return ViewBag.LoginUserId == senderUser.Id ? receiverUser : senderUser;
-                                }
-                                else
-                                {
-                                    var senderUserId = msBox.MessageMetadata.RecipientIds.First(s => s != ViewBag.LoginUserId);
-                                    return _context.Users.FirstOrDefault(s => s.Id == senderUserId);
-                                }
+                                string senderUserId = msBox.GetAnotherRecipient(ViewBag.LoginUserId);
+                                return _context.Users.FirstOrDefault(s => s.Id == senderUserId);
                             }
 
-                            string GetCorrectPostTitle(Posts? post)
+                            string GetCorrectPostTitle(Posts? post, MessageBox msBox)
                             {
                                 if(post == null)
                                 {
-                                    return "Silinmiş İlan";
+                                    return msBox.PostTitle + " - Silinmiş ilan";
                                 }
                                 return post?.Status == EternalBAND.Common.PostStatus.Active ?
                                     post.Title :
-                                    post.Title + " - yayında olmayan ilan";
+                                    post.Title + " - Yayında olmayan ilan";
                             }
 
                             MessageTitleModel GetMessageTitle(MessageBox msBox)
                             {
-                                var currentPost = _context.Posts.Find(msBox.MessageMetadata.PostId);
-                                Users userInfo = GetUserInfo(msBox);
+                                var currentPost = _context.Posts.Find(msBox.PostId);
+                                Users userInfo = GetRecipientInfo(msBox);
 
-                                string relatedPostTitle = GetCorrectPostTitle(currentPost);
+                                string relatedPostTitle = GetCorrectPostTitle(currentPost, msBox);
                                 string messageTitle = "";
 
                                 messageTitle = userInfo.Name == null ? userInfo.Email : userInfo.Name + " " + userInfo.Surname + " - " + relatedPostTitle;
@@ -95,25 +85,20 @@
                         }
                         <div class="col-12 col-lg-6 col-xl-4 border-right">
                             @{
-                                List<MessageMetadata> chatMetadata = new();
                                 if (Model.AllChat != null && Model.AllChat.Any())
                                 {
-                                    var allChatMetaData = Model.AllChat.Select(s => s.MessageMetadata);
                                     foreach (var chat in Model.AllChat)
                                     {
-
                                         var messageTitleModel = GetMessageTitle(chat);
                                         var userInfo = messageTitleModel.ReceiverUser;
                                         var messageTitle = messageTitleModel.MessageBoxTitle;
-
-                                        <a href="@Url.Action("ChatIndex","Message",new { userId = userInfo.Id, postId = chat.Messages.First().RelatedPostId })" class="list-group-item list-group-item-action border-0">
-
-                                            
-                                            @if (chat.Messages.Count(n =>n.IsRead == false) > 0)
+                                        var postId = chat.IsPostDeleted ? chat.PostIdBackup : chat.PostId;
+                                        // MessageBox in messages page
+                                        <a href="@Url.Action("ChatIndex","Message",new { userId = userInfo.Id, postId = postId })" class="list-group-item list-group-item-action border-0">
+                                            @if (chat.Messages != null && chat.Messages.Count(n =>n.IsRead == false) > 0)
                                             {
                                                 <div class="badge bg-success float-end"> </div>
                                             }
-                                            
                                             <div class="d-flex align-items-start">
                                                 <img src="@userInfo.PhotoPath" class="rounded-circle mr-1" alt="@messageTitle" width="40" height="40">
                                                 <div class="flex-grow-1 ms-3 mt-2">
@@ -148,7 +133,7 @@
                                 </div>
                                 <div class="position-relative">
                                     <div class="chat-messages p-4">
-                                        @if (Model.CurrentChat.Messages.Any())
+                                        @if (Model.CurrentChat.Messages != null && Model.CurrentChat.Messages.Any())
                                         {
                                             var currentUser = await UserManager.GetUserAsync(User);
                                             foreach (var chat in Model.CurrentChat.Messages.OrderBy(n => n.Date))
@@ -186,12 +171,12 @@
                                     </div>
                                 </div>
                                 @{
-                                    var userinfo = Model.CurrentChat.MessageMetadata.RecipientIds.First(s => s != ViewBag.LoginUserId);
+                                    string userinfo = Model.CurrentChat.GetAnotherRecipient(ViewBag.LoginUserId);
                                     <div class="flex-grow-0 py-3 px-4 border-top">
                                         <div class="input-group">
                                             <input type="text" id="messageText" class="form-control" placeholder="Mesajınızı buraya yazabilirsiniz." oninput="checkInput()">
                                             @*TODO : use asp-action and route rather than custom JS call*@
-                                            <button class="btn btn-primary" disabled="disabled" id="messageSendButton" onclick="Send('@userinfo','@Model.CurrentChat.MessageMetadata.PostId')">Gönder</button>
+                                            <button class="btn btn-primary" disabled="disabled" id="messageSendButton" onclick="MessageSend('@userinfo','@Model.CurrentChat.PostId', '@Model.CurrentChat.Id')">Gönder</button>
                                         </div>
                                     </div>
                                 }
@@ -269,13 +254,14 @@
         return console.error(err.toString());
     });
     // TODO add promise for error purpose and redirect to Error page
-    function Send(id,postId){
+    function MessageSend(id, postId, messageBoxId) {
         var text = $("#messageText").val();
         $.post("/Message/SendMessage/",
         {
             id: id,
             message: text,
-            postId: postId
+            postId: postId,
+            messageBoxId: messageBoxId
         },
         function (data) {
             document.getElementById('messageText').value = '';
@@ -303,13 +289,8 @@
         {
             return ;
         }
-        // Get the input element
         var messageInput = document.getElementById('messageText');
-
-        // Get the button element
         var sendButton = document.getElementById('messageSendButton');
-
-        // Disable the button if the input is empty, enable it otherwise
         sendButton.disabled = messageInput.value.trim() === '';
     }
 

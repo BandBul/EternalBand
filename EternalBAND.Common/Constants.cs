@@ -9,7 +9,6 @@
         public static string? NormalUserRoleName = "User";
         public static string MainPage = "Anasayfa";
         public static string MessagesQueryParameter = "mesajlar";
-        public static string PostIdQueryParameter = "postid";
         public static int PageSizeForElements = 10;
         public static int PageSizeForBlogs = 3;
     }

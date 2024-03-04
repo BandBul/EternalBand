@@ -173,14 +173,14 @@ namespace EternalBAND.Api.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<string> PostDelete(Users currentUser, Guid postId)
+        public async Task<string> PostDelete(Users currentUser, int postId)
         {
             if (_context.Posts == null)
             {
                 throw new JsonException("Kayıt Bulunamadı.");
             }
 
-            var posts = await _context.Posts.FirstOrDefaultAsync(n => n.Guid == postId);
+            var posts = _context.Posts.Include(s => s.MessageBoxes).FirstOrDefault(s => s.Id == postId);
 
             if (posts == null)
             {
@@ -193,13 +193,14 @@ namespace EternalBAND.Api.Services
             }
             else
             {
-                var postMessages = _context.Messages.Where(s => s.RelatedPostId == posts.Id).ToList();
-                foreach (var message in postMessages)
-                {
-                    message.RelatedPostId = posts.Id * -1;
-                }
                 _context.Posts.Remove(posts);
+                var messageBoxes = posts.MessageBoxes;
+                foreach (var mb in messageBoxes)
+                {
+                    mb.IsPostDeleted = true;
+                }
                 await _context.SaveChangesAsync();
+
 
                 return "İlan silindi.";
             }
