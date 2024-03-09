@@ -212,7 +212,7 @@
                                     <h5 class="fs-17">@blog.Title</h5>
                                 </a>
                                 <p class="text-muted">
-                                    @(blog.HtmlText.Length > 100 ? blog.HtmlText.Substring(0, 100) : blog.HtmlText)
+                                    @(blog.GetShortSummaryText(150))
                                 </p>
                                 <a href="blog/@blog.SeoLink" class="form-text text-primary">Read more <i class="mdi mdi-chevron-right align-middle"></i></a>
                             </div>

@@ -54,6 +54,7 @@
     </ItemGroup>
     <ItemGroup>
       <None Remove="Css\Anasayfa.css" />
+      <None Remove="Css\Blog.css" />
       <None Remove="Css\FilterPostPartial.css" />
       <None Remove="Css\NotificationIndex.css" />
       <None Remove="Css\NotificationPopUp.css" />
@@ -112,6 +113,9 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
       <Content Include="Css\FilterPostPartial.css">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Css\Blog.css">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
       <Content Include="Css\SiteLogo.css">
