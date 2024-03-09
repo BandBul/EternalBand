@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Reflection.Metadata;
 
 namespace EternalBAND.DomainObjects;
 
@@ -28,6 +29,9 @@ public class Blogs : IEntity
     public string? SeoLink { get; set; }
     [DisplayName("Eklenme Tarihi")] 
     public DateTime AddedDate { get; set; }
+    [DisplayName("Özet Metin")]
+    [Required(ErrorMessage = "Özet metini boş bırakılamaz")]
+    public string SummaryText { get; set; }
     public List<string> AllPhotos =>
     new List<string>()
     {
@@ -41,5 +45,10 @@ public class Blogs : IEntity
     public string? GetTopPhoto()
     {
         return AllPhotos.FirstOrDefault(photo => photo != null);
+    }
+
+    public string GetShortSummaryText(int size)
+    {
+        return SummaryText.Length > size ? SummaryText.Substring(0, size) : SummaryText;
     }
 }

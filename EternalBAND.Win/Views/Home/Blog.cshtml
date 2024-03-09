@@ -5,6 +5,7 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using EternalBAND.DataAccess;
 @inject ApplicationDbContext _context
+<link href="/Css/Blog.css" rel="stylesheet" type="text/css">
 @model EternalBAND.DomainObjects.Blogs
 @{
     ViewData["Title"] = Model.Title;
@@ -50,8 +51,12 @@
                         <div class="text-center mb-5">
                             <h3>@Model.Title</h3>
                         </div>
+                        <div class="summary-text">
+                            <p>@Model.SummaryText</p>
+                        </div>
                     </div>
                 </div>
+                <hr>
                 <div class="row">
                     <div class="col-lg-8">
                         <div class="blog-post">

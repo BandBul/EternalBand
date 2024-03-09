@@ -49,7 +49,7 @@ public class AdminController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> BlogsCreate(
-        [Bind("Id,Title,HtmlText,Tags,SeoLink")]
+        [Bind("Id,Title,SummaryText,HtmlText,Tags,SeoLink")]
         Blogs blogs,
         List<IFormFile>? images)
     {
@@ -84,7 +84,7 @@ public class AdminController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> BlogsEdit(int id,
-        [Bind("Id,Title,HtmlText,Tags,SeoLink")]
+        [Bind("Id,Title,SummaryText,HtmlText,Tags,SeoLink")]
         Blogs blogs, List<IFormFile?> images)
     {
         if (ModelState.IsValid)
