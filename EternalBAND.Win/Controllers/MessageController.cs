@@ -2,9 +2,10 @@ using EternalBAND.DomainObjects.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using EternalBAND.Api.Services;
 using EternalBAND.Api.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EternalBAND.Controllers;
-
+[Authorize]
 public class MessageController : Controller
 {
     private readonly MessageService _messageService;
