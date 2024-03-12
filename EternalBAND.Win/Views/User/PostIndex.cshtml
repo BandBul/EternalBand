@@ -173,26 +173,33 @@
           showDenyButton: true,
           confirmButtonText: 'Sil',
           denyButtonText: `Silme`,
-        }).then((result) => {
-          if (result.isConfirmed) {
-              $.post( "/User/PostDelete/"+id, function( data ) {
-                  var message = "";
-                  if (data.includes('silindi')){
-                      message = 'success';
-                  }
-                  else
-                      {
-                          message ='info';
-                          }
-                  Swal.fire({
-                    title: data,confirmButtonText: 'Kapat'}).then((result) => {
-                                                                if (result['isConfirmed']){
-                                                                      setTimeout( location.reload(), 2000);
-                                                                }
-                                                              });
-  
-              });
-          } 
+        })
+        .then((result) => 
+        {
+            if (result.isConfirmed) 
+            {
+                $.post( "/User/PostDelete/"+id, function( data ) 
+                {
+                    var message = "";
+                    if (data.includes('silindi'))
+                    {
+                        message = 'success';
+                    }
+                    else
+                    {
+                        message ='info';
+                    }
+                    Swal.fire({title: data,confirmButtonText: 'Kapat'})
+                    .then(
+                        (result) =>
+                        {
+                            if (result['isConfirmed'])
+                            {
+                                setTimeout( location.reload(), 2000);
+                            }
+                        });
+                });
+            } 
         })
     }
 </script>
