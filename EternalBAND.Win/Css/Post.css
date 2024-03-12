@@ -1,0 +1,16 @@
+﻿.profile-button
+{
+    padding-top: 10px;
+}
+
+.profile-button a i
+{
+    font-style: normal !important;
+    font-size: .9375rem !important;
+}
+
+.profile-button a
+{
+    min-width: 200px !important;
+    white-space: nowrap !important;
+}

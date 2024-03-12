@@ -5,6 +5,7 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using EternalBAND.DataAccess;
 @using EternalBAND.Business
+<link href="/Css/Post.css" rel="stylesheet" type="text/css">
 @inject ApplicationDbContext _context
 @model EternalBAND.DomainObjects.Posts
 @{
@@ -124,6 +125,21 @@
                                         </div>
                                     </li>
                                     }
+                                    @{
+                                        user = await _userManager.GetUserAsync(User);
+                                        if (user != null && user.Id == Model.AddedByUserId)
+                                        {
+                                            <li>
+                                                <div class="profile-button">
+                                                    <a asp-action="PostEdit" asp-route-id="@Model.Guid" class="btn btn-sm btn-primary"><i class="uil uil-edit"> İlanı Düzenle</i></a>
+                                                </div>
+                                                <div class="profile-button">
+                                                    <a onclick="DeletePost(this.id)" id="@Model.Id" class="btn btn-sm btn-danger"><i class="uil uil-trash-alt"> İlanı Sil</i></a>
+                                                </div>
+                                            </li>
+                                        }
+                                    }
+
                                 </ul>
                             </div>
                         </div>
@@ -252,3 +268,35 @@
         </section>
     </div>
 </div>
+
+<script>
+    function DeletePost(id) {
+
+        Swal.fire({
+            title: 'İlan silinecektir emin misiniz?',
+            showDenyButton: true,
+            confirmButtonText: 'Sil',
+            denyButtonText: `Silme`,
+        })
+            .then((result) => {
+                if (result.isConfirmed) {
+                    $.post("/User/PostDelete/" + id, function (data) {
+                        var message = "";
+                        if (data.includes('silindi')) {
+                            message = 'success';
+                        }
+                        else {
+                            message = 'info';
+                        }
+                        Swal.fire({ title: data, confirmButtonText: 'Kapat' })
+                            .then(
+                                (result) => {
+                                    if (result['isConfirmed']) {
+                                        setTimeout(location.reload(), 2000);
+                                    }
+                                });
+                    });
+                }
+            })
+    }
+</script>
