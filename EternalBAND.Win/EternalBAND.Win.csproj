@@ -55,6 +55,7 @@
     <ItemGroup>
       <None Remove="Css\Anasayfa.css" />
       <None Remove="Css\Blog.css" />
+      <None Remove="Css\ContactsCreate.css" />
       <None Remove="Css\FilterPostPartial.css" />
       <None Remove="Css\NotificationIndex.css" />
       <None Remove="Css\NotificationPopUp.css" />
@@ -98,6 +99,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Content Include="Css\ContactsCreate.css">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
       <Content Include="Css\Post.css">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
