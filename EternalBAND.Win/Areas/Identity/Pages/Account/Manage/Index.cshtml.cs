@@ -86,35 +86,13 @@ namespace EternalBAND.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Fotoğrafınız")] public IFormFile Photo { get; set; }
         }
 
-        private async Task LoadAsync(Users user)
+        public async Task<IActionResult> OnGetAsync(string? userId)
         {
-            var userName = await _userManager.GetUserNameAsync(user);
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            ViewData["PhotoPath"] = user.PhotoPath;
-            ViewData["Cities"] = new SelectList(Cities.GetCities(), "Id", "Name");
-            ViewData["Cities"] = new SelectList(Cities.GetCities(), "Id", "Name", user.City);
-
-            Input = new InputModel
-            {
-                PhoneNumber = phoneNumber,
-                Email = userName,
-                Name = user.Name,
-                Surname = user.Surname,
-                City = user.City,
-                Age = user.Age
-            };
-        }
-
-        public async Task<IActionResult> OnGetAsync()
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-            }
-
-            await LoadAsync(user);
-            return Page();
+            ViewData["AnotherUserProfileView"] = userId != null;
+            var user = userId == null ?
+                await _userManager.GetUserAsync(User) :
+                _context.Users.FirstOrDefault(s => s.Id == userId);
+            return await OnGetInternalAsync(user);
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -130,7 +108,7 @@ namespace EternalBAND.Areas.Identity.Pages.Account.Manage
                 await LoadAsync(user);
                 return Page();
             }
-            if (user.Name != Input.Name || user.Surname != Input.Surname ||user.Age != Input.Age||user.City != Input.City)
+            if (user.Name != Input.Name || user.Surname != Input.Surname || user.Age != Input.Age || user.City != Input.City)
             {
                 user.Name = Input.Name.ToUpper();
                 user.Age = Input.Age;
@@ -139,7 +117,7 @@ namespace EternalBAND.Areas.Identity.Pages.Account.Manage
                 user.FullName = string.Format("{0} {1}", Input.Name.ToUpper(), Input.Surname.ToUpper());
                 await _userManager.UpdateAsync(user);
             }
-           
+
             if (user.Email != Input.Email)
             {
                 user.NormalizedEmail = Input.Email.ToUpper();
@@ -153,7 +131,7 @@ namespace EternalBAND.Areas.Identity.Pages.Account.Manage
                 {
                     StatusMessage =
                         $"Hata: Bu mail kullanılamaz.";
-                   
+
                     await LoadAsync(user);
                     return Page();
                 }
@@ -186,7 +164,7 @@ namespace EternalBAND.Areas.Identity.Pages.Account.Manage
                         "OnPostAsync");
                 }
 
-                
+
             }
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             if (Input.PhoneNumber != phoneNumber)
@@ -199,11 +177,12 @@ namespace EternalBAND.Areas.Identity.Pages.Account.Manage
                 }
             }
 
-            if(!_context.UserProfileControl.Any(n=> n.UsersId == user.Id && n.Completed))
+            if (!_context.UserProfileControl.Any(n => n.UsersId == user.Id && n.Completed))
             {
                 _context.UserProfileControl.Add(new UserProfileControl()
                 {
-                    DateTime = DateTime.Now, Completed = true,
+                    DateTime = DateTime.Now,
+                    Completed = true,
                     UsersId = user.Id
                 });
                 _context.SaveChanges();
@@ -211,6 +190,38 @@ namespace EternalBAND.Areas.Identity.Pages.Account.Manage
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Profiliniz güncellendi.";
             return RedirectToPage();
+        }
+
+        private async Task LoadAsync(Users user)
+        {
+            var userName = await _userManager.GetUserNameAsync(user);
+            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            ViewData["PhotoPath"] = user.PhotoPath;
+            ViewData["Cities"] = new SelectList(Cities.GetCities(), "Id", "Name");
+            ViewData["Cities"] = new SelectList(Cities.GetCities(), "Id", "Name", user.City);
+
+            Input = new InputModel
+            {
+                PhoneNumber = phoneNumber,
+                Email = userName,
+                Name = user.Name,
+                Surname = user.Surname,
+                City = user.City,
+                Age = user.Age
+            };
+        }
+
+
+
+        private async Task<IActionResult> OnGetInternalAsync(Users user)
+        {
+            if (user == null)
+            {
+                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            await LoadAsync(user);
+            return Page();
         }
     }
 }

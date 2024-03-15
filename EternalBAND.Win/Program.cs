@@ -34,7 +34,7 @@ builder.Services.AddIdentity<Users, IdentityRole>(options =>
     .AddRoles<IdentityRole>();
 builder.Services.AddRazorPages(options =>
 {
-    options.Conventions.AddAreaPageRoute("Identity", "/Account/Manage/Index", "/profil");
+    options.Conventions.AddAreaPageRoute("Identity", "/Account/Manage/Index", "/profil/{userId?}");
     options.Conventions.AddAreaPageRoute("Identity", "/Account/Manage/ChangePassword", "/sifre-sifirla");
     options.Conventions.AddAreaPageRoute("Identity", "/Account/Lockout", "/hesap-kilitlendi");
     options.Conventions.AddAreaPageRoute("Identity", "/Account/Register", "/kayit-ol");
