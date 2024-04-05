@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using X.PagedList;
 using EternalBAND.Api.Exceptions;
 using Microsoft.Extensions.Hosting;
+using System.Linq;
 
 namespace EternalBAND.Api.Services
 {
@@ -37,14 +38,23 @@ namespace EternalBAND.Api.Services
             return await _context.Blogs.OrderByDescending(n => n.Id).ToPagedListAsync(pId, 10);
         }
 
-        public async Task BlogsCreate(Blogs blogs, List<IFormFile>? images)
+        public async Task BlogsCreate(Blogs blog, List<IFormFile>? images)
         {
-            await BlogPhotoAdd(blogs, images);
-            var source = blogs.SeoLink ?? blogs.Title;
-            blogs.SeoLink = StrConvert.TRToEnDeleteAllSpacesAndToLower(source) + "-" + new Random().Next(0, 999999);
-            blogs.AddedDate = DateTime.Now;
+            await BlogPhotoAdd(blog, images);
+            var source = blog.SeoLink == null || StrConvert.IsInjectionString(blog.SeoLink) ? blog.Title : blog.SeoLink;
+            var convertedSeoLink = StrConvert.TRToEnDeleteAllSpacesAndToLower(source);
+            var finalSeo = "";
+            var allSeos = _context.Blogs.Select(s => s.SeoLink).ToList();
+            do
+            {
+                finalSeo = convertedSeoLink + "-" + new Random().Next(0, 999999);
+            } while (allSeos.Count(s => s.Equals(finalSeo, StringComparison.InvariantCultureIgnoreCase)) != 0);
+            blog.SeoLink = finalSeo;
+
+
+            blog.AddedDate = DateTime.Now;
             // TODO check if this seoLink is unique or not 
-            _context.Add(blogs);
+            _context.Add(blog);
             await _context.SaveChangesAsync();
         }
 
