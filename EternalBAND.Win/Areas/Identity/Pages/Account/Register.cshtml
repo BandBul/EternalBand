@@ -1,10 +1,9 @@
 ﻿@page
+@using EternalBAND.DomainObjects.ViewModel;
 @model RegisterModel
 @{
     ViewData["Title"] = "Kayıt Ol";
 }
-
-
 <div class="main-content">
     <div class="page-content">
         <section class="bg-auth">
@@ -24,11 +23,11 @@
                                     </div>
                                 </div><!--end col-->
                                 <div class="col-lg-6">
-                                    <div class="auth-content card-body p-5 text-white">
+                                    <div class="auth-content card-body p-5 text-dark">
                                         <div class="w-100">
                                             <div class="text-center">
                                                 <h5>@ViewData["Title"]</h5>
-                                                <p class="text-white-70"><partial name="PartialViews/_GetSiteTitlePartial"/>'ın tüm özelliklerine erişmek için kayıt olun.</p>
+                                                <p class="text-dark-70"><partial name="PartialViews/_GetSiteTitlePartial"/>'ın tüm özelliklerine erişmek için kayıt olun.</p>
                                             </div>
                                             <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post"
                                                   class="auth-form">
@@ -56,6 +55,17 @@
                                                     <button type="submit" class="btn btn-white btn-hover w-100">Kayıt Ol</button>
                                                 </div>
                                             </form>
+                                            <br />
+                                            @if (Model.ExternalLogins.Count > 0)
+                                            {
+                                                var externalLoginsData = new ExternalLoginPageModel()
+                                                {
+                                                    ReturnUrl = Model.ReturnUrl,
+                                                    ExternalLogins = Model.ExternalLogins,
+                                                    ButtonTextSuffix ="kayıt ol"
+                                                };
+                                                <partial name="_ExternalLoginPartial" model="@externalLoginsData"></partial>
+                                            }
                                             <div class="mt-3 text-center">
                                                 <p class="mb-0">Hesabın var mı?<br/> <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl" class="fw-medium text-white text-decoration-underline">Giriş Yap!</a></p>
                                             </div>

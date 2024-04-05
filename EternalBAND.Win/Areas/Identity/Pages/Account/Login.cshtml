@@ -1,11 +1,11 @@
 ﻿@page
+@using EternalBAND.DomainObjects.ViewModel;
 @model LoginModel
 
 @{
     ViewData["Title"] = "Giriş Yap";
 }
-<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
-<link href="/Css/Login-page.css" rel="stylesheet" type="text/css">
+
 <div class="main-content">
     <div class="page-content">
         <section class="bg-auth">
@@ -63,19 +63,13 @@
                                             <br />
                                             @if (Model.ExternalLogins.Count > 0)
                                             {
-                                                <form method="post" asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" asp-controller="Account">
-                                                    <div>
-                                                        @* TODO-Engin please make specific coding when another external login providers come*@
-                                                        @foreach (var provider in Model.ExternalLogins)
-                                                        {
-                                                            <button type="submit" class="btn login-with-google-btn btn-hover " style="width:auto"
-                                                                    name="provider" value="@provider.Name"
-                                                                    title="Login using your @provider.DisplayName account">
-                                                                  @provider.DisplayName ile giriş yap
-                                                            </button>
-                                                        }
-                                                    </div>
-                                                </form>
+                                                var externalLoginsData = new ExternalLoginPageModel()
+                                                {
+                                                    ReturnUrl = Model.ReturnUrl,
+                                                    ExternalLogins = Model.ExternalLogins,
+                                                    ButtonTextSuffix ="giriş yap"
+                                                };
+                                                <partial name="_ExternalLoginPartial" model="@externalLoginsData"></partial>
                                             }
                                             <div class="mt-3 text-center">
                                                 <p class="mb-0">Hesabın yok mu?<br/> <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="fw-medium text-dark text-decoration-underline">Kayıt Ol!</a></p>
