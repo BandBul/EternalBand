@@ -149,6 +149,20 @@ public class HomeController : Controller
         return View(contacts);
     }
 
+
+    [Route("KVKK")]
+    public IActionResult Gdpr()
+    {
+        return View();
+    }
+
+    [Route("PrivacyPolicy")]
+    public IActionResult PrivacyPolicy()
+    {
+        return View();
+    }
+
+
     [Route("SendSupportMessage")]
     [Authorize]
     public IActionResult SendSupportMessage(string message)

@@ -20,6 +20,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using EternalBAND.DomainObjects;
+using JetBrains.Annotations;
+using EternalBAND.Api.Attributes;
 
 namespace EternalBAND.Areas.Identity.Pages.Account
 {
@@ -100,6 +102,10 @@ namespace EternalBAND.Areas.Identity.Pages.Account
             [Display(Name = "Yeniden Parola",Prompt ="Yeniden Parolanız" )]
             [Compare("Password", ErrorMessage = "Parolalar uyuşmuyor.")]
             public string ConfirmPassword { get; set; }
+
+            [Display(Name = "KVKK")]
+            [MustBeTrue(ErrorMessage = "KVKK ve gizlilik sözleşmesini onaylamadınız")]
+            public bool IsPrivacyPolicyAccepted { get; set; }
         }
 
 
