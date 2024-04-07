@@ -134,7 +134,7 @@
                                         {
                                             <li>
                                                 <div class="profile-button">
-                                                    <a asp-action="PostEdit" asp-route-id="@Model.Guid" class="btn btn-sm btn-primary"><i class="uil uil-edit"> İlanı Düzenle</i></a>
+                                                    <a asp-controller="User" asp-action="PostEdit" asp-route-id="@Model.Guid" class="btn btn-sm btn-primary"><i class="uil uil-edit"> İlanı Düzenle</i></a>
                                                 </div>
                                                 <div class="profile-button">
                                                     <a onclick="DeletePost(this.id)" id="@Model.Id" class="btn btn-sm btn-danger"><i class="uil uil-trash-alt"> İlanı Sil</i></a>

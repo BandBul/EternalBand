@@ -10,6 +10,7 @@ using EternalBAND.Api.Services;
 using EternalBAND.Business;
 using EternalBAND.DataAccess;
 using EternalBAND.DomainObjects;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -18,6 +19,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace EternalBAND.Areas.Identity.Pages.Account.Manage
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
         private readonly UserManager<Users> _userManager;
@@ -85,7 +87,7 @@ namespace EternalBAND.Areas.Identity.Pages.Account.Manage
             public string Email { get; set; }
             [Display(Name = "Fotoğrafınız")] public IFormFile Photo { get; set; }
         }
-
+        
         public async Task<IActionResult> OnGetAsync(string? userId)
         {
             ViewData["AnotherUserProfileView"] = userId != null;
