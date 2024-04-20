@@ -8,8 +8,32 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.FileProviders;
 using EternalBAND.Api.Infrastructure;
 using EternalBAND.DataAccess.Infrastructure;
+using System.Security.Authentication;
+using Microsoft.Extensions.Hosting.WindowsServices;
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
 
-var builder = WebApplication.CreateBuilder(args);
+var webApplicationOptions = new WebApplicationOptions()
+{
+    Args = args,
+    ContentRootPath = WindowsServiceHelpers.IsWindowsService() ? AppContext.BaseDirectory : default,
+    ApplicationName = System.Diagnostics.Process.GetCurrentProcess().ProcessName
+};
+
+var builder = WebApplication.CreateBuilder(webApplicationOptions);
+builder.Host.UseWindowsService();
+builder.Services.AddWindowsService(options =>
+{
+    options.ServiceName = "BandBul.Api";
+});
+builder.WebHost.UseKestrel((context, serverOptions) =>
+{
+    serverOptions.Configure(context.Configuration.GetSection("Kestrel"))
+    .Endpoint("HTTPS", listenOptions =>
+    {
+        listenOptions.HttpsOptions.SslProtocols = SslProtocols.Tls12;
+    });
+});
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
