@@ -6,6 +6,8 @@
 @using EternalBAND.DataAccess;
 @using Microsoft.EntityFrameworkCore
 @using System.Security.Policy
+@using System.Text.Json;
+@using System.Text.Json.Serialization;
 @model EternalBAND.DomainObjects.ViewModel.ChatViewModel
 @inject UserManager<Users> UserManager
 @inject ApplicationDbContext _context
@@ -201,13 +203,37 @@
         var chat = JSON.parse(signalRMessageContract);
         var senderUser = chat.SenderUser;
         var receiverUserId = chat.ReceiverUserId;
+        var postId = chat.RelatedPostId;
         var currentUserId = @Html.Raw(Json.Serialize(ViewBag.LoginUserId));
+
+
+        //current user is not an one of the recipients
         if (receiverUserId != currentUserId && senderUser.Id != currentUserId)
         {
             // TODO we should manage this by connectionID of client in ChatHub we can create a collection like List<MessageMetadata,ConnectionID>
             // when update receives we can choose which clients will get this connection
             // we will pass signalR if current user is not a recipent for message box
             return;
+        }
+
+        var currentChat = @Html.Raw(JsonSerializer.Serialize(
+            Model.CurrentChat, 
+            new JsonSerializerOptions{ReferenceHandler = ReferenceHandler.Preserve}
+        ));
+        
+        if (currentChat != null) {
+            var currentPostId = currentChat.PostId;
+            if (currentPostId != postId){
+                return;
+            }
+            var otherUserId = currentChat.Recipient1 != currentUserId ? currentChat.Recipient1 : currentChat.Recipient2
+            if (receiverUserId == currentUserId && senderUser.Id != otherUserId) {
+                return;
+            }
+
+            if (senderUser.Id == currentUserId && receiverUserId != otherUserId) {
+                return;
+            }
         }
 
         var correctDate = formatDate(new Date(chat.Date));
