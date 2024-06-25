@@ -8,6 +8,7 @@
 		<GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
 		<GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
 		<GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
@@ -15,28 +16,28 @@
     <ItemGroup>
       <Compile Remove="EternalBAND.Api\**" />
       <Compile Remove="EternalBAND.Common\**" />
-      <Compile Remove="EternalBand.DataAccess\**" />
+      <Compile Remove="EternalBAND.DataAccess\**" />
       <Compile Remove="EternalBAND.DomainObjects\**" />
       <Compile Remove="EternalBAND.Migrations\**" />
       <Compile Remove="EternalBAND\**" />
       <Compile Remove="__MACOSX\**" />
       <Content Remove="EternalBAND.Api\**" />
       <Content Remove="EternalBAND.Common\**" />
-      <Content Remove="EternalBand.DataAccess\**" />
+      <Content Remove="EternalBAND.DataAccess\**" />
       <Content Remove="EternalBAND.DomainObjects\**" />
       <Content Remove="EternalBAND.Migrations\**" />
       <Content Remove="EternalBAND\**" />
       <Content Remove="__MACOSX\**" />
       <EmbeddedResource Remove="EternalBAND.Api\**" />
       <EmbeddedResource Remove="EternalBAND.Common\**" />
-      <EmbeddedResource Remove="EternalBand.DataAccess\**" />
+      <EmbeddedResource Remove="EternalBAND.DataAccess\**" />
       <EmbeddedResource Remove="EternalBAND.DomainObjects\**" />
       <EmbeddedResource Remove="EternalBAND.Migrations\**" />
       <EmbeddedResource Remove="EternalBAND\**" />
       <EmbeddedResource Remove="__MACOSX\**" />
       <None Remove="EternalBAND.Api\**" />
       <None Remove="EternalBAND.Common\**" />
-      <None Remove="EternalBand.DataAccess\**" />
+      <None Remove="EternalBAND.DataAccess\**" />
       <None Remove="EternalBAND.DomainObjects\**" />
       <None Remove="EternalBAND.Migrations\**" />
       <None Remove="EternalBAND\**" />
@@ -86,7 +87,9 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="7.0.1" />
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.2" />
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.6" />
         <PackageReference Include="X.PagedList" Version="8.4.7" />
         <PackageReference Include="X.PagedList.Mvc.Core" Version="8.4.7" />
@@ -138,7 +141,7 @@
     <ItemGroup>
       <ProjectReference Include="..\EternalBAND.Api\EternalBAND.Api.csproj" />
       <ProjectReference Include="..\EternalBAND.Common\EternalBAND.Common.csproj" />
-      <ProjectReference Include="..\EternalBand.DataAccess\EternalBAND.DataAccess.csproj" />
+      <ProjectReference Include="..\EternalBAND.DataAccess\EternalBAND.DataAccess.csproj" />
       <ProjectReference Include="..\EternalBAND.DomainObjects\EternalBAND.DomainObjects.csproj" />
       <ProjectReference Include="..\EternalBAND.Migrations\EternalBAND.Migrations.csproj" />
     </ItemGroup>

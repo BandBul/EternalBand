@@ -17,7 +17,6 @@ var webApplicationOptions = new WebApplicationOptions()
 {
     Args = args,
     ContentRootPath = WindowsServiceHelpers.IsWindowsService() ? AppContext.BaseDirectory : default,
-    ApplicationName = System.Diagnostics.Process.GetCurrentProcess().ProcessName
 };
 
 var builder = WebApplication.CreateBuilder(webApplicationOptions);

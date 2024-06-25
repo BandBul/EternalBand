@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EternalBand.DataAccess\EternalBAND.DataAccess.csproj" />
+    <ProjectReference Include="..\EternalBAND.DataAccess\EternalBAND.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>

@@ -5,7 +5,7 @@ VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EternalBAND.Win", "EternalBAND.Win\EternalBAND.Win.csproj", "{59B0E4C9-B7ED-487F-A10E-36BB743565F8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EternalBAND.DataAccess", "EternalBand.DataAccess\EternalBAND.DataAccess.csproj", "{265ED438-CD42-49CE-B03F-04C681D398AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EternalBAND.DataAccess", "EternalBAND.DataAccess\EternalBAND.DataAccess.csproj", "{265ED438-CD42-49CE-B03F-04C681D398AE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EternalBAND.DomainObjects", "EternalBAND.DomainObjects\EternalBAND.DomainObjects.csproj", "{172E9101-17A4-408B-A850-77D26EBD9841}"
 EndProject
