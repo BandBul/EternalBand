@@ -1,0 +1,38 @@
+﻿@using EternalBAND.Common;
+@using EternalBAND.DataAccess;
+@inject ApplicationDbContext _context
+<link href="/Css/NavMenu.css" rel="stylesheet" type="text/css">
+<div class="collapse navbar-collapse" id="navbarCollapse">
+    <ul class="navbar-nav mx-auto navbar-center">
+        <li class="nav-item">
+            <a asp-controller="User" asp-action="PostCreate">
+                <button class="btn btn-primary posting_button" type="button">İlan Ver</button>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a asp-action="Anasayfa" asp-controller="Home" class="nav-link">Anasayfa</a>
+        </li>
+        @{
+            var postTypes = _context.PostTypes.Where(n => n.Active);
+            foreach(var type in postTypes)
+            {
+                <li class="nav-item">
+                    <a asp-action="Posts" asp-controller="Home" asp-route-s="@type.Type" class="nav-link">@type.FilterText</a>
+                </li>
+            }
+        }
+        <li class="nav-item" hidden>
+            <a asp-action="Posts" asp-controller="Home" asp-route-s="2.-el-enstruman" class="nav-link">2. El Enstrüman</a>
+        </li>
+        <li class="nav-item" hidden>
+            <a asp-action="Posts" asp-controller="Home" asp-route-s="produksiyon" class="nav-link">Prodüksiyon</a>
+        </li>
+        <li class="nav-item">
+            <a asp-action="Blogs" asp-controller="Home" class="nav-link">Blog</a>
+        </li>
+        <li class="nav-item">
+            <a asp-action="ContactsCreate" asp-controller="Home" class="nav-link">İletişim</a>
+        </li>
+    </ul>
+</div>

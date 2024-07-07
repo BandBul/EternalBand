@@ -1,0 +1,54 @@
+﻿.status-green, .header-status-green
+{
+    background-color: forestgreen !important;
+}
+.status-purple, .header-status-purple
+{
+    background-color: rebeccapurple !important;
+}
+.status-orange, .header-status-orange
+{
+    background-color: orange !important;
+}
+
+.status-red, .header-status-red
+{
+    background-color: red !important;
+}
+
+.archive-button
+{
+    background-color: rebeccapurple !important;
+    display: block;
+}
+
+.activated-button
+{
+    background-color: forestgreen !important;
+    display: block;
+}
+
+.status-by-post-area
+{
+    max-width: 800px;
+    margin: 20px auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+
+header
+{
+   
+    padding: 20px;
+    text-align: center;
+}
+
+h1
+{
+    color: #fff;
+    font-size: 36px;
+    font-weight: bold;
+    margin: 0;
+}

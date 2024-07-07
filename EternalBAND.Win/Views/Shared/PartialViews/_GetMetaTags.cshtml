@@ -1,0 +1,16 @@
+@using EternalBAND.DataAccess;
+@using Microsoft.EntityFrameworkCore
+@inject ApplicationDbContext _context
+
+
+<meta content="@_context.SystemInfo.FirstOrDefault(n => n.Type == "site-keywords").Value" name="keywords">
+
+<meta name="robots" content="index">
+<meta content="@_context.SystemInfo.FirstOrDefault(n => n.Type == "site-desc").Value" name="description">
+<link rel="apple-touch-icon-precomposed" href="@(new EternalBAND.Business.AppSettings().GetSiteLogo().Trim())"/>
+<meta property="og:image" content="@(new EternalBAND.Business.AppSettings().GetSiteLogo().Trim())"/>
+
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:locale" content="tr_TR"/>
+<link rel="shortcut icon" href="@(new EternalBAND.Business.AppSettings().GetSiteLogo().Trim())">

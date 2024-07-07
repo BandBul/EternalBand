@@ -1,0 +1,99 @@
+@model EternalBAND.DomainObjects.Blogs
+
+@{
+    ViewData["Title"] = "Blog Yazısı Ekle";
+}
+<link href="~/imageuploader/image-uploader.css" rel="stylesheet" type="text/css">
+<div class="main-content">
+
+    <div class="page-content">
+
+        <section class="page-title-box">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="text-center text-white">
+                            <h3 class="mb-4">@ViewData["Title"]</h3>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="position-relative" style="z-index: 1">
+            <div class="shape">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 250">
+                    <path fill="#FFFFFF" fill-opacity="1"
+                          d="M0,192L120,202.7C240,213,480,235,720,234.7C960,235,1200,213,1320,202.7L1440,192L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z">
+                    </path>
+                </svg>
+            </div>
+        </div>
+        <section class="section">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-12 col-lg-12">
+                        <div class="card p-3" id="typography">
+                            <form asp-action="BlogsCreate" enctype="multipart/form-data" method="post">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="form-group m-3">
+                                    <label asp-for="Title" class="control-label"></label>
+                                    <input asp-for="Title" class="form-control"/>
+                                    <span asp-validation-for="Title" class="text-danger"></span>
+                                </div>
+                                <div class="form-group m-3">
+                                    <label asp-for="SummaryText" class="control-label"></label>
+                                    <input asp-for="SummaryText" class="form-control" />
+                                    <span asp-validation-for="SummaryText" class="text-danger"></span>
+                                </div>
+                                <div class="form-group m-3">
+                                    <label asp-for="HtmlText" class="control-label"></label>
+                                    <input asp-for="HtmlText" type="hidden" class="form-control"/>
+                                    <div id="htmlEditor" style="height:250px"></div>
+                                    <span asp-validation-for="HtmlText" class="text-danger"></span>
+                                </div>
+                                <div class="form-group m-3">
+                                    <label asp-for="Tags" class="control-label"></label>
+                                    <input asp-for="Tags" class="form-control"/>
+                                    <span asp-validation-for="Tags" class="text-danger"></span>
+                                </div>
+                                <div class="form-group m-3">
+                                    <label asp-for="SeoLink" class="control-label"></label>
+                                    <input asp-for="SeoLink" class="form-control"/>
+                                    <span asp-validation-for="SeoLink" class="text-danger"></span>
+                                </div>
+                                <div class="form-group m-3">
+                                    <label class="control-label">Fotoğraflar</label>
+                                    <div class="input-images-2" style="padding-top: .5rem;"></div>
+                                </div>
+
+                                <div class="form-group m-3">
+                                    <input type="submit" value="Oluştur" class="btn btn-primary"/>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <partial name="PartialViews/_SwitcherAndTopPartial"/>
+</div>
+<script>
+    RunQuill("HtmlText");
+</script>
+<script src="~/imageuploader/image-uploader.js"></script>
+
+<script>
+  
+        $('.input-images-2').imageUploader({
+            // preloaded: preloaded,
+            imagesInputName: 'images',
+            preloadedInputName: 'old',
+            maxSize: 2 * 1024 * 1024,
+            maxFiles: 5
+        });
+</script>

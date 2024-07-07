@@ -1,0 +1,22 @@
+﻿@using EternalBAND.Api.Options;
+@using EternalBAND.Common;
+@using EternalBAND.DomainObjects.ViewModel;
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.Extensions.Options;
+@{
+    var input =
+        new BaseNotificationModel()
+        {
+            NotificationType = NotificationType.Message,
+            Title = "Mesajlar",
+            IconHtmlContext = "<i class=\"mdi mdi-message fs-22\"></i>",
+            NotificationCountIdName = "messageCountId",
+            SignalRBroadCastingTitle = BroadCastingTitle.ReceiveMessageNotification,
+            ReadedNotificationCountIdName = "MessageNotificationCountId"
+        };
+}
+
+@{
+    await Html.RenderPartialAsync("PartialViews/_BaseNotification", input);
+}

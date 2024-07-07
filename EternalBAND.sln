@@ -1,9 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 25.0.1704.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EternalBAND", "EternalBAND.csproj", "{59B0E4C9-B7ED-487F-A10E-36BB743565F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EternalBAND.Win", "EternalBAND.Win\EternalBAND.Win.csproj", "{59B0E4C9-B7ED-487F-A10E-36BB743565F8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EternalBAND.DataAccess", "EternalBand.DataAccess\EternalBAND.DataAccess.csproj", "{265ED438-CD42-49CE-B03F-04C681D398AE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EternalBAND.DomainObjects", "EternalBAND.DomainObjects\EternalBAND.DomainObjects.csproj", "{172E9101-17A4-408B-A850-77D26EBD9841}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EternalBAND.Common", "EternalBAND.Common\EternalBAND.Common.csproj", "{120A0969-B263-47A5-A3F5-941C69CE35B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EternalBAND.Api", "EternalBAND.Api\EternalBAND.Api.csproj", "{32064DE7-90B6-4EC5-823A-8B04DB86E888}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EternalBAND.Migrations", "EternalBAND.Migrations\EternalBAND.Migrations.csproj", "{EF5764EA-94C8-41DD-9EFA-7C1E55232446}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +25,26 @@ Global
 		{59B0E4C9-B7ED-487F-A10E-36BB743565F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59B0E4C9-B7ED-487F-A10E-36BB743565F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59B0E4C9-B7ED-487F-A10E-36BB743565F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{265ED438-CD42-49CE-B03F-04C681D398AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{265ED438-CD42-49CE-B03F-04C681D398AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{265ED438-CD42-49CE-B03F-04C681D398AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{265ED438-CD42-49CE-B03F-04C681D398AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{172E9101-17A4-408B-A850-77D26EBD9841}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{172E9101-17A4-408B-A850-77D26EBD9841}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{172E9101-17A4-408B-A850-77D26EBD9841}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{172E9101-17A4-408B-A850-77D26EBD9841}.Release|Any CPU.Build.0 = Release|Any CPU
+		{120A0969-B263-47A5-A3F5-941C69CE35B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{120A0969-B263-47A5-A3F5-941C69CE35B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{120A0969-B263-47A5-A3F5-941C69CE35B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{120A0969-B263-47A5-A3F5-941C69CE35B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32064DE7-90B6-4EC5-823A-8B04DB86E888}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32064DE7-90B6-4EC5-823A-8B04DB86E888}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32064DE7-90B6-4EC5-823A-8B04DB86E888}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32064DE7-90B6-4EC5-823A-8B04DB86E888}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF5764EA-94C8-41DD-9EFA-7C1E55232446}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF5764EA-94C8-41DD-9EFA-7C1E55232446}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF5764EA-94C8-41DD-9EFA-7C1E55232446}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF5764EA-94C8-41DD-9EFA-7C1E55232446}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

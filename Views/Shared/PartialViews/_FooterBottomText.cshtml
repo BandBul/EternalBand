@@ -1,8 +1,0 @@
-@using EternalBAND.Data
-@using Microsoft.EntityFrameworkCore
-@inject ApplicationDbContext _Context
-@{
-    var bottom = _Context.SystemInfo.FirstOrDefault(n => n.Type == "site-bottom-footer-text");
-    string bottomText =  bottom == null ? "":bottom.Value;
-}
-@bottomText

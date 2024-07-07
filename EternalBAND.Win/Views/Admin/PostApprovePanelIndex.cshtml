@@ -1,0 +1,123 @@
+@using EternalBAND.Business;
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common
+@model X.PagedList.IPagedList<EternalBAND.DomainObjects.Posts>
+
+@{
+    ViewData["Title"] = "İlan Onaylama Paneli";
+}
+<partial name="PartialViews/_WarningPopup" model="@TempData["WarningMessage"]" />
+<div class="main-content">
+
+    <div class="page-content">
+
+        <section class="page-title-box">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="text-center text-white">
+                            <h3 class="mb-4">@ViewData["Title"]</h3>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="candidate-list">
+            <div class="row">
+                @{
+                    if (Model.Count != 0)
+                    {
+                        foreach (var post in Model)
+                        {
+                            string photoPath = post.Photo1 != null ? post.Photo1 :
+                            (post.Photo2 != null ? post.Photo2 : ((post.Photo3 != null ? post.Photo3 : ((post.Photo4 != null ? post.Photo4 : ((post.Photo5 != null ? post.Photo5 : "~/images/hazirlaniyor.jpg")))))));
+
+                            <div class="candidate-list-box card mt-4">
+
+                                <div class="card-body p-4">
+                                    <a asp-controller="Admin" asp-action="PostForApproval" asp-route-seolink="@post.SeoLink">
+                                        <div class="row align-items-center">
+                                            <div class="col-auto">
+                                                <div class="candidate-list-images">
+                                                    <img src="@photoPath" alt="" class="avatar-md img-thumbnail rounded-circle">
+                                                </div>
+                                            </div><!--end col-->
+
+                                            <div class="col-lg-5">
+                                                <div class="candidate-list-content mt-3 mt-lg-0">
+                                                    <h5 class="fs-19 mb-0">@post.Title</h5>
+                                                    <ul class="list-inline mb-0 text-muted">
+                                                        @if (post.PostTypes != null)
+                                                        {
+                                                            <li class="list-inline-item">
+                                                                <i class="uil uil-map-marker-question"></i> @post.PostTypes.FilterText
+                                                            </li>
+                                                        }
+                                                        @if (post.Instruments != null)
+                                                        {
+                                                            <li class="list-inline-item">
+                                                                <i class="uil uil-music"></i> @post.Instruments.Instrument
+                                                            </li>
+                                                        }
+                                                        @if (post.CityId != null && post.CityId != 0)
+                                                        {
+                                                            <li class="list-inline-item">
+                                                                <i class="uil uil-location-pin-alt"></i> @Cities.GetCities().FirstOrDefault(n => n.Id == post.CityId).Name
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                </div>
+                                            </div><!--end col-->
+
+                                        </div><!--end row-->
+                                    </a>
+
+                                </div>
+
+                            </div>
+                            <!--end card-->
+                        }
+                    }
+                    else
+                    {
+                        <h3 class="text-center">İlan bulunmuyor.</h3>
+                    }
+                }
+            </div><!--end row-->
+        </div><!--end candidate-list-->
+
+        <div class="row mt-5 pt-2">
+            <div class="col-lg-12">
+                <nav aria-label="Navigation">
+                    <ul class="pagination job-pagination mb-0 justify-content-center">
+                        @{
+                            @Html.PagedListPager((IPagedList) Model, pId => GetLink(pId),
+                        new PagedListRenderOptions
+                        {
+                            LiElementClasses = new string[] {"page-item"},
+                            PageClasses = new string[] {"page-link"},
+                        })
+                        }
+                    </ul>
+                </nav>
+            </div><!--end col-->
+        </div><!-- end row -->
+    </div>
+    <partial name="PartialViews/_SwitcherAndTopPartial"/>
+</div>
+
+@functions {
+
+    string GetLink(int pId)
+    {
+        var city = ViewBag.CityId;
+        var type = ViewBag.TypeShort;
+        var inst = ViewBag.Instrument;
+        var link = $"/ilanlar?c={city}&e={inst}&s={type}&pId={pId}";
+        return link;
+    }
+
+}

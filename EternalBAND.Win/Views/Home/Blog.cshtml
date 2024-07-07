@@ -1,0 +1,181 @@
+﻿@inject SignInManager<Users> SignInManager
+@inject UserManager<Users> UserManager
+@using EternalBAND.DomainObjects;
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using EternalBAND.DataAccess;
+@inject ApplicationDbContext _context
+<link href="/Css/Blog.css" rel="stylesheet" type="text/css">
+@model EternalBAND.DomainObjects.Blogs
+@{
+    ViewData["Title"] = Model.Title;
+}
+@{
+    var user = await UserManager.GetUserAsync(User);
+}
+<div class="main-content">
+    <div class="page-content">
+        <section class="page-title-box">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="text-center text-white">
+                            <h3 class="mb-4">@Model.Title</h3>
+                            <div class="page-next">
+                                <nav class="d-inline-block" aria-label="breadcrumb text-center">
+                                    <ol class="breadcrumb justify-content-center">
+                                        <li class="breadcrumb-item"><a asp-action="Anasayfa">Anasayfa</a></li>
+                                        <li class="breadcrumb-item"><a asp-action="Blogs">Blog</a></li>
+                                    </ol>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="position-relative" style="z-index: 1">
+            <div class="shape">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 250">
+                    <path fill="#FFFFFF" fill-opacity="1"
+                        d="M0,192L120,202.7C240,213,480,235,720,234.7C960,235,1200,213,1320,202.7L1440,192L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z"></path>
+                </svg>
+            </div>
+        </div>
+
+        <section class="section">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-7">
+                        <div class="text-center mb-5">
+                            <h3>@Model.Title</h3>
+                        </div>
+                        <div class="summary-text">
+                            <p>@Model.SummaryText</p>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="blog-post">
+                            <div class="swiper blogdetailSlider">
+                                <div class="swiper-wrapper">
+                                    @{
+                                        if (Model.PhotoPath != null)
+                                        {
+                                            <div class="swiper-slide">
+                                                <img src="@Model.PhotoPath" alt="" class="img-fluid rounded-3">
+                                            </div>
+                                        }
+                                        if (Model.PhotoPath2 != null)
+                                        {
+                                            <div class="swiper-slide">
+                                                <img src="@Model.PhotoPath2" alt="" class="img-fluid rounded-3">
+                                            </div>
+                                        }
+                                        if (Model.PhotoPath3 != null)
+                                        {
+                                            <div class="swiper-slide">
+                                                <img src="@Model.PhotoPath3" alt="" class="img-fluid rounded-3">
+                                            </div>
+                                        }
+                                        if (Model.PhotoPath4 != null)
+                                        {
+                                            <div class="swiper-slide">
+                                                <img src="@Model.PhotoPath4" alt="" class="img-fluid rounded-3">
+                                            </div>
+                                        }
+                                        if (Model.PhotoPath5 != null)
+                                        {
+                                            <div class="swiper-slide">
+                                                <img src="@Model.PhotoPath5" alt="" class="img-fluid rounded-3">
+                                            </div>
+                                        }
+                                        if (Model.PhotoPath == null && Model.PhotoPath2 == null
+                                            && Model.PhotoPath3 == null
+                                            && Model.PhotoPath4 == null
+                                            && Model.PhotoPath5 == null)
+                                        {
+                                            <div class="swiper-slide">
+                                                <img src="~/images/hazirlaniyor.jpg" alt="" class="img-fluid rounded-3">
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                                        
+                            <ul class="list-inline mb-0 mt-3 text-muted">
+                                <li class="list-inline-item">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0">
+                                            <i class="uil uil-calendar-alt"></i>
+                                        </div>
+                                        <div class="ms-2">
+                                            <p class="mb-0"> @Model.AddedDate.ToString("dd/MM/yyyy")</p>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="mt-4">
+                                @Html.Raw(Model.HtmlText)
+                                @{
+                                    if (!string.IsNullOrEmpty(Model.Tags))
+                                    {
+                                        <div class="d-flex align-items-center mb-4">
+                                            <div class="flex-shrink-0">
+                                                <b>Etiketler:</b>
+                                            </div>
+                                            <div class="flex-grow-1 ms-2">
+                                                @{
+                                                    var tags = Model.Tags.Split(",");
+                                                    foreach (var tag in tags)
+                                                    {
+                                                        <p class="badge bg-soft-success mt-3 fs-14">@tag</p>
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-5">
+                        <div class="sidebar ms-lg-4 ps-lg-4 mt-5 mt-lg-0">
+                            <aside class="widget widget_search">
+                                <form asp-action="Blogs" class="position-relative">
+                                    <input class="form-control" type="text" name="seolink" id="seolink" placeholder="Ara...">
+                                    <button class="bg-transparent border-0 position-absolute top-50 end-0 translate-middle-y fs-22 me-2" type="submit"><span class="mdi mdi-magnify text-muted"></span></button>
+                                </form>
+                            </aside>
+
+                            <div class="mt-4 pt-2">
+                                <div class="sd-title">
+                                    <h6 class="fs-16 mb-3">Son Yazılar</h6>
+                                </div>
+                                <ul class="widget-popular-post list-unstyled my-4">
+                                    @{
+                                        var blogs=  _context.Blogs.Where(b => b.Id != Model.Id).Take(4).OrderByDescending(n => n.AddedDate);
+                                        foreach (var blog in blogs)
+                                        {
+                                            var photo = blog.GetTopPhoto()?? "../images/hazirlaniyor.jpg";
+                                            <li class="d-flex mb-3 align-items-center pb-3 border-bottom">
+                                                <img src="@photo" alt="" class="widget-popular-post-img rounded"/>
+                                                <div class="flex-grow-1 text-truncate ms-3">
+                                                    <a href="@blog.SeoLink" class="text-dark">@blog.Title</a>
+                                                    <span class="d-block text-muted fs-14">@blog.AddedDate.ToString("dd/MM/yyyy")</span>
+                                                </div>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

@@ -1,0 +1,84 @@
+﻿@using EternalBAND.Common;
+@using EternalBAND.DomainObjects.ViewModel;
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Web.Common;
+@using Cities = EternalBAND.Business.Cities
+@using EternalBAND.DataAccess;
+@using Microsoft.EntityFrameworkCore.Metadata.Internal;
+@model PostViewModel
+@inject ApplicationDbContext _context
+@{
+    ViewData["Title"] = "İlanlar";
+}
+
+<div class="main-content">
+    <div class="page-content">
+        <section class="page-title-box">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="text-center text-white">
+                            <h3 class="mb-4">@ViewData["Title"]</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="position-relative" style="z-index: 1">
+            <div class="shape">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 250">
+                    <path fill="#FFFFFF" fill-opacity="1"
+                          d="M0,192L120,202.7C240,213,480,235,720,234.7C960,235,1200,213,1320,202.7L1440,192L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z">
+                    </path>
+                </svg>
+            </div>
+        </div>
+        <section class="section">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-12">
+                        <div class="candidate-list-widgets mb-4">
+                            <partial name="PartialViews/_FilterPostPartial" model="@Model.PostFilterContracts"></partial>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="candidate-list">
+                    <div id="itemlist">
+                        <partial name="PartialViews/_PostsListPartial" model="@Model.Posts"></partial>
+                    </div>
+                </div>
+
+                <div class="row mt-5 pt-2">
+                    <div class="col-lg-12">
+                        <nav aria-label="Navigation">
+                            <ul class="pagination job-pagination mb-0 justify-content-center">
+                                @{
+                                    @Html.PagedListPager(
+                                        (IPagedList) Model.Posts, pId => GetLink(pId),
+                                        new PagedListRenderOptions
+                                        {
+                                            LiElementClasses = new string[] {"page-item"},
+                                            PageClasses = new string[] {"page-link"},
+                                        }
+                                    )
+                                }
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+@functions {
+    string GetLink(int pId)
+    {
+        var city = ViewBag.CityId ?? 0;
+        var type = ViewBag.TypeShort ?? "";
+        var inst = ViewBag.Instrument ?? "";
+        var link = $"/ilanlar?c={city}&e={inst}&s={type}&pId={pId}";
+        return link;
+    }
+}

@@ -1,0 +1,23 @@
+﻿@using EternalBAND.Api.Options;
+@using EternalBAND.Business;
+@using EternalBAND.Common;
+@using EternalBAND.DataAccess;
+@using EternalBAND.DomainObjects.ViewModel;
+@using EternalBAND.DomainObjects;
+@using Microsoft.AspNetCore.Identity;
+@model ExternalLoginPageModel
+<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
+<link href="/Css/Login-page.css" rel="stylesheet" type="text/css">
+<form method="post" asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" asp-controller="Account">
+    <div>
+        @* TODO-Engin please make specific coding when another external login providers come*@
+        @foreach (var provider in Model.ExternalLogins)
+        {
+            <button type="submit" class="btn login-with-google-btn btn-hover " style="width:auto"
+                    name="provider" value="@provider.Name"
+                    title="Login using your @provider.DisplayName account">
+                @provider.DisplayName ile @Model.ButtonTextSuffix
+            </button>
+        }
+    </div>
+</form>

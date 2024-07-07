@@ -1,0 +1,132 @@
+﻿@using EternalBAND.Api.Options;
+@using EternalBAND.Common;
+@using EternalBAND.DataAccess;
+@using EternalBAND.DomainObjects.ViewModel;
+@using EternalBAND.DomainObjects;
+@using Microsoft.AspNetCore.Identity;
+@using Microsoft.EntityFrameworkCore;
+@using Microsoft.Extensions.Options;
+@using System.Text.RegularExpressions;
+<link href="/Css/NotificationPopUp.css" rel="stylesheet" type="text/css">
+@model BaseNotificationModel
+@inject ApplicationDbContext _context
+@inject UserManager<Users> UserManager
+@inject SignInManager<Users> SignInManager
+@inject IOptions<NotificationOptions> _notifSettings
+@{
+    var user = await UserManager.GetUserAsync(User);
+    var isMessageNotification = Model.NotificationType == NotificationType.Message; 
+    var notifications = await _context.Notification.Include(s => s.SenderUser).Where(n => n.ReceiveUserId == user.Id && n.NotificationType == Model.NotificationType).ToListAsync();
+}
+@if (SignInManager.IsSignedIn(User))
+{
+    <a href="javascript:void(0)" class="header-item noti-icon position-relative" id="notification" data-bs-toggle="dropdown"
+    aria-expanded="false">
+        @Html.Raw(Model.IconHtmlContext)
+        <div id="@Model.NotificationCountIdName" class="count position-absolute">@notifications.Where(n => !n.IsRead).Count()</div>
+    </a>
+    <div class="dropdown-menu dropdown-menu-sm dropdown-menu-end p-0" aria-labelledby="notification">
+        <div class="notification-header border-bottom bg-light">
+            <h6 class="mb-1">@Model.Title</h6>
+            @{
+                var count = notifications.Where(n => !n.IsRead).Count();
+                var message = count == 0 ?
+                    "Okunmamış mesajın bulunmuyor." :
+                    $"{count} adet okunmamış mesajın var.";
+
+                    <p id="@Model.ReadedNotificationCountIdName" class="text-muted fs-13 mb-0">@message</p>
+            }
+        </div>
+        <div class="notification-wrapper dropdown-scroll" id="@Model.Title">
+            @{
+                var pagination = notifications.OrderBy(n => n.IsRead).ThenByDescending(n => n.AddedDate).Take(_notifSettings.Value.MaxNotificationCountInPopup).ToList();
+                foreach (var ms in pagination)
+                {
+                    <a asp-controller="User" asp-action="NotificationRead" asp-route-id="@ms.Id" class="text-dark notification-item d-block active @(ms.IsRead ? "" : "notReaded") ">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="avatar-xs bg-primary text-white rounded-circle text-center">
+                                    <img src="@ms.SenderUser.PhotoPath" class="rounded-circle mr-1" alt="@ms.SenderUser.Name @ms.SenderUser.Surname" width="40" height="40">
+                                </div>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="mt-0 mb-1 fs-14">@Html.Raw(@ms.Message)</h6>
+
+                            </div>
+                        </div>
+                    </a>
+                }
+            }
+        </div><!--end notification-wrapper-->
+        <div class="notification-footer border-top text-center">
+            @if (isMessageNotification)
+            {
+                // clicking See All Messages
+                <a class="primary-link fs-13" asp-action="ChatIndex" asp-controller="Message">
+                    <i class="mdi mdi-arrow-right-circle me-1"></i> <span>Tümünü Gör</span>
+                </a>
+            }
+            else
+            {
+                <a class="primary-link fs-13" asp-action="NotificationIndex" asp-controller="User">
+                    <i class="mdi mdi-arrow-right-circle me-1"></i> <span>Tümünü Gör</span>
+                </a>
+            }
+            
+
+        </div>
+    </div>
+     
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script>
+
+        var connection = new signalR.HubConnectionBuilder()
+            .withUrl("/chatHub")
+            .build();
+        connection.on("@Model.SignalRBroadCastingTitle", function (signalRMessageContract) {
+            var notif = JSON.parse(signalRMessageContract);
+            var receiverUserId = notif.ReceiveUserId
+            var currentUserId = @Html.Raw(Json.Serialize(user.Id));
+            if (receiverUserId != currentUserId ) {
+                // TODO we should manage this by connectionID of client in ChatHub we can create a collection like List<MessageMetadata,ConnectionID>
+                // when update receives we can choose which clients will get this connection
+                // we will pass signalR if current user is not a recipent for message box
+                return;
+            }
+
+            const countElement = document.getElementById("@Model.NotificationCountIdName");
+            if (countElement) {
+                // Update the count based on your logic (e.g., increment by 1)
+                var readedNotificationCountId = document.getElementById("@Model.ReadedNotificationCountIdName");
+                const currentCount = parseInt(countElement.innerText, 10) || 0;
+                countElement.innerText = currentCount + 1;
+                readedNotificationCountId.innerText = `${currentCount + 1} adet okunmamış mesajın var.`
+            }
+            var innerHTML = `<a href="/User/NotificationRead/${notif.Id}" class="text-dark notification-item d-block active notReaded ">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-shrink-0 me-3">
+                                        <div class="avatar-xs bg-primary text-white rounded-circle text-center">
+                                            <img src="${notif.SenderUser.PhotoPath}" class="rounded-circle mr-1" alt="${notif.SenderUser.Name} ${notif.SenderUser.Surname}" width="40" height="40">
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                                <h6 class="mt-0 mb-1 fs-14">${notif.Message}</h6>
+
+                                    </div>
+                                </div>
+                            </a>`;
+
+            document.getElementById("@Model.Title").insertAdjacentHTML('afterBegin', innerHTML);
+
+        });
+
+        connection.start().then(function () {
+            console.log("Connected to SignalR Hub");
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+
+
+    </script>
+
+}

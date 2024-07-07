@@ -1,0 +1,53 @@
+﻿@using EternalBAND.Api.Options;
+@using EternalBAND.Business;
+@using EternalBAND.Common;
+@using EternalBAND.DomainObjects.ViewModel;
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.Extensions.Options;
+@model X.PagedList.IPagedList<EternalBAND.DomainObjects.Posts>
+
+@{
+    foreach (var post in Model)
+    {
+        var photo = post.GetTopPhoto() ?? "/images/featured-job/img-01.png";
+        <div class="job-box card mt-4">
+            <div class="p-4">
+                <div class="row align-items-center">
+                    <div class="col-md-2">
+                        <div class="text-center mb-4 mb-md-0">
+                            <a href="ilan/@post.SeoLink">
+                                <img src="@photo" alt="" class="img-fluid rounded-3">
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="mb-2 mb-md-0">
+                            <h5 class="fs-18 mb-1">
+                                <a href="ilan/@post.SeoLink" class="text-dark">@post.Title</a>
+                            </h5>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="d-flex mb-2">
+                            <div class="flex-shrink-0">
+                                <i class="mdi mdi-map-marker text-primary me-1"></i>
+                            </div>
+                            <p class="text-muted mb-0">@Cities.GetCities().First(s => s.Id == post.CityId).Name</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div>
+                            <span class="badge bg-soft-success fs-13 mt-1">İlan türü : @post.PostTypes.FilterText</span>
+                            <span class="badge bg-soft-danger fs-13 mt-1">Enstrüman : @post.Instruments.Instrument</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    }
+}

@@ -1,0 +1,4 @@
+@using System.Reflection;
+<link href="/Css/SiteLogo.css" rel="stylesheet" type="text/css">
+<img src="@(new EternalBAND.Business.AppSettings().GetSiteLogo().Trim())" height="28" alt="" title="@(Assembly.GetEntryAssembly().GetName().Version)" class="logo-dark" />
+@*<div class="version-number">@(Assembly.GetEntryAssembly().GetName().Version)</div>*@
