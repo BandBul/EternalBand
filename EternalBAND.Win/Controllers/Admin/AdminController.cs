@@ -21,7 +21,7 @@ public class AdminController : Controller
         _adminService = adminService;
         _controllerHelper = controllerHelper;
     }
-
+    [HttpGet]
     // GET: Blogs
     public async Task<IActionResult> BlogsIndex(int pId = 1)
     {
@@ -36,7 +36,7 @@ public class AdminController : Controller
         }
     }
 
-
+    [HttpGet]
     // GET: Blogs/Create
     public IActionResult BlogsCreate()
     {
@@ -556,7 +556,7 @@ public class AdminController : Controller
         }
     }
 
-    [ActionName("ApprovePost")]
+    [HttpGet,ActionName("ApprovePost")]
     // TODO pass post PK id not seoLink 
     // TODO check token validation
     //[ValidateAntiForgeryToken]
@@ -576,7 +576,7 @@ public class AdminController : Controller
         }
     }
 
-    [ActionName("RejectPost")]
+    [HttpGet, ActionName("RejectPost")]
     // TODO pass post PK id not seoLink 
     // TODO check token validation
     //[ValidateAntiForgeryToken]
@@ -595,7 +595,7 @@ public class AdminController : Controller
             throw;
         }
     }
-
+    [HttpGet]
     public async Task<IActionResult> PostApprovePanelIndex(int pId=1)
     {
         return View(await GetApprovalPageData(pId));
