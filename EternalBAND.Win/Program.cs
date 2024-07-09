@@ -121,6 +121,18 @@ builder.Services
     .AddDataAccessInfrastructure()
     .AddApiInfrastructure();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAnyOrigin",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -155,6 +167,7 @@ app.UseStaticFiles(new StaticFileOptions
 });
 
 app.UseRouting();
+app.UseCors("AllowAnyOrigin");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllerRoute(
