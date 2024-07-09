@@ -10,8 +10,8 @@ using EternalBAND.Api.Infrastructure;
 using EternalBAND.DataAccess.Infrastructure;
 using System.Security.Authentication;
 using Microsoft.Extensions.Hosting.WindowsServices;
-using System.Net;
-using System.Security.Cryptography.X509Certificates;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 var webApplicationOptions = new WebApplicationOptions()
 {
@@ -43,6 +43,28 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
+//Swagger Documentation Section
+var info = new OpenApiInfo()
+{
+    Title = "Bandbul Documentation",
+    Version = "v1",
+    Description = "Herkes icin Muzik",
+    //Contact = new OpenApiContact()
+    //{
+    //    Name = "Your name",
+    //    Email = "your@email.com",
+    //}
+
+};
+
+builder.Services.AddSwaggerGen(c =>
+{ 
+    c.SwaggerDoc("v1", info);
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
+});
 builder.Services.AddIdentity<Users, IdentityRole>(options =>
     {
         options.User.RequireUniqueEmail = true;
@@ -104,6 +126,16 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseSwagger(u =>
+    {
+        u.RouteTemplate = "swagger/{documentName}/swagger.json";
+    });
+
+    app.UseSwaggerUI(c =>
+    {
+        c.RoutePrefix = "swagger";
+        c.SwaggerEndpoint(url: "/swagger/v1/swagger.json", name: "Bandbul");
+    });
     app.UseMigrationsEndPoint();
 }
 else

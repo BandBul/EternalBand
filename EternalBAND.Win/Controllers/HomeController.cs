@@ -36,7 +36,7 @@ public class HomeController : Controller
         return View(await _homeService.GetMainPageModel());
     }
 
-    [Route("blogs/{seolink?}")]
+    [HttpGet,Route("blogs/{seolink?}")]
     public async Task<IActionResult> Blogs(string? seolink = "", int pId = 1)
     {
         if (seolink == null)
@@ -58,7 +58,7 @@ public class HomeController : Controller
     }
 
     // TODO change parameter names as understandable strings
-    [Route("ilanlar")]
+    [HttpGet,Route("ilanlar")]
     public async Task<IActionResult> Posts(int pId = 1, string? s = "0", int c = 0, string? e = "0")
     {
         ViewBag.CityId = c;
@@ -76,7 +76,8 @@ public class HomeController : Controller
 
             }
         };
-        return View(model);
+        //return View(model);
+        return Ok(model);
     }
 
     [HttpGet, Route("ilan/{seolink}")]
@@ -150,27 +151,27 @@ public class HomeController : Controller
     }
 
 
-    [Route("KVKK")]
+    [HttpGet,Route("KVKK")]
     public IActionResult Gdpr()
     {
         return View();
     }
 
-    [Route("PrivacyPolicy")]
+    [HttpGet,Route("PrivacyPolicy")]
     public IActionResult PrivacyPolicy()
     {
         return View();
     }
 
 
-    [Route("SendSupportMessage")]
+    [HttpGet,Route("SendSupportMessage")]
     [Authorize]
     public IActionResult SendSupportMessage(string message)
     {
         return RedirectToAction(nameof(Anasayfa));
     }
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    [HttpGet,ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
         return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});

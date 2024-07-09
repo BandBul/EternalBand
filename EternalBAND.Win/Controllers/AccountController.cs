@@ -5,6 +5,7 @@ using EternalBAND.Api.Services;
 namespace EternalBAND.Controllers
 {
     [AllowAnonymous, Route("account")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class AccountController : Controller
     {
         private readonly ILogger<AccountController> _logger;

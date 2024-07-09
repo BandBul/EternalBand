@@ -197,7 +197,7 @@ public class UserController : Controller
         }
     
     }
-    [Route("bildirimler")]
+    [HttpGet, Route("bildirimler")]
     public async Task<IActionResult> NotificationIndex(int pId=1)
     {
         var currentUser = await _controllerHelper.GetUserAsync(User);
@@ -205,7 +205,7 @@ public class UserController : Controller
         return View(result);
     }
 
-    [ActionName("NotificationRead")]
+    [HttpGet, ActionName("NotificationRead")]
     public async Task<IActionResult> NotificationRead(int id)
     {
         try
