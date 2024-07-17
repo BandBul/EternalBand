@@ -2,7 +2,7 @@ using EternalBAND.DataAccess;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EternalBAND.Controllers;
-
+[ApiExplorerSettings(IgnoreApi = true)]
 public class ErrorController : Controller
 {
     public ErrorController()

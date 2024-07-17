@@ -13,6 +13,7 @@ using NuGet.Packaging;
 namespace EternalBAND.Controllers.User;
 // TODO create a Reposıtory for manage _context, controller should only responsible for API and basic validations 
 [Authorize]
+[ApiExplorerSettings(IgnoreApi = true)]
 public class UserController : Controller
 {
     private readonly ControllerHelper _controllerHelper;
