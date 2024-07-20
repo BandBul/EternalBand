@@ -15,6 +15,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using EternalBAND.Win.Middleware;
 
 var webApplicationOptions = new WebApplicationOptions()
 {
@@ -123,10 +124,15 @@ if (debugOption.IsWebApiEnabled)
             "/mail-gonderildi");
     });
 
-    var googleApiKey = new GoogleApiKeyOptions();
-    builder.Configuration.GetSection(GoogleApiKeyOptions.GoogleApiKey).Bind(googleApiKey);
+    var googleSettings = new GoogleOptions();
+    builder.Configuration.GetSection(GoogleOptions.GoogleOptionsKey).Bind(googleSettings);
+
     builder.Services.Configure<NotificationOptions>(
         builder.Configuration.GetSection(NotificationOptions.NotificationOptionKey));
+
+    builder.Services.Configure<GoogleOptions>(
+    builder.Configuration.GetSection(GoogleOptions.GoogleOptionsKey));
+
     builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -149,8 +155,8 @@ if (debugOption.IsWebApiEnabled)
     })
     .AddGoogle(opt =>
     {
-        opt.ClientId = googleApiKey.ClientId;
-        opt.ClientSecret = googleApiKey.ClientSecret;
+        opt.ClientId = googleSettings.ClientId;
+        opt.ClientSecret = googleSettings.ClientSecret;
     });
 
     builder.Services.AddAuthorization(options =>
@@ -184,7 +190,7 @@ if (debugOption.IsWebApiEnabled)
     });
 
     var app = builder.Build();
-
+    app.UseMiddleware<ErrorHandlingMiddleware>();
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
     {
@@ -202,11 +208,9 @@ if (debugOption.IsWebApiEnabled)
     }
     else
     {
-        app.UseExceptionHandler("/Home/Error");
         // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
         app.UseHsts();
     }
-    app.UseStatusCodePagesWithRedirects("/api/ErrorWeb/webError/{0}");
     app.UseHttpsRedirection();
     app.UseStaticFiles();
     app.UseStaticFiles(new StaticFileOptions
@@ -227,9 +231,7 @@ if (debugOption.IsWebApiEnabled)
     app.MapRazorPages();
     app.MapHub<ChatHub>("/chatHub");
 
-
     app.Run();
-
 }
 
 else
@@ -307,8 +309,8 @@ else
 
 
 
-    var googleApiKey = new GoogleApiKeyOptions();
-    builder.Configuration.GetSection(GoogleApiKeyOptions.GoogleApiKey).Bind(googleApiKey);
+    var googleApiKey = new GoogleOptions();
+    builder.Configuration.GetSection(GoogleOptions.GoogleOptionsKey).Bind(googleApiKey);
     builder.Services.Configure<NotificationOptions>(
         builder.Configuration.GetSection(NotificationOptions.NotificationOptionKey));
     builder.Services.AddAuthentication(opt =>

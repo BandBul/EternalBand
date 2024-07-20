@@ -1,13 +1,11 @@
-﻿using EternalBAND.Api.Options;
+﻿using EternalBAND.Api.Services;
 using EternalBAND.DomainObjects;
 using EternalBAND.DomainObjects.ApiContract;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+using EternalBAND.Api.Extensions;
+using Microsoft.AspNetCore.Authentication;
+using AuthenticationService = EternalBAND.Api.Services.AuthenticationService;
 
 namespace EternalBAND.Win.Controllers.WebApi
 {
@@ -16,84 +14,43 @@ namespace EternalBAND.Win.Controllers.WebApi
     public class AuthenticationWebController : ControllerBase
     {
         private readonly SignInManager<Users> signInManager;
-        private readonly JwtTokenOptions jwtTokenSettings;
+        private readonly AuthenticationService authenticationService;
         private readonly ILogger<AuthenticationWebController> logger;
-        private readonly UserManager<Users> userManager;
 
         // TODO create an AuthenticationService to separate logic
         public AuthenticationWebController(
             ILogger<AuthenticationWebController> logger, 
-            SignInManager<Users> signInManager, 
-            IOptions<JwtTokenOptions> jwtTokenSettings,
-            UserManager<Users> userManager
+            SignInManager<Users> signInManager,
+            AuthenticationService authenticationService
             )
         {
             this.logger = logger;
             this.signInManager = signInManager;
-            this.jwtTokenSettings = jwtTokenSettings.Value;
-            this.userManager = userManager;
+            this.authenticationService = authenticationService;
         }
-        // for now UserName and email is same later we should separate them
+        // TODO for now UserName and email is same later we should separate them
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] UserContracts loginUser)
+        public async Task<IActionResult> Login([FromBody] LoginInputContract loginUser)
         {
             var result = await signInManager.PasswordSignInAsync(loginUser.Username, loginUser.Password, loginUser.RememberMe, lockoutOnFailure: false);
             if (!result.Succeeded)
             {
-                if (result.IsNotAllowed)
-                {
-                    return Unauthorized("User is not allowed");
-                }
-
-                else if (result.IsLockedOut)
-                {
-                    return Unauthorized("User account is locked");
-                }
-
-                else if (result.RequiresTwoFactor)
-                {
-                    return Unauthorized("Need 2 FActor Authentication");
-                }
-
-                else
-                {
-                    return Unauthorized("Username or password is incorrect");
-                }
+                return this.HandleSignInFailure(result);
             }
-            var user = await userManager.FindByEmailAsync(loginUser.Username);
-            var roles = await userManager.GetRolesAsync(user);
-            string tokenString = CreateToken(user, roles);
+            string tokenString = await authenticationService.CreateTokenAsync(loginUser.Username);
 
-            return Ok(new { Token = tokenString });
+            return Ok(new LoginOutputContract { Token = tokenString });
         }
 
-        private string CreateToken(Users? user, IEnumerable<string> roles)
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(jwtTokenSettings.Secret);
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.UserName),
-            };
-            foreach (var role in roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            }
+            // Sign out of the standard user-password Identity
+            await signInManager.SignOutAsync();
+            // Sign out of the External authentication scheme
+            await HttpContext.SignOutAsync();
 
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-
-                Subject = new ClaimsIdentity(claims),
-                Issuer = jwtTokenSettings.Issuer,
-                Audience = jwtTokenSettings.Audience,
-                // TODO add  this to appsettings
-                Expires = DateTime.UtcNow.AddHours(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            return Ok();
         }
     }
 }
