@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using EternalBAND.Api.Extensions;
 using Microsoft.AspNetCore.Authentication;
 using AuthenticationService = EternalBAND.Api.Services.AuthenticationService;
+using System.Runtime.ConstrainedExecution;
 
 namespace EternalBAND.Win.Controllers.WebApi
 {
@@ -42,6 +43,23 @@ namespace EternalBAND.Win.Controllers.WebApi
             return Ok(new LoginOutputContract { Token = tokenString });
         }
 
+        [HttpPost("signup")]
+        public async Task<IActionResult> SignUp(SignUpInputContract signupContract)
+        {
+            try
+            {
+                await authenticationService.CreateUserAsync(signupContract);
+                var token = await authenticationService.CreateTokenAsync(signupContract.Username);
+                return Ok(new LoginOutputContract { Token = token });
+            }
+            catch (Exception ex )
+            {
+                return Problem(ex.Message);
+            }
+          
+        }
+
+        // TODO Logout should except token
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {

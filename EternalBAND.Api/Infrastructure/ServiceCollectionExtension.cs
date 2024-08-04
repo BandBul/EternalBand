@@ -2,6 +2,7 @@
 using EternalBAND.Api.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.DependencyInjection;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace EternalBAND.Api.Infrastructure
 {
@@ -15,6 +16,7 @@ namespace EternalBAND.Api.Infrastructure
             services.AddScoped<AdminService>();
             services.AddScoped<AccountService>();
             services.AddScoped<MessageService>();
+            services.AddSingleton<JwtSecurityTokenHandler>();
             services.AddScoped<AuthenticationService>();
             services.AddScoped<HubController>();
             services.AddScoped<ControllerHelper>();

@@ -1,9 +1,8 @@
 ﻿namespace EternalBAND.DomainObjects.ApiContract
 {
-    public class LoginInputContract : IContract
+    public class SignUpInputContract : IContract
     {
         public string Username { get; set; }
         public string Password { get; set; }
-        public bool RememberMe { get; set; } = false;
     }
 }

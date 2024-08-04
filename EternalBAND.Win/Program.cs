@@ -16,6 +16,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using EternalBAND.Win.Middleware;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 var webApplicationOptions = new WebApplicationOptions()
 {
@@ -58,15 +60,18 @@ if (debugOption.IsWebApiEnabled)
         options.UseSqlServer(connectionString, x => x.MigrationsAssembly("EternalBAND.Migrations")));
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-    builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
+    builder.Services.AddFluentValidationAutoValidation();
+    builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+    builder.Services.AddControllers();
 
     //Swagger Documentation Section
     var info = new OpenApiInfo()
-    {
-        Title = "Bandbul Documentation",
-        Version = "v1",
-        Description = "Herkes icin Muzik",
-    };
+        {
+            Title = "Bandbul Documentation",
+            Version = "v1",
+            Description = "Herkes icin Muzik",
+        };
 
     var securityId = "Bearer";
     builder.Services.AddSwaggerGen(c =>
@@ -165,13 +170,6 @@ if (debugOption.IsWebApiEnabled)
         options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
     });
 
-    builder.Services.ConfigureApplicationCookie(options =>
-    {
-        options.LoginPath = "/giris-yap";
-        options.AccessDeniedPath = "/erisim-engellendi";
-        options.LogoutPath = "/cikis-yap";
-        options.ExpireTimeSpan = TimeSpan.FromHours(3);
-    });
     builder.Services.AddSignalR();
 
     builder.Services
@@ -190,6 +188,7 @@ if (debugOption.IsWebApiEnabled)
     });
 
     var app = builder.Build();
+    
     app.UseMiddleware<ErrorHandlingMiddleware>();
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
