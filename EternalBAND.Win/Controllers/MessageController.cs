@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace EternalBAND.Controllers;
 [Authorize]
+[ApiExplorerSettings(IgnoreApi = true)]
 public class MessageController : Controller
 {
     private readonly MessageService _messageService;

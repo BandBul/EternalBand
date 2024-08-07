@@ -1,61 +1,69 @@
-﻿using EternalBAND.DomainObjects;
+﻿using EternalBAND.Api.Options;
+using EternalBAND.DomainObjects;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using System.Security.Claims;
 
 namespace EternalBAND.Api.Services
 {
     public class AccountService
     {
-        private readonly SignInManager<Users> _signInManager;
-        private readonly UserManager<Users> _userManager;
-        public AccountService(SignInManager<Users> signInManager, UserManager<Users> userManager)
+        private readonly SignInManager<Users> signInManager;
+        private readonly UserManager<Users> userManager;
+        private readonly GoogleOptions googleSettings;
+        public AccountService(SignInManager<Users> signInManager, UserManager<Users> userManager, IOptions<GoogleOptions> googleOptions)
         {
-            _signInManager = signInManager;
-            _userManager = userManager;
+            this.signInManager = signInManager;
+            this.userManager = userManager;
+            this.googleSettings = googleOptions.Value;
         }
         public ChallengeResult ExernalLogin(string provider, string redirectUrl) 
         {
-            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
             return new ChallengeResult(provider, properties);
         }
 
-        public async Task<bool> ExternalLoginCallback()
+        public ChallengeResult ExernalLoginWithReturnUrl(string provider, string returnUrl)
         {
-            var info = await GetExternalLoginInfoAsync();
+            var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, googleSettings.RedirectUrl);
+            properties.Items["returnUrl"] = returnUrl;
+            return new ChallengeResult(provider, properties);
+        }
+
+        public async Task<bool> ExternalLoginCallback(ExternalLoginInfo info)
+        {
             var email = info.Principal.FindFirstValue(ClaimTypes.Email);
             if (email != null)
             {
                 // Create a new user without password if we do not have a user already
-                var user = await _userManager.FindByEmailAsync(email);
+                var user = await userManager.FindByEmailAsync(email);
                 if (user == null)
                 {
                     user = new Users
                     {
-                        UserName = info.Principal.FindFirstValue(ClaimTypes.Email),
-                        Email = info.Principal.FindFirstValue(ClaimTypes.Email)
+                        UserName = email,
+                        Email = email
                     };
-                    await _userManager.CreateAsync(user);
+                    await userManager.CreateAsync(user);
                 }
                 // Add a login (i.e insert a row for the user in AspNetUserLogins table)
-                await _userManager.AddLoginAsync(user, info);
-                await _signInManager.SignInAsync(user, isPersistent: false);
+                await userManager.AddLoginAsync(user, info);
+                await signInManager.SignInAsync(user, isPersistent: false);
                 return true;
             }
-            else
-            {
-                return false;
-            }
+
+            return false;
         }
 
         public async Task<ExternalLoginInfo?> GetExternalLoginInfoAsync()
         {
-            return await _signInManager.GetExternalLoginInfoAsync();
+            return await signInManager.GetExternalLoginInfoAsync();
         }
 
         public async Task<Microsoft.AspNetCore.Identity.SignInResult> ExternalLoginSignInAsync(string loginProvider, string providerKey)
         {
-            return await _signInManager.ExternalLoginSignInAsync(loginProvider, providerKey, isPersistent: false, bypassTwoFactor: true);
+            return await signInManager.ExternalLoginSignInAsync(loginProvider, providerKey, isPersistent: false, bypassTwoFactor: true);
         }
 
     }

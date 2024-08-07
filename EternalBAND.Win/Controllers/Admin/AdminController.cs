@@ -11,6 +11,7 @@ using X.PagedList;
 namespace EternalBAND.Controllers.Admin;
 
 [Authorize(Roles = "Admin")]
+[ApiExplorerSettings(IgnoreApi = true)]
 public class AdminController : Controller
 {
     private readonly AdminService _adminService;

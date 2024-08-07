@@ -12,6 +12,8 @@ using EternalBAND.Api.Helpers;
 using EternalBAND.Common;
 
 namespace EternalBAND.Controllers;
+
+[ApiExplorerSettings(IgnoreApi = true)]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;

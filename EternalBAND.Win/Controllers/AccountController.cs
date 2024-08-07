@@ -51,7 +51,7 @@ namespace EternalBAND.Controllers
             }
             else
             {
-                var callBackResult = await _accountService.ExternalLoginCallback();
+                var callBackResult = await _accountService.ExternalLoginCallback(info);
                 // Get the email claim value
                 if (callBackResult)
                 {
