@@ -67,11 +67,11 @@ if (debugOption.IsWebApiEnabled)
 
     //Swagger Documentation Section
     var info = new OpenApiInfo()
-        {
-            Title = "Bandbul Documentation",
-            Version = "v1",
-            Description = "Herkes icin Muzik",
-        };
+    {
+        Title = "Bandbul Documentation",
+        Version = "v1",
+        Description = "Herkes icin Muzik",
+    };
 
     var securityId = "Bearer";
     builder.Services.AddSwaggerGen(c =>
@@ -115,19 +115,6 @@ if (debugOption.IsWebApiEnabled)
         .AddEntityFrameworkStores<ApplicationDbContext>()
         .AddDefaultTokenProviders()
         .AddRoles<IdentityRole>();
-    builder.Services.AddRazorPages(options =>
-    {
-        options.Conventions.AddAreaPageRoute("Identity", "/Account/Manage/Index", "/profil/{userId?}");
-        options.Conventions.AddAreaPageRoute("Identity", "/Account/Manage/ChangePassword", "/sifre-sifirla");
-        options.Conventions.AddAreaPageRoute("Identity", "/Account/Lockout", "/hesap-kilitlendi");
-        options.Conventions.AddAreaPageRoute("Identity", "/Account/Register", "/kayit-ol");
-        options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", "/giris-yap");
-        options.Conventions.AddAreaPageRoute("Identity", "/Account/ForgotPassword", "/sifremi-unuttum");
-        options.Conventions.AddAreaPageRoute("Identity", "/Account/Logout", "/cikis-yap");
-        options.Conventions.AddAreaPageRoute("Identity", "/Account/AccessDenied", "/erisim-engellendi");
-        options.Conventions.AddAreaPageRoute("Identity", "/Account/ForgotPasswordConfirmation",
-            "/mail-gonderildi");
-    });
 
     var googleSettings = new GoogleOptions();
     builder.Configuration.GetSection(GoogleOptions.GoogleOptionsKey).Bind(googleSettings);
