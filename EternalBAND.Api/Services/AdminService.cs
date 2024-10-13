@@ -8,8 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using X.PagedList;
 using EternalBAND.Api.Exceptions;
-using Microsoft.Extensions.Hosting;
-using System.Linq;
+using X.PagedList.EF;
 
 namespace EternalBAND.Api.Services
 {
@@ -530,9 +529,9 @@ namespace EternalBAND.Api.Services
             .FirstOrDefaultAsync(n => n.SeoLink == seoLink);
         }
 
-        public IEnumerable<Posts> GetFilteredPosts(Func<Posts,bool> predicate)
+        public async Task<IPagedList<Posts>> GetFilteredPosts(Func<Posts,bool> predicate)
         {
-            return _context.Posts.Where(predicate);
+            return await _context.Posts.Where(predicate).AsQueryable<Posts>().ToPagedListAsync(1, 10) ;
         }
 
         private bool InstrumentsExists(int? id)

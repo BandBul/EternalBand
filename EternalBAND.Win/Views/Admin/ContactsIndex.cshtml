@@ -1,6 +1,5 @@
 @using X.PagedList
 @using X.PagedList.Mvc.Core
-@using X.PagedList.Web.Common
 @model IPagedList<EternalBAND.DomainObjects.Contacts>
 
 @{
@@ -105,16 +104,16 @@
                                 }
                                 </tbody>
                             </table>
-                              <ul class="pagination pagination-sm">
-                                                                                        @{
-                                                                                            @Html.PagedListPager((IPagedList) Model, pId => Url.Action("ContactsIndex", new {@pId = pId}),
-                                                                                                new PagedListRenderOptions
-                                                                                                {
-                                                                                                    LiElementClasses = new string[] {"page-item"},
-                                                                                                    PageClasses = new string[] {"page-link"}
-                                                                                                })
-                                                                                        }
-                                                                                    </ul>
+                                <ul class="pagination pagination-sm">
+                                    @{
+                                        @Html.PagedListPager((IPagedList) Model, pId => Url.Action("ContactsIndex", new {@pId = pId}),
+                                            new PagedListRenderOptions
+                                            {
+                                                LiElementClasses = new string[] {"page-item"},
+                                                PageClasses = new string[] {"page-link"}
+                                            })
+                                    }
+                                </ul>
                         </div>
                     </div>
                 </div>

@@ -2,11 +2,9 @@
 using EternalBAND.DataAccess;
 using EternalBAND.DomainObjects;
 using EternalBAND.DomainObjects.ViewModel;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
-using System.Linq.Expressions;
 using X.PagedList;
+using X.PagedList.EF;
 
 namespace EternalBAND.Api.Services
 {
@@ -34,12 +32,11 @@ namespace EternalBAND.Api.Services
 
         public async Task<IPagedList<Posts>> GetNewPosts()
         {
-            var currentPosts = 
-                await _context.Posts
+            var currentPosts =
+                _context.Posts
                 .Where(p => p.Status == Common.PostStatus.Active)
                 .Include(n => n.PostTypes)
-                .Include(n => n.Instruments)
-                .ToListAsync();
+                .Include(n => n.Instruments);
             return await currentPosts
                 .OrderByDescending(s => s.AddedDate)
                 .ToPagedListAsync(1, Constants.PageSizeForElements);
@@ -65,8 +62,6 @@ namespace EternalBAND.Api.Services
         {
             var filters = new List<Func<Posts, bool>>();
 
-            var posts = _context.Posts.Where(p => p.Status == PostStatus.Active).Include(n => n.PostTypes).Include(n => n.Instruments);
-
             if(type != "0" && type != "")
             {
                 filters.Add(n => n.PostTypes.Type.Contains(type));
@@ -84,7 +79,7 @@ namespace EternalBAND.Api.Services
 
             Func<Posts, bool> predicate = post => filters.All(filter => filter(post));
 
-            return await posts.Where(predicate)
+            return await _context.Posts.Where(p => p.Status == PostStatus.Active).Include(n => n.PostTypes).Include(n => n.Instruments)
                     .OrderByDescending(s => s.AddedDate)
                     .ToPagedListAsync(pageId, Constants.PageSizeForElements);
         }

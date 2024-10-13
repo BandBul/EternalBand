@@ -5,8 +5,9 @@ using EternalBAND.Common;
 using EternalBAND.DomainObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography;
 using X.PagedList;
+using X.PagedList.EF;
+
 
 namespace EternalBAND.Controllers.Admin;
 
@@ -629,7 +630,7 @@ public class AdminController : Controller
 
     private async Task<IPagedList<Posts>> GetApprovalPageData(int pId = 1)
     {
-        return await _adminService.GetFilteredPosts(s => s.Status == PostStatus.PendingApproval).ToPagedListAsync(1, 10);
+        return await _adminService.GetFilteredPosts(s => s.Status == PostStatus.PendingApproval);
     }
 
 }

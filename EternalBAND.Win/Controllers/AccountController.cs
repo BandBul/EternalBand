@@ -20,6 +20,7 @@ namespace EternalBAND.Controllers
         public IActionResult ExternalLogin(string provider, string returnUrl = null)
         {
             var redirectUrl = Url.Action("GoogleResponse", "Account");
+            _logger.LogInformation($"{provider} signin called with redirecturl : {redirectUrl}");
             return _accountService.ExernalLogin(provider, redirectUrl);
         }
 

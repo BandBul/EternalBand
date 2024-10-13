@@ -1,6 +1,5 @@
 @using X.PagedList
 @using X.PagedList.Mvc.Core
-@using X.PagedList.Web.Common
 @model IPagedList<EternalBAND.DomainObjects.Blogs>
 
 @{
@@ -86,16 +85,14 @@
                 <div class="col-lg-12">
                     <nav aria-label="Navigation">
                         <ul class="pagination job-pagination mb-0 justify-content-center">
-                           
-                         
                             @{
-                                                        @Html.PagedListPager((IPagedList) Model, pId => Url.Action("BlogsIndex", new {@pId = pId}),
-                                                            new PagedListRenderOptions
-                                                            {
-                                                                LiElementClasses = new string[] {"page-item"},
-                                                                PageClasses = new string[] {"page-link"},
-                                                            })
-                                                    }
+                                @Html.PagedListPager((IPagedList) Model, pId => Url.Action("BlogsIndex", new {@pId = pId}),
+                                        new PagedListRenderOptions
+                                        {
+                                            LiElementClasses = new string[] {"page-item"},
+                                            PageClasses = new string[] {"page-link"},
+                                        })
+                                }
                           
                         </ul>
                     </nav>

@@ -60,7 +60,7 @@ public class HomeController : Controller
     }
 
     // TODO change parameter names as understandable strings
-    [HttpGet,Route("ilanlar")]
+    [HttpPost,Route("ilanlar")]
     public async Task<IActionResult> Posts(int pId = 1, string? s = "0", int c = 0, string? e = "0")
     {
         ViewBag.CityId = c;
@@ -79,7 +79,7 @@ public class HomeController : Controller
             }
         };
         //return View(model);
-        return Ok(model);
+        return View(model);
     }
 
     [HttpGet, Route("ilan/{seolink}")]

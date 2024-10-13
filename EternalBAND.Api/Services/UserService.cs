@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using System.Text.Json;
 using JsonException = EternalBAND.Api.Exceptions.JsonException;
 using EternalBAND.Common;
+using X.PagedList.EF;
 
 namespace EternalBAND.Api.Services
 {
