@@ -193,6 +193,16 @@ try
             opt.ClientSecret = googleApiKey.ClientSecret;
         });
 
+        builder.Services.ConfigureApplicationCookie(options =>
+        {
+            options.LoginPath = "/giris-yap";
+            options.AccessDeniedPath = "/erisim-engellendi";
+            options.LogoutPath = "/cikis-yap";
+            options.ExpireTimeSpan = TimeSpan.FromHours(3);
+            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            options.Cookie.SameSite = SameSiteMode.None;
+        });
+
         builder.Services.AddSignalR();
 
         builder.Services
