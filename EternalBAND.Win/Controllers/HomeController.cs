@@ -166,10 +166,27 @@ public class HomeController : Controller
     }
 
 
-    [HttpGet,Route("SendSupportMessage")]
+    [HttpPost,Route("SendSupportMessage")]
     [Authorize]
-    public IActionResult SendSupportMessage(string message)
+    public async Task<IActionResult> SendSupportMessage(string message)
     {
+        var contractMessage = new Contacts()
+        {
+            Message = message
+        };
+
+        if (User != null) 
+        {
+            var user = await _controllerHelper.GetUserAsync(User);
+            contractMessage.NameSurname = user.FullName;
+            contractMessage.Mail = user.Email;
+            contractMessage.Phone = user.PhoneNumber;
+        }
+        await ContactsCreate(contractMessage);
+
+        //TO DO add a message that your message is received to us
+        // ViewBag.IsContactMessageReceived = ......
+        // show this info as banner when page redirected
         return RedirectToAction(nameof(Anasayfa));
     }
 
