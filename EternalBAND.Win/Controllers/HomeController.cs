@@ -78,9 +78,16 @@ public class HomeController : Controller
 
             }
         };
-        //return View(model);
         return View(model);
     }
+
+    [HttpGet, Route("ilanlar")]
+    public async Task<IActionResult> Posts(string s)
+    {
+        return await Posts(1, s);
+    }
+
+
 
     [HttpGet, Route("ilan/{seolink}")]
     public async Task<IActionResult> Post(string? seolink , bool approvalPurpose = false)

@@ -3,6 +3,7 @@ using EternalBAND.DataAccess;
 using EternalBAND.DomainObjects;
 using EternalBAND.DomainObjects.ViewModel;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using X.PagedList;
 using X.PagedList.EF;
 
@@ -60,26 +61,29 @@ namespace EternalBAND.Api.Services
 
         public async Task<IPagedList<Posts>> FilterPostsByType(int pageId, string type, int cityId, string instrument)
         {
-            var filters = new List<Func<Posts, bool>>();
+            var query = _context.Posts.Where(p => p.Status == PostStatus.Active);
+
+            var filters = new List<Expression<Func<Posts, bool>>>();
 
             if(type != "0" && type != "")
             {
-                filters.Add(n => n.PostTypes.Type.Contains(type));
+                query = query.Where(n => n.PostTypes.Type.Contains(type));
             }
 
             if (instrument != "0" && instrument != "")
             {
-                filters.Add(n => n.Instruments.InstrumentShort == instrument);
+                query = query.Where(n => n.Instruments.InstrumentShort == instrument);
             }
 
             if (cityId != 0)
             {
-                filters.Add(n => n.CityId == cityId);
+                query = query.Where(n => n.CityId == cityId);
             }
 
-            Func<Posts, bool> predicate = post => filters.All(filter => filter(post));
 
-            return await _context.Posts.Where(p => p.Status == PostStatus.Active).Include(n => n.PostTypes).Include(n => n.Instruments)
+            return await query
+                    .Include(n => n.PostTypes)
+                    .Include(n => n.Instruments)
                     .OrderByDescending(s => s.AddedDate)
                     .ToPagedListAsync(pageId, Constants.PageSizeForElements);
         }
