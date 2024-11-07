@@ -57,6 +57,7 @@
       <Content Remove="wwwroot\css\Login-page.css" />
     </ItemGroup>
     <ItemGroup>
+      <None Remove="Css\About.css" />
       <None Remove="Css\Anasayfa.css" />
       <None Remove="Css\Blog.css" />
       <None Remove="Css\ContactsCreate.css" />
@@ -66,6 +67,7 @@
       <None Remove="Css\Post.css" />
       <None Remove="Css\PostIndex.css" />
       <None Remove="Css\PostRules.css" />
+      <None Remove="Css\PostRulesPopup.css" />
       <None Remove="Css\SiteLogo.css" />
       <None Remove="EternalBAND.zip" />
       <None Remove="Proje.zip" />
@@ -119,6 +121,12 @@
       <Content Include="Css\Post.css">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+      <Content Include="Css\About.css">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Css\PostRulesPopup.css">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
       <Content Include="Css\PostRules.css">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
@@ -169,6 +177,10 @@
     <ItemGroup>
       <Content Update="appsettings.Production.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Update="Views\Shared\PartialViews\_BasePostRules.cshtml">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>

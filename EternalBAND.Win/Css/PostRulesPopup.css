@@ -1,0 +1,34 @@
+﻿.popup
+{
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 10px;
+    border: 2px solid #ccc; /* Add border */
+    border-radius: 8px; /* Add border radius */
+    z-index: 1000;
+    width: 1000px;
+}
+
+/* Overlay to disable background interaction */
+.overlay
+{
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.text-content
+{
+    border: 1px solid #ccc; /* Gray border */
+    padding: 5px;
+    border-radius: 8px; /* Smooth border */
+}

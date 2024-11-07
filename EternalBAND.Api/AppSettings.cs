@@ -31,15 +31,7 @@ namespace EternalBAND.Business
             File.WriteAllText(appSettingsJsonFilePath, output);
 
         }
-        public static void SetSiteDomainValue(string value)
-        {
-            string appSettingsJsonFilePath = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
-            var jsonObj = GetDynamicJson(appSettingsJsonFilePath);
-            jsonObj.SiteGeneralSetting["SiteDomain"] = value;
-            string output = JsonConvert.SerializeObject(jsonObj, Formatting.Indented);
-            File.WriteAllText(appSettingsJsonFilePath, output);
-
-        }
+        
         public static dynamic GetDynamicJson()
         {
             return  GetDynamicJson(Path.Combine(AppContext.BaseDirectory, "appsettings.json"));

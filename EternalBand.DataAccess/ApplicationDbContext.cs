@@ -260,44 +260,27 @@ public class ApplicationDbContext : IdentityDbContext<Users>
             },
             new SystemInfo
             {
-                Id = 13,
-                Type = "site-logo",
-                Value = "/images/logo-light.png",
-                Desc = "Site Logo"
-            },
-            new SystemInfo
-            {
-                Id = 14,
-                Type = "site-favicon",
-                Value = "/images/favicon.ico",
-                Desc = "Site Favicon"
-            },   new SystemInfo
-            {
-                Id = 15,
-                Type = "site-domain",
-                Value = "https://bandbul.checktheproject.com",
-                Desc = "Site Domain"
-            }
-            ,   new SystemInfo
-            {
                 Id = 17,
                 Type = "site-footer-left-text",
                 Value = " It is a long established fact that a reader will be of a page reader will be of at its layout. ",
                 Desc = "Site Sol Alt Metin"
-            } ,   new SystemInfo
+            } ,   
+            new SystemInfo
             {
                 Id = 18,
                 Type = "site-desc",
                 Value = "Buraya description gelecek :)",
                 Desc = "Site Desc Seo için"
-            },   new SystemInfo
+            },   
+            new SystemInfo
             {
                 Id = 19,
                 Type = "site-keywords",
                 Value = "keywords , keywords 1, keywords 2",
                 Desc = "Site Keywords Seo için"
             }
-            ,   new SystemInfo
+            ,   
+            new SystemInfo
             {
                 Id = 16,
                 Type = "site-bottom-footer-text",

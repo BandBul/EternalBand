@@ -1,6 +1,15 @@
+@using EternalBAND.Common
 @using EternalBAND.DataAccess;
+@using EternalBAND.Api.Options
+@using Microsoft.Extensions.Options
+@inject IOptions<SiteGeneralOptions> _siteSettings
 @inject ApplicationDbContext _context
-
+@{
+    var queryParamStr = "/ilanlar?s=";
+    var musicianText = queryParamStr + PostTypeName.Musician;
+    var groupText = queryParamStr + PostTypeName.Group;
+    var lessonText = queryParamStr + PostTypeName.Lesson;
+}
 <section class="bg-footer">
     <div class="container">
         <div class="row">
@@ -10,7 +19,7 @@
                         <partial name="PartialViews/_GetSiteTitlePartial"/>
                     </h4>
                     <p class="text-white-50">
-                        @_context.SystemInfo.FirstOrDefault(n => n.Type == "site-footer-left-text").Value
+                        @_siteSettings.Value.SiteSlogan
                     </p>
                     @{
                         var instagram = _context.SystemInfo.FirstOrDefault(n => n.Type == "site-instagram");
@@ -54,73 +63,54 @@
             </div><!--end col-->
             <div class="col-lg-2 col-6">
                 <div class="footer-item mt-4 mt-lg-0">
-                    <p class="fs-16 text-white mb-4">Company</p>
+                    <p class="fs-16 text-white mb-4">ANASAYFA</p>
                     <ul class="list-unstyled footer-list mb-0">
                         <li>
-                            <a href="about.html"><i class="mdi mdi-chevron-right"></i> About Us</a>
+                            <a href="/About"><i class="mdi mdi-chevron-right"></i> Hakkımızda</a>
                         </li>
                         <li>
-                            <a href="contact.html"><i class="mdi mdi-chevron-right"></i> Contact Us</a>
+                            <a href="/iletisim"><i class="mdi mdi-chevron-right"></i> İletişim</a>
                         </li>
-                        <li>
-                            <a href="services.html"><i class="mdi mdi-chevron-right"></i> Services</a>
-                        </li>
-                        <li>
-                            <a href="blog.html"><i class="mdi mdi-chevron-right"></i> Blog</a>
-                        </li>
-                        <li>
-                            <a href="team.html"><i class="mdi mdi-chevron-right"></i> Team</a>
-                        </li>
-                        <li>
-                            <a href="pricing.html"><i class="mdi mdi-chevron-right"></i> Pricing</a>
+                        <li hidden>
+                            <a href="services.html"><i class="mdi mdi-chevron-right"></i> Prodüksiyon</a>
+                        </li> 
+                        <li hidden>
+                            <a href="blog.html"><i class="mdi mdi-chevron-right"></i> 2. El Enstrüman</a>
                         </li>
                     </ul>
                 </div>
             </div><!--end col-->
             <div class="col-lg-2 col-6">
                 <div class="footer-item mt-4 mt-lg-0">
-                    <p class="fs-16 text-white mb-4">For Jobs</p>
+                    <p class="fs-16 text-white mb-4">İLANLAR</p>
                     <ul class="list-unstyled footer-list mb-0">
-                        <li>
-                            <a href="job-categories.html"><i class="mdi mdi-chevron-right"></i> Browser Categories</a>
-                        </li>
-                        <li>
-                            <a href="job-list.html"><i class="mdi mdi-chevron-right"></i> Browser Jobs</a>
-                        </li>
-                        <li>
-                            <a href="job-details.html"><i class="mdi mdi-chevron-right"></i> Job Details</a>
-                        </li>
-                        <li>
-                            <a href="bookmark-jobs.html"><i class="mdi mdi-chevron-right"></i> Bookmark Jobs</a>
-                        </li>
+                        @{
+                            <li>
+                                <a href="@groupText"><i class="mdi mdi-chevron-right"></i> Grup Arıyorum</a>
+                            </li>
+                            <li>
+                                <a href="@musicianText"><i class="mdi mdi-chevron-right"></i> Müzisyen Arıyorum</a>
+                            </li>
+                            <li>
+                                <a href="@lessonText"><i class="mdi mdi-chevron-right"></i> Ders Almak İstiyorum</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div><!--end col-->
+
             <div class="col-lg-2 col-6">
                 <div class="footer-item mt-4 mt-lg-0">
-                    <p class="text-white fs-16 mb-4">For Candidates</p>
+                    <p class="fs-16 text-white mb-4">DESTEK</p>
                     <ul class="list-unstyled footer-list mb-0">
-                        <li>
-                            <a href="candidate-list.html"><i class="mdi mdi-chevron-right"></i> Candidate List</a>
+                        <li hidden>
+                            <a href="contact.html"><i class="mdi mdi-chevron-right"></i> S.S.S.</a>
                         </li>
                         <li>
-                            <a href="candidate-grid.html"><i class="mdi mdi-chevron-right"></i> Candidate Grid</a>
+                            <a href="/PostRules"><i class="mdi mdi-chevron-right"></i> İlan Kuralları</a>
                         </li>
-                        <li>
-                            <a href="candidate-details.html"><i class="mdi mdi-chevron-right"></i> Candidate Details</a>
-                        </li>
-                    </ul>
-                </div>
-            </div><!--end col-->
-            <div class="col-lg-2 col-6">
-                <div class="footer-item mt-4 mt-lg-0">
-                    <p class="fs-16 text-white mb-4">Support</p>
-                    <ul class="list-unstyled footer-list mb-0">
-                        <li>
-                            <a href="contact.html"><i class="mdi mdi-chevron-right"></i> Help Center</a>
-                        </li>
-                        <li>
-                            <a href="faqs.html"><i class="mdi mdi-chevron-right"></i> FAQ'S</a>
+                         <li hidden>
+                            <a href="faqs.html"><i class="mdi mdi-chevron-right"></i> Destek Birimi</a>
                         </li>
                         <li>
                             <a href="/PrivacyPolicy" target="_blank"><i class="mdi mdi-chevron-right"></i> Gizlilik Sözleşmesi</a>

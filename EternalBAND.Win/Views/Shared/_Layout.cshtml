@@ -1,10 +1,14 @@
 ﻿<!DOCTYPE html>
 <html lang="tr">
-
+@using EternalBAND.Common
+@using EternalBAND.DataAccess;
+@using EternalBAND.Api.Options
+@using Microsoft.Extensions.Options
+@inject IOptions<SiteGeneralOptions> _siteSettings
 <head>
     <meta charset="UTF-8">
     <title><partial name="PartialViews/_GetSiteTitlePartial"/> - @ViewData["Title"]</title>
-    <meta property="og:title" content="@(new EternalBAND.Business.AppSettings().GetSiteTitle().Trim()) - @ViewData["Title"]"/>
+    <meta property="og:title" content="@(_siteSettings.Value.SiteName) - @ViewData["Title"]" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <partial name="PartialViews/_GetSiteFavicon"/>

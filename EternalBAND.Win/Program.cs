@@ -52,6 +52,7 @@ try
         builder.Services.Configure<JwtTokenOptions>(builder.Configuration.GetSection(JwtTokenOptions.JwtOptionKey));
         builder.Services.Configure<NotificationOptions>(builder.Configuration.GetSection(NotificationOptions.NotificationOptionKey));
         builder.Services.Configure<GoogleOptions>(builder.Configuration.GetSection(GoogleOptions.GoogleOptionsKey));
+        builder.Services.Configure<SiteGeneralOptions>(builder.Configuration.GetSection(SiteGeneralOptions.SiteGeneralOptionKey));
 
         // TODO below settings for able to setup an windows service, research is there any other wy todo
         builder.Host.UseWindowsService();
@@ -172,8 +173,9 @@ try
 
         var googleApiKey = new GoogleOptions();
         builder.Configuration.GetSection(GoogleOptions.GoogleOptionsKey).Bind(googleApiKey);
-        builder.Services.Configure<NotificationOptions>(
-            builder.Configuration.GetSection(NotificationOptions.NotificationOptionKey));
+        builder.Services.Configure<NotificationOptions>(builder.Configuration.GetSection(NotificationOptions.NotificationOptionKey));
+        builder.Services.Configure<SiteGeneralOptions>(builder.Configuration.GetSection(SiteGeneralOptions.SiteGeneralOptionKey));
+
         builder.Services.AddAuthentication(opt =>
         {
             opt.DefaultScheme = "Cookies";

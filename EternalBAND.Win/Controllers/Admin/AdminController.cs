@@ -390,32 +390,6 @@ public class AdminController : Controller
         }
     }
 
-    // POST: SystemInfo/Edit/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> SystemInfoEdit(int id, [Bind("Id,Type,Value,Desc")] SystemInfo systemInfo,
-        IFormFile? image)
-    {
-        if (ModelState.IsValid)
-        {
-            try
-            {
-                await _adminService.SystemInfoEdit(id, systemInfo, image);
-                return RedirectToAction(nameof(SystemInfoIndex));
-            }
-            catch (NotFoundException)
-            {
-                return NotFound();
-            }
-        }
-        else
-        {
-            return View(systemInfo);
-        }
-    }
-
     [HttpGet]
     // GET: SystemInfo/Delete/5
     public async Task<IActionResult> SystemInfoDelete(int? id)

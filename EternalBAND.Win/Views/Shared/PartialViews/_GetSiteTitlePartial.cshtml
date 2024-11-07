@@ -1,1 +1,5 @@
-@(new EternalBAND.Business.AppSettings().GetSiteTitle().Trim())
+@using EternalBAND.Api.Options
+@using Microsoft.Extensions.Options
+@inject IOptions<SiteGeneralOptions> _siteSettings
+
+@(_siteSettings.Value.SiteName)

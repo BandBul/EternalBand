@@ -1,1 +1,5 @@
-<link rel="shortcut icon" href="@(new EternalBAND.Business.AppSettings().GetSiteFavicon().Trim())">
+@using System.Reflection;
+@using EternalBAND.Api.Options
+@using Microsoft.Extensions.Options
+@inject IOptions<SiteGeneralOptions> _siteSettings
+<link rel="shortcut icon" href="@(_siteSettings.Value.SiteFavicon)">

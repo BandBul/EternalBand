@@ -87,8 +87,6 @@ public class HomeController : Controller
         return await Posts(1, s);
     }
 
-
-
     [HttpGet, Route("ilan/{seolink}")]
     public async Task<IActionResult> Post(string? seolink , bool approvalPurpose = false)
     {
@@ -172,6 +170,17 @@ public class HomeController : Controller
         return View();
     }
 
+    [HttpGet, Route("PostRules")]
+    public IActionResult PostRules()
+    {
+        return View();
+    }
+
+    [HttpGet, Route("About")]
+    public IActionResult About()
+    {
+        return View();
+    }
 
     [HttpPost,Route("SendSupportMessage")]
     [Authorize]
