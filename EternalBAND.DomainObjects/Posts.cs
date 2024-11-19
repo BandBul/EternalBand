@@ -81,4 +81,13 @@ public class Posts : IEntity
     {
         return AllPhotos.FirstOrDefault(photo => photo != null);
     }
+
+    public void SetPhoto(List<string> photos)
+    {
+        Photo1 = photos.Count >= 1 ? photos[0] : null;
+        Photo2 = photos.Count >= 2 ? photos[1] : null;
+        Photo3 = photos.Count >= 3 ? photos[2] : null;
+        Photo4 = photos.Count >= 4 ? photos[3] : null;
+        Photo5 = photos.Count >= 5 ? photos[4] : null;
+    }
 }

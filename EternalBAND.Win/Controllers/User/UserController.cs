@@ -108,14 +108,15 @@ public class UserController : Controller
         [Bind(
             "Guid,Title,HTMLText,PostTypesId,InstrumentsId,CityId")]
         Posts posts,
-        List<IFormFile>? images)
+        List<IFormFile>? uploadedFiles,
+        List<string>? deletedFilesIndex)
     {
         if (ModelState.IsValid)
         {
             try
             {
                 var currentUser = await _controllerHelper.GetUserAsync(User);
-                await _userService.PostEdit(currentUser, posts, images);
+                await _userService.PostEdit(currentUser, posts, uploadedFiles, deletedFilesIndex);
                 return RedirectToAction(nameof(PostIndex));
             }
            
@@ -123,7 +124,6 @@ public class UserController : Controller
             {
                 return NotFound();
             }
-            
         }
 
         ViewData["PostTypesId"] = new SelectList(_userService.GetPostTypes(), "Id", "FilterText", posts.PostTypesId);

@@ -82,7 +82,7 @@ public class HomeController : Controller
     }
 
     [HttpGet, Route("ilanlar")]
-    public async Task<IActionResult> Posts(string s)
+    public async Task<IActionResult> Posts(string? s)
     {
         return await Posts(1, s);
     }

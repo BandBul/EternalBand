@@ -1,4 +1,5 @@
-﻿using EternalBAND.Common;
+﻿using EternalBAND.Api.Extensions;
+using EternalBAND.Common;
 using EternalBAND.DataAccess;
 using EternalBAND.DomainObjects;
 using EternalBAND.DomainObjects.ViewModel;
@@ -65,12 +66,12 @@ namespace EternalBAND.Api.Services
 
             var filters = new List<Expression<Func<Posts, bool>>>();
 
-            if(type != "0" && type != "")
+            if(type.IsValidForFilter())
             {
                 query = query.Where(n => n.PostTypes.Type.Contains(type));
             }
 
-            if (instrument != "0" && instrument != "")
+            if (instrument.IsValidForFilter())
             {
                 query = query.Where(n => n.Instruments.InstrumentShort == instrument);
             }

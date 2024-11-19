@@ -14,6 +14,7 @@ using System.Text.Json;
 using JsonException = EternalBAND.Api.Exceptions.JsonException;
 using EternalBAND.Common;
 using X.PagedList.EF;
+using Microsoft.IdentityModel.Tokens;
 
 namespace EternalBAND.Api.Services
 {
@@ -78,7 +79,7 @@ namespace EternalBAND.Api.Services
             return posts;
         }
 
-        public async Task PostEdit(Users currentUser, Posts posts, List<IFormFile>? images)
+        public async Task PostEdit(Users currentUser, Posts posts, List<IFormFile>? images, List<string>? deletedFilesIndex)
         {
             try
             {
@@ -87,21 +88,18 @@ namespace EternalBAND.Api.Services
                     throw new NotFoundException();
                 }
 
-                PostAddPhoto(posts, images);
                 var post = await _context.Posts.AsNoTracking().FirstOrDefaultAsync(n => n.Guid == posts.Guid);
+                if (post == null) 
+                {
+                    throw new NotFoundException();
+                }
+                
+
                 if ((currentUser.Id == post.AddedByUserId))
                 {
                     var isAdmin = await _userManager.IsInRoleAsync(currentUser, Constants.AdminRoleName);
-                    if (images.Count == 0)
-                    {
-                        posts.Photo1 = post.Photo1;
-                        posts.Photo2 = post.Photo2;
-                        posts.Photo3 = post.Photo3;
-                        posts.Photo4 = post.Photo4;
-                        posts.Photo5 = post.Photo5;
-                    }
-
                     posts.Id = post.Id;
+                    await UpdatePhotos(posts, images, deletedFilesIndex, post.AllPhotos);
                     posts.AddedByUserId = post.AddedByUserId;
                     posts.AdminConfirmationUserId = post.AdminConfirmationUserId;
                     posts.AdminConfirmation = post.AdminConfirmation;
@@ -173,7 +171,7 @@ namespace EternalBAND.Api.Services
 
             await _context.SaveChangesAsync();
         }
-
+        // TO DO : if post deleted then photos should be deleted from server as well
         public async Task<string> PostDelete(Users currentUser, int postId)
         {
             if (_context.Posts == null)
@@ -329,42 +327,47 @@ namespace EternalBAND.Api.Services
             {
                 foreach (var image in images)
                 {
-                    var photoName = new PhotoName().GeneratePhotoName(new Random().Next(0, 10000000).ToString()) +
-                                    new Random().Next(0, 1000) +
-                                    System.IO.Path.GetExtension(image.FileName);
+                    var absoluteFilePath = ImageHelper.GetGeneratedAbsolutePostImagePath(posts.Id, image.FileName);
+                    string fulldirectoryPath = Path.Combine(_environment.WebRootPath, Path.GetDirectoryName(absoluteFilePath));
+
+                    // Ensure the directory exists
+                    if (!Directory.Exists(fulldirectoryPath))
+                    {
+                        Directory.CreateDirectory(fulldirectoryPath);
+                    }
                     using (var stream =
                            new FileStream(
-                               Path.Combine(_environment.WebRootPath, "images/ilan/", photoName),
+                               Path.Combine(_environment.WebRootPath, absoluteFilePath),
                                FileMode.Create))
                     {
                         await image.CopyToAsync(stream);
                         if (posts.Photo1 == null)
                         {
-                            posts.Photo1 = "/images/ilan/" + photoName;
+                            posts.Photo1 = absoluteFilePath;
                             continue;
                         }
 
                         if (posts.Photo2 == null)
                         {
-                            posts.Photo2 = "/images/ilan/" + photoName;
+                            posts.Photo2 = absoluteFilePath;
                             continue;
                         }
 
                         if (posts.Photo3 == null)
                         {
-                            posts.Photo3 = "/images/ilan/" + photoName;
+                            posts.Photo3 = absoluteFilePath;
                             continue;
                         }
 
                         if (posts.Photo4 == null)
                         {
-                            posts.Photo4 = "/images/ilan/" + photoName;
+                            posts.Photo4 = absoluteFilePath;
                             continue;
                         }
 
                         if (posts.Photo5 == null)
                         {
-                            posts.Photo5 = "/images/ilan/" + photoName;
+                            posts.Photo5 = absoluteFilePath;
                             continue;
                         }
                     }
@@ -387,6 +390,45 @@ namespace EternalBAND.Api.Services
                     break;
                 }
             }
+        }
+
+        private async Task UpdatePhotos(Posts posts, List<IFormFile>? images, List<string>? deletedFilesIndex, List<string> exPhotos)
+        {
+            posts.SetPhoto(exPhotos);
+
+            if (!deletedFilesIndex.IsNullOrEmpty())
+            {
+                var filesToDelete = new List<string?>();
+                deletedFilesIndex.ForEach(index =>
+                {
+                    switch (int.Parse(index))
+                    {
+                        case 1:
+                            filesToDelete.Add(posts.Photo1);
+                            posts.Photo1 = null;
+                            break;
+                        case 2:
+                            filesToDelete.Add(posts.Photo2);
+                            posts.Photo2 = null;
+                            break;
+                        case 3:
+                            filesToDelete.Add(posts.Photo3);
+                            posts.Photo3 = null;
+                            break;
+                        case 4:
+                            filesToDelete.Add(posts.Photo4);
+                            posts.Photo4 = null;
+                            break;
+                        case 5:
+                            filesToDelete.Add(posts.Photo5);
+                            posts.Photo5 = null;
+                            break;
+                    }
+                });
+                ImageHelper.DeletePhotos(_environment.WebRootPath, filesToDelete);
+            }
+
+            await PostAddPhoto(posts, images);
         }
     }
 }

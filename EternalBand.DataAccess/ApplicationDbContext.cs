@@ -172,7 +172,7 @@ public class ApplicationDbContext : IdentityDbContext<Users>
             PhoneNumberConfirmed = false,
             AccessFailedCount = 0,
             PhoneNumber = "5000000000",
-            PhotoPath = "/img/user_photo/profile.png",
+            PhotoPath = "/images/user_photo/profile.png",
             FullName = "Super Admin",
         });
         builder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>

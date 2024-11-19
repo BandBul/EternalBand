@@ -9,6 +9,9 @@ using Microsoft.EntityFrameworkCore;
 using X.PagedList;
 using EternalBAND.Api.Exceptions;
 using X.PagedList.EF;
+using System;
+using System.Linq.Expressions;
+using Microsoft.Extensions.Hosting;
 
 namespace EternalBAND.Api.Services
 {
@@ -464,9 +467,12 @@ namespace EternalBAND.Api.Services
             .FirstOrDefaultAsync(n => n.SeoLink == seoLink);
         }
 
-        public async Task<IPagedList<Posts>> GetFilteredPosts(Func<Posts,bool> predicate)
+        public async Task<IPagedList<Posts>> GetFilteredPosts(Expression<Func<Posts,bool>> predicate)
         {
-            return await _context.Posts.Where(predicate).AsQueryable<Posts>().ToPagedListAsync(1, 10) ;
+            return await _context.Posts
+                .Where(predicate)
+                .OrderByDescending(s => s.AddedDate)
+                .ToPagedListAsync(1, 10) ;
         }
 
         private bool InstrumentsExists(int? id)
@@ -493,6 +499,20 @@ namespace EternalBAND.Api.Services
         {
             return (_context.Blogs?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+        private async Task Physical_Delete_Photos(List<string>? filesToDelete)
+        {
+            if (filesToDelete != null && filesToDelete.Count > 0)
+            {
+                foreach (var fileName in filesToDelete)
+                {
+                    var filePath = Path.Combine(_environment.WebRootPath, fileName);
+                    if (File.Exists(filePath))
+                    {
+                        File.Delete(filePath);
+                    }
+                }
+            }
+        }
 
         private async Task BlogPhotoAdd(Blogs blogs, List<IFormFile?> images)
         {
@@ -500,42 +520,41 @@ namespace EternalBAND.Api.Services
             {
                 foreach (var image in images)
                 {
-                    var photoName = new PhotoName().GeneratePhotoName(new Random().Next(0, 10000000).ToString()) +
-                                    new Random().Next(0, 1000) +
-                                    System.IO.Path.GetExtension(image.FileName);
+                    var absoluteFilePath = ImageHelper.GetGeneratedAbsoluteBlogImagePath(blogs.Id, image.FileName);
+                    
                     using (var stream =
                            new FileStream(
-                               Path.Combine(_environment.WebRootPath, "images/ilan/", photoName),
+                               Path.Combine(_environment.WebRootPath, absoluteFilePath),
                                FileMode.Create))
                     {
                         await image.CopyToAsync(stream);
                         if (blogs.PhotoPath == null)
                         {
-                            blogs.PhotoPath = "/images/ilan/" + photoName;
+                            blogs.PhotoPath = absoluteFilePath;
                             continue;
                         }
 
                         if (blogs.PhotoPath3 == null)
                         {
-                            blogs.PhotoPath3 = "/images/ilan/" + photoName;
+                            blogs.PhotoPath3 = absoluteFilePath;
                             continue;
                         }
 
                         if (blogs.PhotoPath3 == null)
                         {
-                            blogs.PhotoPath3 = "/images/ilan/" + photoName;
+                            blogs.PhotoPath3 = absoluteFilePath;
                             continue;
                         }
 
                         if (blogs.PhotoPath4 == null)
                         {
-                            blogs.PhotoPath4 = "/images/ilan/" + photoName;
+                            blogs.PhotoPath4 = absoluteFilePath;
                             continue;
                         }
 
                         if (blogs.PhotoPath5 == null)
                         {
-                            blogs.PhotoPath5 = "/images/ilan/" + photoName;
+                            blogs.PhotoPath5 = absoluteFilePath;
                             continue;
                         }
                     }

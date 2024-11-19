@@ -3,7 +3,8 @@
 @{
     ViewData["Title"] = "İlan Düzenle";
 }
-<link href="~/imageuploader/image-uploader.css" rel="stylesheet" type="text/css">
+<link href="~/dropzone/dropzone.css" rel="stylesheet" type="text/css">
+<link href="/Css/PostEdit.css" rel="stylesheet" type="text/css">
 <div class="main-content">
     <div class="page-content">
         <section class="page-title-box">
@@ -31,7 +32,7 @@
                 <div class="row">
                     <div class="col-12 col-lg-12">
                         <div class="card p-3" id="typography">
-                            <form asp-action="PostEdit" enctype="multipart/form-data" method="post">
+                            <form asp-action="PostEdit" enctype="multipart/form-data" method="post" id="musicForm">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <input type="hidden" asp-for="Guid"/>
                                 <div class="form-group m-3">
@@ -60,7 +61,7 @@
                                 </div>
                                 <div class="form-group m-3">
                                     <label class="control-label">Fotoğraflar</label>
-                                    <div class="input-images-2" style="padding-top: .5rem;"></div>
+                                    <div id="image-upload" class="dropzone"></div>
                                 </div>
                                 <div class="form-group m-3">
                                     <input type="submit" value="Kaydet" class="btn btn-primary"/>
@@ -76,44 +77,119 @@
     <partial name="PartialViews/_SwitcherAndTopPartial"/>
 </div>
 
-<script>
-//RunQuill("HTMLText");
-</script>
 
-<script src="~/imageuploader/image-uploader.js"></script>
+<script src="~/dropzone/dropzone-min.js"></script>
 
 <script>
-    let preloaded = 
-    [
+    Dropzone.autoDiscover = false; // Disable auto-discovery to prevent conflicts
+
+    let deletedFiles = []; // To store deleted file identifiers
+    let uploadedFiles = []; // Stores files added in this session
+
+    const preloadedFiles = [
         @{
             if (Model.Photo1 != null)
             {
-                @:{id: 1, src: '@Model.Photo1'},
+                            @:{ id: 1, src: '@Model.Photo1' },
             }
             if (Model.Photo2 != null)
             {
-                @:{id: 2, src: '@Model.Photo2'},
+                            @:{ id: 2, src: '@Model.Photo2' },
             }
             if (Model.Photo3 != null)
             {
-                @:{id: 3, src: '@Model.Photo3'},
+                            @:{ id: 3, src: '@Model.Photo3' },
             }
             if (Model.Photo4 != null)
             {
-                @:{id: 4, src: '@Model.Photo4'},
+                            @:{ id: 4, src: '@Model.Photo4' },
             }
             if (Model.Photo5 != null)
             {
-                @:{id: 5, src: '@Model.Photo5'},
+                            @:{ id: 5, src: '@Model.Photo5' },
             }
         }
     ];
 
-    $('.input-images-2').imageUploader({
-        preloaded: preloaded,
-        imagesInputName: 'images',
-        preloadedInputName: 'old',
-        maxSize: 2 * 1024 * 1024,
-        maxFiles: 5
+    // Initialize Dropzone
+    const dropzone = new Dropzone("#image-upload", {
+        url: "#", // Replace with your upload endpoint
+        autoProcessQueue: false, // Prevent auto-upload
+        maxFilesize: 2, // MB
+        maxFiles: 5,
+        addRemoveLinks: true,
+        paramName: "images",
+        init: function () {
+            const dz = this;
+
+            // Add preloaded files
+            preloadedFiles.forEach(function (file) {
+                const mockFile = { name: `Image ${file.id}`, size: 12345, serverId: file.id };
+                dz.emit("addedfile", mockFile);
+                dz.emit("thumbnail", mockFile, file.src);
+                dz.emit("complete", mockFile);
+                dz.files.push(mockFile);
+            });
+
+            // Handle file addition
+            dz.on("addedfile", function (file) {
+                if (!file.isMock) {
+                    if (dz.files.length > this.options.maxFiles) {
+                        this.removeFile(file);
+                        alert("You can only upload up to 5 files.");
+                    }
+                    else {
+                        uploadedFiles.push(file);
+                    }
+                }
+            });
+
+            // Handle file removal
+            dz.on("removedfile", function (file) {
+                if (file.serverId) {
+                    deletedFiles.push(file.serverId);
+                }
+                // document.getElementById('deletedFiles').value = JSON.stringify(deletedFiles);
+            });
+
+            dz.on("maxfilesexceeded", function (file) {
+                this.removeFile(file); // Remove the extra file
+                alert("You can only upload up to 5 files.");
+            });
+        }
     });
+
+    document.getElementById('musicForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        // Append uploaded files
+        uploadedFiles.forEach(file => {
+            formData.append('uploadedFiles', file);
+        });
+
+        // Add deleted files as a separate parameter
+        deletedFiles.forEach(index => {
+            formData.append('deletedFilesIndex', index);
+        });
+
+        fetch('/ilan-duzenle', {
+            method: 'POST',
+            body: formData,
+        })
+             .then(response => {
+                    if (response.ok) {
+                        console.info('Changes saved successfully.');
+                        window.location.href = "/ilanlarim";
+
+                    } else {
+                        console.info('Error saving changes.');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+    });
+
+
+
 </script>

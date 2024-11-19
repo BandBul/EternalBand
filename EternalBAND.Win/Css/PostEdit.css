@@ -1,0 +1,10 @@
+﻿.dropzone .dz-preview .dz-image img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important; /* Ensure images fit perfectly */
+}
+
+.dropzone .dz-preview .dz-image {
+    width: 100px !important; /* Thumbnail width */
+    height: 100px !important; /* Thumbnail height */
+}
