@@ -1,7 +1,12 @@
 ﻿<link href="/Css/PostRulesPopup.css" rel="stylesheet" type="text/css">
 <div>
     <div id="popup" class="popup">
-        <partial name="PartialViews/_BasePostRules" />
+        <div class="text-content">
+            <h2>İlan Kuralları</h2>
+            <hr />
+            <h1><span style="color: #ff0000;">Dikkat! L&uuml;tfen ilan vermeden &ouml;nce oku!</span></h1>
+            <partial name="PartialViews/_BasePostRules" />
+        </div>
         <div>
             <br><button id="approve-rules" class="btn btn-info btn-lg active" onclick="closePopup()">Kuralları Okudum</button>
         </div>

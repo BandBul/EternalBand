@@ -1,4 +1,9 @@
 @using EternalBAND.DataAccess;
+@using EternalBAND.Common
+@using EternalBAND.Api.Options
+@using Microsoft.Extensions.Options
+@inject IOptions<SiteGeneralOptions> _siteSettings
+
 @model EternalBAND.DomainObjects.Contacts
 <link href="/Css/ContactsCreate.css" rel="stylesheet" type="text/css">
 @inject ApplicationDbContext _context
@@ -121,11 +126,13 @@
                         <div class="text-center">
                             <img src="~/images/contact.png" alt="" class="img-fluid">
                         </div>
-                        <div class="mt-4 pt-3">
+                        @* TODO add correct values inside appsettings *@
+@*                         <div class="mt-4 pt-3">
                             @{
-                                var address = _context.SystemInfo.FirstOrDefault(n => n.Type == "site-address");
-                                var phone = _context.SystemInfo.FirstOrDefault(n => n.Type == "site-phone");
-                                var mail = _context.SystemInfo.FirstOrDefault(n => n.Type == "site-mail-address");
+                                var address = _siteSettings.Value.SiteAddress;
+                                var phone = _siteSettings.Value.SitePhone;
+                                var mail = _siteSettings.Value.SiteMail;
+
                             }
                             @if (address != null)
                             {
@@ -134,33 +141,33 @@
                                         <i class="uil uil-map-marker"></i>
                                     </div>
                                     <div class="flex-grow-1 ms-2">
-                                        <p class="mb-0">@address.Value</p>
+                                        <p class="mb-0">@address</p>
                                     </div>
                                 </div>
                             }
-                             @if (mail != null)
-                                                        {
-                                                            <div class="d-flex text-muted align-items-center mt-2">
-                                                                <div class="flex-shrink-0 fs-22 text-primary">
-                                                                    <i class="uil uil-envelope"></i>
-                                                                </div>
-                                                                <div class="flex-grow-1 ms-2">
-                                                                    <p class="mb-0">@mail.Value</p>
-                                                                </div>
-                                                            </div>
-                                                        }
-                                                            @if (phone != null)
-                                                            {
-                                                                <div class="d-flex text-muted align-items-center mt-2">
-                                                                    <div class="flex-shrink-0 fs-22 text-primary">
-                                                                        <i class="uil uil-phone-alt"></i>
-                                                                    </div>
-                                                                    <div class="flex-grow-1 ms-2">
-                                                                        <p class="mb-0">@phone.Value</p>
-                                                                    </div>
-                                                                </div>
-                                                            }
-                        </div>
+                            @if (mail != null)
+                            {
+                                <div class="d-flex text-muted align-items-center mt-2">
+                                    <div class="flex-shrink-0 fs-22 text-primary">
+                                        <i class="uil uil-envelope"></i>
+                                    </div>
+                                    <div class="flex-grow-1 ms-2">
+                                        <p class="mb-0">@mail</p>
+                                    </div>
+                                </div>
+                            }
+                            @if (phone != null)
+                            {
+                                <div class="d-flex text-muted align-items-center mt-2">
+                                    <div class="flex-shrink-0 fs-22 text-primary">
+                                        <i class="uil uil-phone-alt"></i>
+                                    </div>
+                                    <div class="flex-grow-1 ms-2">
+                                        <p class="mb-0">@phone</p>
+                                    </div>
+                                </div>
+                            }
+                        </div> *@
                     </div>
                 </div>
             </div>

@@ -183,48 +183,6 @@ public class ApplicationDbContext : IdentityDbContext<Users>
         builder.Entity<SystemInfo>().HasData(
             new SystemInfo
             {
-                Id = 12,
-                Type = "site-address",
-                Value = "Istanbul",
-                Desc = "Adres (Boş bırakırsanız göstermez)"
-            },
-            new SystemInfo
-            {
-                Id = 11,
-                Type = "site-phone",
-                Value = "0850",
-                Desc = "Site Telefon Numarası (Boş bırakırsanız göstermez)"
-            },
-            new SystemInfo
-            {
-                Id = 10,
-                Type = "site-twitter",
-                Value = "https://twitter.com",
-                Desc = "Site Facebook Adres (Boş bırakırsanız göstermez)"
-            },
-            new SystemInfo
-            {
-                Id = 9,
-                Type = "site-instagram",
-                Value = "https://instagram.com",
-                Desc = "Site Instagram Adres (Boş bırakırsanız göstermez)"
-            },
-            new SystemInfo
-            {
-                Id = 7,
-                Type = "site-facebook",
-                Value = "https://facebook.com",
-                Desc = "Site Facebook Adres (Boş bırakırsanız göstermez)"
-            },
-            new SystemInfo
-            {
-                Id = 8,
-                Type = "site-mail-address",
-                Value = "test@mail.com",
-                Desc = "Site İletişim Mail Adresi (Boş bırakırsanız göstermez)"
-            },
-            new SystemInfo
-            {
                 Id = 1,
                 Type = "mail-sender-address",
                 Value = "testuservortex@outlook.com",
@@ -264,7 +222,7 @@ public class ApplicationDbContext : IdentityDbContext<Users>
                 Type = "site-footer-left-text",
                 Value = " It is a long established fact that a reader will be of a page reader will be of at its layout. ",
                 Desc = "Site Sol Alt Metin"
-            } ,   
+            },   
             new SystemInfo
             {
                 Id = 18,
@@ -278,8 +236,7 @@ public class ApplicationDbContext : IdentityDbContext<Users>
                 Type = "site-keywords",
                 Value = "keywords , keywords 1, keywords 2",
                 Desc = "Site Keywords Seo için"
-            }
-            ,   
+            },   
             new SystemInfo
             {
                 Id = 16,
