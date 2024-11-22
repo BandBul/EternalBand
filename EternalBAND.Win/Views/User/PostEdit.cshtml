@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "İlan Düzenle";
 }
-<link href="~/dropzone/dropzone.css" rel="stylesheet" type="text/css">
+
 <link href="/Css/PostEdit.css" rel="stylesheet" type="text/css">
 <div class="main-content">
     <div class="page-content">
@@ -32,7 +32,7 @@
                 <div class="row">
                     <div class="col-12 col-lg-12">
                         <div class="card p-3" id="typography">
-                            <form asp-action="PostEdit" enctype="multipart/form-data" method="post" id="musicForm">
+                            <form asp-action="PostEdit" enctype="multipart/form-data" method="post" id="musicFormEdit">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <input type="hidden" asp-for="Guid"/>
                                 <div class="form-group m-3">
@@ -77,15 +77,9 @@
     <partial name="PartialViews/_SwitcherAndTopPartial"/>
 </div>
 
-
-<script src="~/dropzone/dropzone-min.js"></script>
+@section Scripts {
 
 <script>
-    Dropzone.autoDiscover = false; // Disable auto-discovery to prevent conflicts
-
-    let deletedFiles = []; // To store deleted file identifiers
-    let uploadedFiles = []; // Stores files added in this session
-
     const preloadedFiles = [
         @{
             if (Model.Photo1 != null)
@@ -111,85 +105,6 @@
         }
     ];
 
-    // Initialize Dropzone
-    const dropzone = new Dropzone("#image-upload", {
-        url: "#", // Replace with your upload endpoint
-        autoProcessQueue: false, // Prevent auto-upload
-        maxFilesize: 2, // MB
-        maxFiles: 5,
-        addRemoveLinks: true,
-        paramName: "images",
-        init: function () {
-            const dz = this;
-
-            // Add preloaded files
-            preloadedFiles.forEach(function (file) {
-                const mockFile = { name: `Image ${file.id}`, size: 12345, serverId: file.id };
-                dz.emit("addedfile", mockFile);
-                dz.emit("thumbnail", mockFile, file.src);
-                dz.emit("complete", mockFile);
-                dz.files.push(mockFile);
-            });
-
-            // Handle file addition
-            dz.on("addedfile", function (file) {
-                if (!file.isMock) {
-                    if (dz.files.length > this.options.maxFiles) {
-                        this.removeFile(file);
-                        alert("You can only upload up to 5 files.");
-                    }
-                    else {
-                        uploadedFiles.push(file);
-                    }
-                }
-            });
-
-            // Handle file removal
-            dz.on("removedfile", function (file) {
-                if (file.serverId) {
-                    deletedFiles.push(file.serverId);
-                }
-                // document.getElementById('deletedFiles').value = JSON.stringify(deletedFiles);
-            });
-
-            dz.on("maxfilesexceeded", function (file) {
-                this.removeFile(file); // Remove the extra file
-                alert("You can only upload up to 5 files.");
-            });
-        }
-    });
-
-    document.getElementById('musicForm').addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        const formData = new FormData(this);
-
-        // Append uploaded files
-        uploadedFiles.forEach(file => {
-            formData.append('uploadedFiles', file);
-        });
-
-        // Add deleted files as a separate parameter
-        deletedFiles.forEach(index => {
-            formData.append('deletedFilesIndex', index);
-        });
-
-        fetch('/ilan-duzenle', {
-            method: 'POST',
-            body: formData,
-        })
-             .then(response => {
-                    if (response.ok) {
-                        console.info('Changes saved successfully.');
-                        window.location.href = "/ilanlarim";
-
-                    } else {
-                        console.info('Error saving changes.');
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-    });
-
-
-
+    initDropzone(preloadedFiles)
 </script>
+}

@@ -59,12 +59,12 @@ public class UserController : Controller
     [ValidateAntiForgeryToken]
     [HttpPost, Route("PostCreate")]
     public async Task<IActionResult> PostCreate([Bind("Id,Title,HTMLText,PostTypesId,InstrumentsId,CityId")] Posts posts,
-        List<IFormFile>? images)
+        List<IFormFile>? uploadedFiles)
     {
         if (ModelState.IsValid)
         {
             var currentUser = await _controllerHelper.GetUserAsync(User);
-            await _userService.PostCreate(currentUser, posts, images);
+            await _userService.PostCreate(currentUser, posts, uploadedFiles);
             return RedirectToAction(nameof(PostIndex));
         }
         else
