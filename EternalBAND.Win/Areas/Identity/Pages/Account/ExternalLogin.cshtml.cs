@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using EternalBAND.DomainObjects;
+using EternalBAND.Api;
 
 namespace EternalBAND.Areas.Identity.Pages.Account
 {
@@ -28,7 +29,7 @@ namespace EternalBAND.Areas.Identity.Pages.Account
         private readonly UserManager<Users> _userManager;
         private readonly IUserStore<Users> _userStore;
         private readonly IUserEmailStore<Users> _emailStore;
-        private readonly IEmailSender _emailSender;
+        private readonly IBaseEmailSender _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
 
         public ExternalLoginModel(
@@ -36,7 +37,7 @@ namespace EternalBAND.Areas.Identity.Pages.Account
             UserManager<Users> userManager,
             IUserStore<Users> userStore,
             ILogger<ExternalLoginModel> logger,
-            IEmailSender emailSender)
+            IBaseEmailSender emailSender)
         {
             _signInManager = signInManager;
             _userManager = userManager;

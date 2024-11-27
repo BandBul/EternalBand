@@ -21,6 +21,7 @@ namespace EternalBAND.Areas.Identity.Pages.Account
     public class LoginModel : PageModel
     {
         private readonly SignInManager<Users> _signInManager;
+        private readonly UserManager<Users> userManager;
         private readonly ILogger<LoginModel> _logger;
 
         public LoginModel(SignInManager<Users> signInManager, ILogger<LoginModel> logger)
@@ -129,9 +130,16 @@ namespace EternalBAND.Areas.Identity.Pages.Account
                     _logger.LogWarning("Kullanıcı kilitlendi.");
                     return RedirectToPage("./Lockout");
                 }
+
+                if (result.IsNotAllowed)
+                {
+                    ModelState.AddModelError(string.Empty, "Lütfen mail adresinizi onaylayınız.");
+                    return Page();
+                }
+
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Hatalı giriş işlemi.");
+                    ModelState.AddModelError(string.Empty, "Hatalı giriş işlemi. Lütfen kullanıcı adınızı ve şifrenizi kontrol ediniz.");
                     return Page();
                 }
             }

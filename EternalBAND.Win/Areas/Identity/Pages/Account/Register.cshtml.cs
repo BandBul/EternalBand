@@ -22,6 +22,7 @@ using Microsoft.Extensions.Logging;
 using EternalBAND.DomainObjects;
 using JetBrains.Annotations;
 using EternalBAND.Api.Attributes;
+using EternalBAND.Api;
 
 namespace EternalBAND.Areas.Identity.Pages.Account
 {
@@ -32,14 +33,14 @@ namespace EternalBAND.Areas.Identity.Pages.Account
         private readonly IUserStore<Users> _userStore;
         private readonly IUserEmailStore<Users> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
-        private readonly IEmailSender _emailSender;
+        private readonly IBaseEmailSender _emailSender;
 
         public RegisterModel(
             UserManager<Users> userManager,
             IUserStore<Users> userStore,
             SignInManager<Users> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IBaseEmailSender emailSender)
         {
             _userManager = userManager;
             _userStore = userStore;

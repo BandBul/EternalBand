@@ -53,12 +53,12 @@ namespace EternalBAND.Win.Infrastructure
             return services;
         }
 
-            public static IServiceCollection AddAuthorizationInternal(this IServiceCollection services)
+        public static IServiceCollection AddAuthorizationInternal(this IServiceCollection services)
         {
             services.AddIdentity<Users, IdentityRole>(options =>
             {
                 options.User.RequireUniqueEmail = true;
-                options.SignIn.RequireConfirmedEmail = false;
+                options.SignIn.RequireConfirmedAccount = true;
                 options.Password.RequiredLength = 6;
                 options.Password.RequireDigit = false;
                 options.Password.RequireLowercase = false;

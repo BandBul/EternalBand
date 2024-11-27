@@ -41,6 +41,10 @@ try
 {
     var debugOption = new DebugOptions();
     builder.Configuration.GetSection(DebugOptions.DebugOptionKey).Bind(debugOption);
+
+    builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection(SmtpOptions.SmtpOptionKey));
+    builder.Services.Configure<SiteGeneralOptions>(builder.Configuration.GetSection(SiteGeneralOptions.SiteGeneralOptionKey));
+
     if (debugOption.IsWebApiEnabled)
     {
         var jwtTokenOptions = new JwtTokenOptions();
@@ -52,7 +56,6 @@ try
         builder.Services.Configure<JwtTokenOptions>(builder.Configuration.GetSection(JwtTokenOptions.JwtOptionKey));
         builder.Services.Configure<NotificationOptions>(builder.Configuration.GetSection(NotificationOptions.NotificationOptionKey));
         builder.Services.Configure<GoogleOptions>(builder.Configuration.GetSection(GoogleOptions.GoogleOptionsKey));
-        builder.Services.Configure<SiteGeneralOptions>(builder.Configuration.GetSection(SiteGeneralOptions.SiteGeneralOptionKey));
 
         // TODO below settings for able to setup an windows service, research is there any other wy todo
         builder.Host.UseWindowsService();
@@ -147,22 +150,10 @@ try
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
             c.IncludeXmlComments(xmlPath);
         });
-        builder.Services.AddIdentity<Users, IdentityRole>(options =>
-        {
-            options.User.RequireUniqueEmail = true;
-            options.SignIn.RequireConfirmedEmail = false;
-            options.Password.RequiredLength = 6;
-            options.Password.RequireDigit = false;
-            options.Password.RequireLowercase = false;
-            options.Password.RequireUppercase = false;
-            options.Password.RequireNonAlphanumeric = false;
-        })
-            .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddDefaultTokenProviders()
-            .AddRoles<IdentityRole>();
+      
         builder.Services.AddRazorPages(options =>
         {
-            options.Conventions.AddAreaPageRoute("Identity", "/Account/Manage/Index", "/profil/{userId?}");
+            options.Conventions.AddAreaPageRoute("Identity", "/Account/Manage/Profile", "/profil/{userId?}");
             options.Conventions.AddAreaPageRoute("Identity", "/Account/Manage/ChangePassword", "/sifre-sifirla");
             options.Conventions.AddAreaPageRoute("Identity", "/Account/Lockout", "/hesap-kilitlendi");
             options.Conventions.AddAreaPageRoute("Identity", "/Account/Register", "/kayit-ol");
@@ -177,7 +168,7 @@ try
         var googleApiKey = new GoogleOptions();
         builder.Configuration.GetSection(GoogleOptions.GoogleOptionsKey).Bind(googleApiKey);
         builder.Services.Configure<NotificationOptions>(builder.Configuration.GetSection(NotificationOptions.NotificationOptionKey));
-        builder.Services.Configure<SiteGeneralOptions>(builder.Configuration.GetSection(SiteGeneralOptions.SiteGeneralOptionKey));
+        
 
         builder.Services.AddAuthentication(opt =>
         {
@@ -211,6 +202,7 @@ try
         builder.Services.AddSignalR();
 
         builder.Services
+            .AddAuthorizationInternal()
             .AddDataAccessInfrastructure()
             .AddApiInfrastructure();
 

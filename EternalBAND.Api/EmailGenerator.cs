@@ -1,16 +1,32 @@
 namespace EternalBAND.Api
 {
-    public class GeneratorMailTemplate
+    public class EmailGenerator
     {
-        private string _emailContents, _emailTitle;
-        public GeneratorMailTemplate(string emailContents)
+        private string emailContents = " ";
+        private string emailTitle = " ";
+        private string title = " ";
+
+        public EmailGenerator()
         {
-            _emailContents = emailContents;
-        } 
-        public GeneratorMailTemplate(string emailContents,string emailTitle)
+
+        }
+
+
+        public EmailGenerator SetContent(string emailContents)
         {
-            _emailContents = emailContents;
-            _emailTitle = emailTitle;
+            this.emailContents = emailContents;
+            return this;
+        }
+
+        public EmailGenerator SetEmailTitle(string emailTitle)
+        {
+            this.emailTitle = emailTitle;
+            return this;
+        }
+        public EmailGenerator SetTitle(string title)
+        {
+            this.title = title;
+            return this;
         }
 
         private string GetTemplate()
@@ -19,11 +35,11 @@ namespace EternalBAND.Api
         }
         public string GenerateEmail()
         {
-            return GetTemplate().Replace("{{{{{Preview}}}}}",_emailTitle).Replace("{{{{Content}}}}", _emailContents).Replace("{{{{Title}}}}",Business.AppSettings.GetAppSettings(Business.AppSettings.GetDynamicJson(),"SiteName"));
+            return GetTemplate().Replace("{{{{{Preview}}}}}",emailTitle).Replace("{{{{Content}}}}", emailContents).Replace("{{{{Title}}}}",title);
         }
         public string GenerateTitleAndContent()
         {
-            return " <p style='font-family: sans-serif; font-size: 18px; font-weight: normal; margin: 0; margin-bottom: 15px;'><b>{{{{ContentTitle}}}}</b></p><p style='font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;'>{{{{Content}}}}</p>".Replace("{{{{ContentTitle}}}}", _emailTitle).Replace("{{{{Content}}}}", _emailContents);
+            return " <p style='font-family: sans-serif; font-size: 18px; font-weight: normal; margin: 0; margin-bottom: 15px;'><b>{{{{ContentTitle}}}}</b></p><p style='font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;'>{{{{Content}}}}</p>".Replace("{{{{ContentTitle}}}}", emailTitle).Replace("{{{{Content}}}}", emailContents);
         }
     }
 }

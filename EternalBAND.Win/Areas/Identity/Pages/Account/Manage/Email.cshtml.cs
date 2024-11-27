@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using EternalBAND.DomainObjects;
+using EternalBAND.Api;
 
 namespace EternalBAND.Areas.Identity.Pages.Account.Manage
 {
@@ -20,12 +21,12 @@ namespace EternalBAND.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<Users> _userManager;
         private readonly SignInManager<Users> _signInManager;
-        private readonly IEmailSender _emailSender;
+        private readonly IBaseEmailSender _emailSender;
 
         public EmailModel(
             UserManager<Users> userManager,
             SignInManager<Users> signInManager,
-            IEmailSender emailSender)
+            IBaseEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;

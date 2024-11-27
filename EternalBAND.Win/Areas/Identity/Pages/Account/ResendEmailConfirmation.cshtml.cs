@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using EternalBAND.DomainObjects;
+using EternalBAND.Api;
 
 namespace EternalBAND.Areas.Identity.Pages.Account
 {
@@ -21,9 +22,9 @@ namespace EternalBAND.Areas.Identity.Pages.Account
     public class ResendEmailConfirmationModel : PageModel
     {
         private readonly UserManager<Users> _userManager;
-        private readonly IEmailSender _emailSender;
+        private readonly IBaseEmailSender _emailSender;
 
-        public ResendEmailConfirmationModel(UserManager<Users> userManager, IEmailSender emailSender)
+        public ResendEmailConfirmationModel(UserManager<Users> userManager, IBaseEmailSender emailSender)
         {
             _userManager = userManager;
             _emailSender = emailSender;

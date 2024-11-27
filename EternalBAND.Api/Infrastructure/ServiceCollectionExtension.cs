@@ -1,6 +1,5 @@
 ﻿using EternalBAND.Api.Helpers;
 using EternalBAND.Api.Services;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -10,7 +9,7 @@ namespace EternalBAND.Api.Infrastructure
     {
         public static IServiceCollection AddApiInfrastructure(this IServiceCollection services)
         {
-            services.AddScoped<IEmailSender, MailSender>();
+            services.AddScoped<IBaseEmailSender, EmailSender>();
             services.AddScoped<HomeService>();
             services.AddScoped<UserService>();
             services.AddScoped<AdminService>();
