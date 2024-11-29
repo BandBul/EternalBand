@@ -20,7 +20,7 @@ namespace EternalBand.Tests
         {
             configuration = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory) // Set the base path to the current directory
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true) // Add the appsettings.json
+                .AddJsonFile("appsettings_test.json", optional: true, reloadOnChange: true) // Add the appsettings.json
                 .Build();
             
             services = new ServiceCollection();
