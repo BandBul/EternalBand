@@ -294,53 +294,6 @@ namespace EternalBAND.Api.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IPagedList<SystemInfo>> SystemInfoIndex(int pId = 1)
-        {
-            if (_context.SystemInfo == null)
-            {
-                throw new ProblemException("Entity set 'ApplicationDbContext.SystemInfo'  is null.");
-            }
-
-            return await _context.SystemInfo.OrderByDescending(n => n.Id).ToPagedListAsync(pId, 10);
-        }
-
-        public async Task SystemInfoCreate(SystemInfo systemInfo)
-        {
-            _context.Add(systemInfo);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task<SystemInfo> GetSystemInfo(int? id)
-        {
-            if (id == null || _context.SystemInfo == null)
-            {
-                throw new NotFoundException();
-            }
-
-            var systemInfo = await _context.SystemInfo.FindAsync(id);
-            if (systemInfo == null)
-            {
-                throw new NotFoundException();
-            }
-
-            return systemInfo;
-        }
-        public async Task SystemInfoDeleteConfirmed(int id)
-        {
-            if (_context.SystemInfo == null)
-            {
-                throw new ProblemException("Entity set 'ApplicationDbContext.SystemInfo'  is null.");
-            }
-
-            var systemInfo = await _context.SystemInfo.FindAsync(id);
-            if (systemInfo != null)
-            {
-                _context.SystemInfo.Remove(systemInfo);
-            }
-
-            await _context.SaveChangesAsync();
-        }
-
         public async Task<IPagedList<Instruments>> InstrumentsIndex(int pId = 1)
         {
             if (_context.Instruments == null)
@@ -478,11 +431,6 @@ namespace EternalBAND.Api.Services
         private bool InstrumentsExists(int? id)
         {
             return (_context.Instruments?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
-
-        private bool SystemInfoExists(int id)
-        {
-            return (_context.SystemInfo?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
         private bool PostTypesExists(int? id)

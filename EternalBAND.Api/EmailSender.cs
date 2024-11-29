@@ -28,7 +28,7 @@ public class EmailSender : IBaseEmailSender
         {
             var senderMail = smtpSettings.SenderAddress;
             var senderMailPassword = smtpSettings.Password;
-            var senderDisplayName = siteSettings.SiteName;
+            var senderDisplayName = siteSettings.Name;
             var emailGenerator =
                 new EmailGenerator()
                 .SetContent(htmlMessage)

@@ -21,7 +21,6 @@ public class ApplicationDbContext : IdentityDbContext<Users>
     public DbSet<PostTypes> PostTypes { get; set; }
     public DbSet<Messages> Messages { get; set; }
     public DbSet<Contacts> Contacts { get; set; }
-    public DbSet<SystemInfo> SystemInfo { get; set; }
     public DbSet<Logs> Logs { get; set; }
     public DbSet<ErrorLogs> ErrorLogs { get; set; }
     public DbSet<Blogs> Blogs { get; set; }
@@ -180,77 +179,7 @@ public class ApplicationDbContext : IdentityDbContext<Users>
             RoleId = Constants.AdminRoleId,
             UserId = Constants.AdminUserId
         });
-        builder.Entity<SystemInfo>().HasData(
-            new SystemInfo
-            {
-                Id = 1,
-                Type = "mail-sender-address",
-                Value = "testuservortex@outlook.com",
-                Desc = "Mail Gönderen Adres"
-            },
-            new SystemInfo
-            {
-                Id = 2,
-                Type = "mail-sender-port",
-                Value = "587",
-                Desc = "Mail Gönderen Sunucu Portu"
-            },
-            new SystemInfo
-            {
-                Id = 3,
-                Type = "mail-sender-host",
-                Value = "smtp-mail.outlook.com",
-                Desc = "Mail Gönderen Sunucu Hostu"
-            },
-            new SystemInfo
-            {
-                Id = 4,
-                Type = "mail-sender-enable-ssl",
-                Value = "true",
-                Desc = "Mail Gönderen Sunucu SSL İstiyor mu?"
-            },
-            new SystemInfo
-            {
-                Id = 5,
-                Type = "mail-sender-address-password",
-                Value = "K48F7HWiFk7Abgjn",
-                Desc = "Mail Gönderen Adres Şifresi"
-            },
-            new SystemInfo
-            {
-                Id = 17,
-                Type = "site-footer-left-text",
-                Value = " It is a long established fact that a reader will be of a page reader will be of at its layout. ",
-                Desc = "Site Sol Alt Metin"
-            },   
-            new SystemInfo
-            {
-                Id = 18,
-                Type = "site-desc",
-                Value = "Buraya description gelecek :)",
-                Desc = "Site Desc Seo için"
-            },   
-            new SystemInfo
-            {
-                Id = 19,
-                Type = "site-keywords",
-                Value = "keywords , keywords 1, keywords 2",
-                Desc = "Site Keywords Seo için"
-            },   
-            new SystemInfo
-            {
-                Id = 16,
-                Type = "site-bottom-footer-text",
-                Value = "- Tüm hakları saklıdır.",
-                Desc = "Site Bottom Footer Text"
-            },
-            new SystemInfo
-            {
-                Id = 6,
-                Type = "site-title",
-                Value = "EternalBAND",
-                Desc = "Site Başlığı"
-            });
+        
         base.OnModelCreating(builder);
     }
 }

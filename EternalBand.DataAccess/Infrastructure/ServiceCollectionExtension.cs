@@ -16,7 +16,6 @@ namespace EternalBAND.DataAccess.Infrastructure
             services.AddScoped<BaseRepository,BaseRepository<PostTypes>>();
             services.AddScoped<BaseRepository,BaseRepository<Messages>>();
             services.AddScoped<BaseRepository,BaseRepository<Contacts>>();
-            services.AddScoped<BaseRepository,BaseRepository<SystemInfo>>();
             services.AddScoped<BaseRepository,BaseRepository<Logs>>();
             services.AddScoped<BaseRepository,BaseRepository<ErrorLogs>>();
             services.AddScoped<BaseRepository,BaseRepository<Blogs>>();

@@ -3,4 +3,4 @@
 @using Microsoft.Extensions.Options
 @inject IOptions<SiteGeneralOptions> _siteSettings
 <link href="/Css/SiteLogo.css" rel="stylesheet" type="text/css">
-<img src="@(_siteSettings.Value.SiteLogo)" height="28" alt="" @* title="@(Assembly.GetEntryAssembly().GetName().Version)" *@ />
+<img src="@(_siteSettings.Value.Logo)" height="28" alt="" @* title="@(Assembly.GetEntryAssembly().GetName().Version)" *@ />

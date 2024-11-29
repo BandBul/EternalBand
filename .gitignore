@@ -35,3 +35,6 @@ __macosx/
 EternalBAND/
 *.zip
 /publish
+*/wwwroot/images/user_photo/*
+*/wwwroot/images/ilan/*
+*/Properties/PublishProfiles/*

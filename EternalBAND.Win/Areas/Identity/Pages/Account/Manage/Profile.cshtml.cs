@@ -36,37 +36,15 @@ namespace EternalBAND.Areas.Identity.Pages.Account.Manage
             _context = context;
         }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
-   
-
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         [TempData]
         public string StatusMessage { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         [BindProperty]
         public InputModel Input { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public class InputModel
         {
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
-               [DisplayName("Ad")]
+            [DisplayName("Ad")]
             [Required(ErrorMessage = "{0} zorunlu.")]
             public string Name { get; set; }
 
@@ -191,7 +169,7 @@ namespace EternalBAND.Areas.Identity.Pages.Account.Manage
             }
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Profiliniz güncellendi.";
-            return RedirectToPage();
+            return RedirectToPage("Anasayfa");
         }
 
         private async Task LoadAsync(Users user)

@@ -1,8 +1,9 @@
+@using EternalBAND.Api.Options
 @using EternalBAND.DataAccess;
 @using Microsoft.EntityFrameworkCore
-@inject ApplicationDbContext _Context
+@using Microsoft.Extensions.Options
+@inject IOptions<SiteGeneralOptions> siteSettings
 @{
-    var bottom = _Context.SystemInfo.FirstOrDefault(n => n.Type == "site-bottom-footer-text");
-    string bottomText =  bottom == null ? "":bottom.Value;
+    string bottomText = siteSettings.Value.BottomFooterText;
 }
 @bottomText
