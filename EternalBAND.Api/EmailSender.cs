@@ -42,8 +42,10 @@ public class EmailSender : IBaseEmailSender
             };
             mail.To.Add(email);
             mail.From = new MailAddress(senderMail, senderDisplayName, System.Text.Encoding.UTF8);
-
+           
             await smtpClient.SendMailAsync(mail);
+
+            logger.LogDebug($"Mail properly sent to {email}");
         }
         catch (Exception ex)
         {

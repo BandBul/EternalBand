@@ -8,13 +8,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using X.PagedList;
 using EternalBAND.Api.Exceptions;
-using System.Collections;
-using Microsoft.Extensions.Hosting;
-using System.Text.Json;
 using JsonException = EternalBAND.Api.Exceptions.JsonException;
-using EternalBAND.Common;
 using X.PagedList.EF;
-using Microsoft.IdentityModel.Tokens;
+using EternalBAND.Api.Extensions;
 
 namespace EternalBAND.Api.Services
 {
