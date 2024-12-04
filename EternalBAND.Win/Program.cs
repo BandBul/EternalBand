@@ -16,6 +16,7 @@ using FluentValidation.AspNetCore;
 using EternalBAND.Win.Infrastructure;
 using NLog;
 using NLog.Extensions.Logging;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var nlogger = LogManager.GetCurrentClassLogger();
 
@@ -168,21 +169,15 @@ try
         var googleApiKey = new GoogleOptions();
         builder.Configuration.GetSection(GoogleOptions.GoogleOptionsKey).Bind(googleApiKey);
         builder.Services.Configure<NotificationOptions>(builder.Configuration.GetSection(NotificationOptions.NotificationOptionKey));
-        
 
-        builder.Services.AddAuthentication(opt =>
-        {
-            opt.DefaultScheme = "Cookies";
-        })
-        .AddCookie(options =>
-        {
-            options.LoginPath = "/giris-yap";
-            options.AccessDeniedPath = "/erisim-engellendi";
-            options.LogoutPath = "/cikis-yap";
-            options.ExpireTimeSpan = TimeSpan.FromHours(3);
-            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-            options.Cookie.SameSite = SameSiteMode.None;
-        })
+        builder.Services.AddSignalR();
+
+        builder.Services
+            .AddAuthorizationInternal()
+            .AddDataAccessInfrastructure()
+            .AddApiInfrastructure();
+
+        builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         .AddGoogle(opt =>
         {
             opt.ClientId = googleApiKey.ClientId;
@@ -198,13 +193,6 @@ try
             options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             options.Cookie.SameSite = SameSiteMode.None;
         });
-
-        builder.Services.AddSignalR();
-
-        builder.Services
-            .AddAuthorizationInternal()
-            .AddDataAccessInfrastructure()
-            .AddApiInfrastructure();
 
         builder.Services.AddCors(options =>
         {
