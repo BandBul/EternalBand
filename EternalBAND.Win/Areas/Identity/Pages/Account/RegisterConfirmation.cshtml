@@ -1,14 +1,8 @@
 ﻿@page
-@model RegisterConfirmationModel
 @{
+    var inputString = "Hesap onaylaması için size mail gönderdik, lütfen mail kutunuzu kontrol ediniz.";
     ViewData["Title"] = "Register confirmation";
 }
-<link href="/Css/RegisterConfirmation.css" rel="stylesheet" type="text/css">
-<div class="register-confirmation-mail">
-    <h1>@ViewData["Title"]</h1>
-    <p>
-        Please check your email to confirm your account.
-    </p
-</div>
+<partial name="PartialViews/_BaseConfirmationPagePartial" model="@inputString"></partial>
 
 

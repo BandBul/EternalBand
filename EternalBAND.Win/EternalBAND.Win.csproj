@@ -69,6 +69,7 @@
     <ItemGroup>
       <None Remove="Css\About.css" />
       <None Remove="Css\Anasayfa.css" />
+      <None Remove="Css\BaseConfirmation.css" />
       <None Remove="Css\Blog.css" />
       <None Remove="Css\ContactsCreate.css" />
       <None Remove="Css\FilterPostPartial.css" />
@@ -79,7 +80,6 @@
       <None Remove="Css\PostIndex.css" />
       <None Remove="Css\PostRules.css" />
       <None Remove="Css\PostRulesPopup.css" />
-      <None Remove="Css\RegisterConfirmation.css" />
       <None Remove="Css\SiteLogo.css" />
       <None Remove="EternalBAND.zip" />
       <None Remove="Proje.zip" />
@@ -128,7 +128,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="Css\RegisterConfirmation.css">
+      <Content Include="Css\BaseConfirmation.css">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
       <Content Include="Css\PostEdit.css">
