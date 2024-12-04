@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Mail;
 using EternalBAND.Api.Options;
 using Microsoft.Extensions.Logging;
@@ -19,7 +20,6 @@ public class EmailSender : IBaseEmailSender
         smtpSettings = smtpOptions.Value;
         siteSettings = siteOptions.Value;
         this.logger = logger;
-
         SetSmtpClient();
     }
     public async Task SendEmailAsync(string email, string subject, string htmlMessage)
@@ -27,7 +27,6 @@ public class EmailSender : IBaseEmailSender
         try
         {
             var senderMail = smtpSettings.SenderAddress;
-            var senderMailPassword = smtpSettings.Password;
             var senderDisplayName = siteSettings.Name;
             var emailGenerator =
                 new EmailGenerator()
@@ -52,20 +51,18 @@ public class EmailSender : IBaseEmailSender
         }
     }
 
-    private SmtpClient SetSmtpClient()
+    private void SetSmtpClient()
     {
-        if(smtpClient == null)
+        if (smtpClient == null)
         {
             smtpClient = new SmtpClient()
             {
-                Timeout = 10000,
-                Credentials = new System.Net.NetworkCredential(smtpSettings.Username, smtpSettings.Password),
+                Timeout = smtpSettings.TimeoutMs,
+                Credentials = new NetworkCredential(smtpSettings.Username, smtpSettings.Password),
                 Port = smtpSettings.Port,
                 Host = smtpSettings.Host,
                 EnableSsl = smtpSettings.SslEnabled
             };
         }
-        return smtpClient;
-
     }
 }

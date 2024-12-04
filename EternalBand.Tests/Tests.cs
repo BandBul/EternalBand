@@ -7,6 +7,7 @@ using System;
 
 namespace EternalBand.Tests
 {
+    [TestFixture]
     public class Tests
     {
         private IConfiguration configuration;
@@ -37,7 +38,9 @@ namespace EternalBand.Tests
         public async Task Test_Send_Email()
         {
             var emailSender = serviceProvider.GetService<IBaseEmailSender>();
-            await emailSender.SendEmailAsync("enginyldrm02@gmail.com", "Bandbul SMTP Test", "SMTP icin deneme maili atiyorum");
+            await emailSender.SendEmailAsync("enginyldrm02at@gmail.com", "Bandbul SMTP Test", "SMTP icin deneme maili atiyorum");
+            await emailSender.SendEmailAsync("enisemre8st@gmail.com ", "Bandbul SMTP Test", "SMTP icin deneme maili atiyorum");
+            await emailSender.SendEmailAsync("brkysgmn@gmail.com", "Bandbul SMTP Test", "SMTP icin deneme maili atiyorum");
         }
     }
 }

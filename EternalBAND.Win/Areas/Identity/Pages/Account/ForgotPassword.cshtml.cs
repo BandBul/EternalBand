@@ -2,19 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using EternalBAND.DomainObjects;
 using EternalBAND.Api;
+using Microsoft.IdentityModel.Tokens;
 namespace EternalBAND.Areas.Identity.Pages.Account
 {
     public class ForgotPasswordModel : PageModel
@@ -28,23 +25,15 @@ namespace EternalBAND.Areas.Identity.Pages.Account
             _emailSender = emailSender;
         }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         [BindProperty]
         public InputModel Input { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
+        public string WarningMessage { get; set; }
+
+
+
         public class InputModel
         {
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
             [Required(ErrorMessage = "{0} zorunlu alandır. Lütfen doldurunuz")]
             [EmailAddress]
             [Display(Name = "Mail Adresi",Prompt ="Mail Adresiniz" )]
@@ -56,31 +45,50 @@ namespace EternalBAND.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(Input.Email);
-                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+                if (user == null)
                 {
-                    // Don't reveal that the user does not exist or is not confirmed
-                    return RedirectToPage("./ForgotPasswordConfirmation");
+                    WarningMessage = $"'{Input.Email}' mailini kullanan bir kullanıcı bulunmamaktadır.";
+                    return Page();
                 }
 
-                // For more information on how to enable account confirmation and password reset please
-                // visit https://go.microsoft.com/fwlink/?LinkID=532713
-                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                var callbackUrl = Url.Page(
-                    "/Account/ResetPassword",
-                    pageHandler: null,
-                    values: new { area = "Identity", code },
-                    protocol: Request.Scheme);
+                if (await IsUserMailExternal(user))
+                {
+                    WarningMessage = "Hesabınız Google ile Oturum Açma kullanıyor. " +
+                        "Lütfen giriş yapmak için Google hesabınızı kullanın. Şifre sıfırlamaya gerek yoktur.";
+                    return Page();
+                }
+                //TODO add confirmation email sending logic
+                else if (!(await _userManager.IsEmailConfirmedAsync(user)))
+                {
+                    WarningMessage = $"Henüz e-posta adresinizi doğrulamamış görünüyorsunuz. " +
+                        $"Lütfen gelen kutunuzu doğrulama e-postası için kontrol edin veya bu bağlantıyı tıklayarak yeni doğrulama e-postası gönderin.";
+                    return Page();
+                }
 
-                await _emailSender.SendEmailAsync(
-                    Input.Email,
-                    "Reset Password",
-                    $"<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Buraya tıklayarak</a> şifrenizi sıfırlayabilirsiniz.");
+                else 
+                {
+                    var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                    var callbackUrl = Url.Page(
+                        "/Account/ResetPassword",
+                        pageHandler: null,
+                        values: new { area = "Identity", code },
+                        protocol: Request.Scheme);
 
-                return RedirectToPage("./ForgotPasswordConfirmation");
+                    await _emailSender.SendEmailAsync(
+                        Input.Email,
+                        "Reset Password",
+                        $"<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Buraya tıklayarak</a> şifrenizi sıfırlayabilirsiniz.");
+
+                    return RedirectToPage("./ForgotPasswordConfirmation");
+                }
             }
-
             return Page();
+        }
+
+        private async Task<bool> IsUserMailExternal(Users user)
+        {
+            return !(await _userManager.GetLoginsAsync(user)).IsNullOrEmpty();
         }
     }
 }
