@@ -71,8 +71,8 @@ namespace EternalBAND.Controllers
                 }
                 else
                 {
-                    ViewBag.ErrorTitle = $"Email claim not received from: {info.LoginProvider}";
-                    ViewBag.ErrorMessage = "Please contact support on Pragim@PragimTech.com";
+                    ViewBag.ErrorTitle = $"E-posta talebi alınamadı: {info.LoginProvider}";
+                    ViewBag.ErrorMessage = "Lütfen destek için info@bandbul.com adresiyle iletişime geçin.";
                     return View("Error");
                 }
             }

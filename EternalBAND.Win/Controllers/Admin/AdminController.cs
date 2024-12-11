@@ -6,8 +6,6 @@ using EternalBAND.DomainObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using X.PagedList;
-using X.PagedList.EF;
-
 
 namespace EternalBAND.Controllers.Admin;
 

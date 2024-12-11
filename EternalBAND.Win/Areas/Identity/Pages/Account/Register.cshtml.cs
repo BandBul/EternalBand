@@ -132,7 +132,7 @@ namespace EternalBAND.Areas.Identity.Pages.Account
                 await _userManager.AddToRoleAsync(user, Constants.NormalUserRoleName);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User created a new account with password.");
+                    _logger.LogDebug("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -143,8 +143,8 @@ namespace EternalBAND.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    await _emailSender.SendEmailAsync(Input.Email, "E-posta adresinizi onaylayın.",
+                        $"Hesabınızı doğrulamak için lütfen <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>buraya tıklayın</a>.");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
@@ -162,7 +162,6 @@ namespace EternalBAND.Areas.Identity.Pages.Account
                 }
             }
 
-            // If we got this far, something failed, redisplay form
             return Page();
         }
 
@@ -174,6 +173,7 @@ namespace EternalBAND.Areas.Identity.Pages.Account
             }
             catch
             {
+                // TODO convert turkish + logging
                 throw new InvalidOperationException($"Can't create an instance of '{nameof(Users)}'. " +
                     $"Ensure that '{nameof(Users)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                     $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
@@ -184,6 +184,7 @@ namespace EternalBAND.Areas.Identity.Pages.Account
         {
             if (!_userManager.SupportsUserEmail)
             {
+                // TODO convert turkish + logging
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
             return (IUserEmailStore<Users>)_userStore;

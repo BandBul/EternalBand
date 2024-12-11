@@ -15,7 +15,7 @@ public class Contacts : IEntity
     public string NameSurname { get; set; } = "Destek Birimi";
     [Required(ErrorMessage = "Başlık boş bırakılamaz.")]
     [Display(Name = "Başlık")]
-    public string Title { get; set; } = "From contact form in Anasayfa No title";
+    public string Title { get; set; } = "Anasayfa İletişim Formu - Başlık Yok";
     [Required(ErrorMessage = "Mesaj boş bırakılamaz.")]
     [Display(Name = "Mesaj")]
     public string Message { get; set; }
