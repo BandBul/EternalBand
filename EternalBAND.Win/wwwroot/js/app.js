@@ -44,10 +44,10 @@ function initDropzone(preloadedFiles = []) {
     const dropzone = new Dropzone("#image-upload", {
         url: "#", // Replace with your upload endpoint
         autoProcessQueue: false, // Prevent auto-upload
-        maxFilesize: 2, // MB
+        maxFilesize: 7 , // MB
         maxFiles: 5,
         addRemoveLinks: true,
-        dictDefaultMessage: "Drop files here or click the button to upload",
+        dictDefaultMessage: "Dosyaları buraya sürükleyin veya yüklemek için tıklayın (Maks. 7 MB).",
         init: function () {
             const dz = this;
 
@@ -152,6 +152,22 @@ if (formEdit) {
 
                 } else {
                     console.info('Error saving changes.');
+                    // Create a hidden form to simulate a POST redirect
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = 'ilan-duzenle'; // Server endpoint
+
+                    // Add form data fields to the hidden form
+                    for (const [key, value] of formData.entries()) {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = key;
+                        input.value = value;
+                        form.appendChild(input);
+                    }
+
+                    document.body.appendChild(form); // Append to body
+                    form.submit(); // Submit the form 
                 }
             })
             .catch(error => console.error('Error:', error));
@@ -190,6 +206,22 @@ if (formCreate)
 
                 } else {
                     console.info('Error saving changes.');
+                    // Create a hidden form to simulate a POST redirect
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/PostCreate'; // Server endpoint
+
+                    // Add form data fields to the hidden form
+                    for (const [key, value] of formData.entries()) {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = key;
+                        input.value = value;
+                        form.appendChild(input);
+                    }
+
+                    document.body.appendChild(form); // Append to body
+                    form.submit(); // Submit the form 
                 }
             })
             .catch(error => console.error('Error:', error));

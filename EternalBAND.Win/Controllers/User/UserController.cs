@@ -2,16 +2,13 @@ using EternalBAND.Business;
 using EternalBAND.DomainObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using EternalBAND.Api.Helpers;
 using EternalBAND.Api.Services;
 using EternalBAND.Api.Exceptions;
-using Microsoft.EntityFrameworkCore;
-using NuGet.Packaging;
+using System.Net;
 
 namespace EternalBAND.Controllers.User;
-// TODO create a Reposıtory for manage _context, controller should only responsible for API and basic validations 
 [Authorize]
 [ApiExplorerSettings(IgnoreApi = true)]
 public class UserController : Controller
@@ -41,15 +38,7 @@ public class UserController : Controller
     [HttpGet, Route("PostCreate")]
     public IActionResult PostCreate()
     {
-        var postTypes = new List<PostTypes>() { new PostTypes() { Active = true, Id = null, FilterText = "Seçiniz", Type = "Default" } };
-        postTypes.AddRange(_userService.GetPostTypes());
-
-        var instruments = new List<Instruments>() { new Instruments() { Id = null, Instrument = "Seçiniz", InstrumentShort = "Default" } };
-        instruments.AddRange(_userService.GetInstruments());
-
-        ViewData["PostTypesId"] = new SelectList(postTypes, "Id", "FilterText");
-        ViewData["InstrumentsId"] = new SelectList(instruments, "Id", "Instrument");
-        ViewData["CityId"] = new SelectList(Cities.GetCities(), "Id", "Name");
+        PrepareViewData();
         return View();
     }
 
@@ -69,8 +58,8 @@ public class UserController : Controller
         }
         else
         {
-            IEnumerable<ModelError> allErrors = ModelState.Values.SelectMany(v => v.Errors);
-            // TODO what should we do with this error list we can display it at FE
+            PrepareViewData(posts.PostTypesId, posts.InstrumentsId, posts.CityId);
+            Response.StatusCode = (int)HttpStatusCode.BadRequest;
         }
       
         return View(posts);
@@ -83,9 +72,7 @@ public class UserController : Controller
         try
         {
             var post = await _userService.PostEditInitial(id);
-            ViewData["PostTypesId"] = new SelectList(_userService.GetPostTypes(), "Id", "FilterText", post.PostTypesId);
-            ViewData["InstrumentsId"] = new SelectList(_userService.GetInstruments(), "Id", "Instrument", post.InstrumentsId);
-            ViewData["CityId"] = new SelectList(Cities.GetCities(), "Id", "Name", post.CityId);
+            PrepareViewData();
             return View(post);
         }
         catch (NotFoundException)
@@ -125,10 +112,11 @@ public class UserController : Controller
                 return NotFound();
             }
         }
-
-        ViewData["PostTypesId"] = new SelectList(_userService.GetPostTypes(), "Id", "FilterText", posts.PostTypesId);
-        ViewData["InstrumentsId"] = new SelectList(_userService.GetInstruments(), "Id", "Instrument", posts.InstrumentsId);
-        ViewData["CityId"] = new SelectList(Cities.GetCities(), "Id", "Name", posts.CityId);
+        else 
+        {
+            Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            PrepareViewData(posts.PostTypesId, posts.InstrumentsId, posts.CityId);
+        }
         return View(posts);
     }
 
@@ -224,5 +212,18 @@ public class UserController : Controller
             TempData["WarningMessage"] = ex.Message;
             return Redirect(Request.Headers["Referer"].ToString());
         }
+    }
+
+    private void PrepareViewData(int? postTypeId = null, int? instrumentsId = null, int? cityId = null)
+    {
+        var postTypes = new List<PostTypes>() { new PostTypes() { Active = true, Id = null, FilterText = "Seçiniz", Type = "Default" } };
+        postTypes.AddRange(_userService.GetPostTypes());
+
+        var instruments = new List<Instruments>() { new Instruments() { Id = null, Instrument = "Seçiniz", InstrumentShort = "Default" } };
+        instruments.AddRange(_userService.GetInstruments());
+
+        ViewData["PostTypesId"] = postTypeId != null ? new SelectList(postTypes, "Id", "FilterText", postTypeId) : new SelectList(postTypes, "Id", "FilterText");
+        ViewData["InstrumentsId"] = instrumentsId != null ? new SelectList(instruments, "Id", "Instrument", instrumentsId) : new SelectList(instruments, "Id", "Instrument");
+        ViewData["CityId"] = cityId != null ? new SelectList(Cities.GetCities(), "Id", "Name", cityId) : new SelectList(Cities.GetCities(), "Id", "Name");
     }
 }

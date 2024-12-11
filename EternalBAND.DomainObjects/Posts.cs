@@ -1,8 +1,5 @@
 using EternalBAND.Common;
-using EternalBAND.DomainObjects.ViewModel;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
-using System.Dynamic;
 
 namespace EternalBAND.DomainObjects;
 
