@@ -1,4 +1,5 @@
 ﻿@page
+@using EternalBAND.Common
 @using EternalBAND.DomainObjects.ViewModel;
 @model RegisterModel
 @{
@@ -50,7 +51,7 @@
 
                                                 <div class=" mb-3">
                                                     <input asp-for="Input.IsPrivacyPolicyAccepted" type="checkbox" />
-                                                    <span><a href="/KVKK" target="_blank">KVKK</a> metnini okudum ve <a href="/PrivacyPolicy" target="_blank">Gizlilik Sözleşmesi</a> ile ilgili beyanı kabul ediyorum</span>
+                                                    <span><a href="/@EndpointConstants.Kvkk" target="_blank">KVKK</a> metnini okudum ve <a href="/PrivacyPolicy" target="_blank">Gizlilik Sözleşmesi</a> ile ilgili beyanı kabul ediyorum</span>
                                                     <br/>
                                                     <span asp-validation-for="Input.IsPrivacyPolicyAccepted" class="text-danger"></span>
                                                 </div>

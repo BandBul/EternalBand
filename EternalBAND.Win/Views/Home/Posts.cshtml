@@ -77,7 +77,7 @@
         var city = ViewBag.CityId ?? 0;
         var type = ViewBag.TypeShort ?? "";
         var inst = ViewBag.Instrument ?? "";
-        var link = $"/ilanlar?c={city}&e={inst}&s={type}&pId={pId}";
+        var link = $"/{EndpointConstants.Posts}?c={city}&e={inst}&s={type}&pId={pId}";
         return link;
     }
 }

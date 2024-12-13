@@ -1,15 +1,12 @@
 ﻿using System.Diagnostics;
-using EternalBAND.DataAccess;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using X.PagedList;
 using Microsoft.AspNetCore.Authorization;
 using EternalBAND.DomainObjects;
 using EternalBAND.DomainObjects.ViewModel;
 using EternalBAND.Api.Services;
-using System.Security.Cryptography;
 using EternalBAND.Api.Helpers;
 using EternalBAND.Common;
+using EternalBAND.Api;
 
 namespace EternalBAND.Controllers;
 
@@ -32,13 +29,13 @@ public class HomeController : Controller
         return View(await _homeService.GetMainPageModel());
     }
 
-    [HttpGet, Route("Anasayfa")]
+    [HttpGet, Route(EndpointConstants.Anasayfa)]
     public async Task<IActionResult> MainPage()
     {
         return View(await _homeService.GetMainPageModel());
     }
 
-    [HttpGet,Route("blogs/{seolink?}")]
+    [HttpGet,Route(EndpointConstants.BlogsEndpoint)]
     public async Task<IActionResult> Blogs(string? seolink = "", int pId = 1)
     {
         if (seolink == null)
@@ -48,7 +45,7 @@ public class HomeController : Controller
         return View(await _homeService.Blogs(pId, seolink));
     }
 
-    [HttpGet, Route("blog/{seoLink}")]
+    [HttpGet, Route(EndpointConstants.Blog)]
     public async Task<IActionResult> Blog(string? seoLink = "")
     {
         if (seoLink == null)
@@ -60,7 +57,7 @@ public class HomeController : Controller
     }
 
     // TODO change parameter names as understandable strings
-    [HttpPost,Route("ilanlar")]
+    [HttpPost,Route(EndpointConstants.Posts)]
     public async Task<IActionResult> Posts(int pId = 1, string? s = "0", int c = 0, string? e = "0")
     {
         ViewBag.CityId = c;
@@ -81,13 +78,13 @@ public class HomeController : Controller
         return View(model);
     }
 
-    [HttpGet, Route("ilanlar")]
+    [HttpGet, Route(EndpointConstants.Posts)]
     public async Task<IActionResult> Posts(string? s)
     {
         return await Posts(1, s);
     }
 
-    [HttpGet, Route("ilan/{seolink}")]
+    [HttpGet, Route(EndpointConstants.Post)]
     public async Task<IActionResult> Post(string? seolink , bool approvalPurpose = false)
     {
         if (approvalPurpose)
@@ -106,19 +103,13 @@ public class HomeController : Controller
         return View(await _homeService.Post(seolink));
     }
 
-    [HttpGet, Route("iletisim")]
+    [HttpGet, Route(EndpointConstants.Contact)]
     public IActionResult ContactsCreate()
     {
         return View();
     }
 
-    [HttpGet, Route("SeeAllPost")]
-    public async Task<IActionResult> SeeAllPost()
-    {
-        return Redirect("/ilanlar");
-    }
-
-    [HttpPost, Route("FilterNewPosts")]
+    [HttpPost, Route(EndpointConstants.FilterNewPosts)]
     public async Task<IActionResult> FilterNewPosts(string postTypeName)
     {
         PostTypeName postType;
@@ -130,17 +121,17 @@ public class HomeController : Controller
         var filteredPosts = await _homeService.PostsByPostTypeAsync(postType);
         return PartialView("PartialViews/_PostsListPartial", filteredPosts);
     }
-
-    [HttpPost, Route("NewPosts")]
+    // TODO : Change name as RecentPosts
+    [HttpPost, Route(EndpointConstants.NewPosts)]
     public async Task<IActionResult> NewPosts()
     {
-        var filteredPosts = await _homeService.NewPosts();
+        var filteredPosts = await _homeService.GetRecentPosts();
         return PartialView("PartialViews/_PostsListPartial", filteredPosts);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    [Route("iletisim")]
+    [Route(EndpointConstants.Contact)]
     public async Task<IActionResult> ContactsCreate(
         [Bind("Id,Mail,Phone,NameSurname,Title,Message,AddedDate")] Contacts contacts)
     {
@@ -158,31 +149,31 @@ public class HomeController : Controller
     }
 
 
-    [HttpGet,Route("KVKK")]
+    [HttpGet,Route(EndpointConstants.Kvkk)]
     public IActionResult Gdpr()
     {
         return View();
     }
 
-    [HttpGet,Route("PrivacyPolicy")]
+    [HttpGet,Route(EndpointConstants.PrivacyPolicy)]
     public IActionResult PrivacyPolicy()
     {
         return View();
     }
 
-    [HttpGet, Route("PostRules")]
+    [HttpGet, Route(EndpointConstants.PostRules)]
     public IActionResult PostRules()
     {
         return View();
     }
 
-    [HttpGet, Route("About")]
+    [HttpGet, Route(EndpointConstants.About)]
     public IActionResult About()
     {
         return View();
     }
 
-    [HttpPost,Route("SendSupportMessage")]
+    [HttpPost,Route(EndpointConstants.SendSupportMessage)]
     [Authorize]
     public async Task<IActionResult> SendSupportMessage(string message)
     {
@@ -206,7 +197,7 @@ public class HomeController : Controller
         return RedirectToAction(nameof(Anasayfa));
     }
 
-    [HttpGet,ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    [HttpGet, Route(EndpointConstants.Error),ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
         return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});

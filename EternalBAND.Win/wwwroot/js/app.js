@@ -141,7 +141,7 @@ if (formEdit) {
             formData.append('deletedFilesIndex', index);
         });
 
-        fetch('/ilan-duzenle', {
+        fetch('/ilanDuzenleme', {
             method: 'POST',
             body: formData,
         })
@@ -155,7 +155,7 @@ if (formEdit) {
                     // Create a hidden form to simulate a POST redirect
                     const form = document.createElement('form');
                     form.method = 'POST';
-                    form.action = 'ilan-duzenle'; // Server endpoint
+                    form.action = 'ilanDuzenleme'; // Server endpoint
 
                     // Add form data fields to the hidden form
                     for (const [key, value] of formData.entries()) {
@@ -195,7 +195,7 @@ if (formCreate)
             formData.append('deletedFilesIndex', index);
         });
 
-        fetch('/PostCreate', {
+        fetch('/ilanOlusturma', {
             method: 'POST',
             body: formData,
         })
@@ -209,7 +209,7 @@ if (formCreate)
                     // Create a hidden form to simulate a POST redirect
                     const form = document.createElement('form');
                     form.method = 'POST';
-                    form.action = '/PostCreate'; // Server endpoint
+                    form.action = '/ilanOlusturma'; // Server endpoint
 
                     // Add form data fields to the hidden form
                     for (const [key, value] of formData.entries()) {

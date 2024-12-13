@@ -229,7 +229,7 @@ try
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
-        app.UseStatusCodePagesWithRedirects("/hata-olustu/{0}");
+        app.UseStatusCodePagesWithRedirects("/{ErrorEndpoint}/{0}");
         app.UseHttpsRedirection();
         app.UseStaticFiles();
         app.UseStaticFiles(new StaticFileOptions

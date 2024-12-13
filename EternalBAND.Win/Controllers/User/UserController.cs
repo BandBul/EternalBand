@@ -7,6 +7,7 @@ using EternalBAND.Api.Helpers;
 using EternalBAND.Api.Services;
 using EternalBAND.Api.Exceptions;
 using System.Net;
+using EternalBAND.Common;
 
 namespace EternalBAND.Controllers.User;
 [Authorize]
@@ -24,7 +25,7 @@ public class UserController : Controller
         _userService = userService;
     }
 
-    [HttpGet, Route("ilanlarim")]
+    [HttpGet, Route(EndpointConstants.MyPosts)]
     public async Task<IActionResult> PostIndex()
     {
         ViewBag.PostStatusViewModel = Initials.InitialPostStatusViewModelValue;
@@ -35,18 +36,17 @@ public class UserController : Controller
         return View(allPosts);
     }
 
-    [HttpGet, Route("PostCreate")]
+    [HttpGet, Route(EndpointConstants.PostCreate)]
     public IActionResult PostCreate()
     {
         PrepareViewData();
         return View();
     }
 
-    // POST: Posts/Create
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [ValidateAntiForgeryToken]
-    [HttpPost, Route("PostCreate")]
+    [HttpPost, Route(EndpointConstants.PostCreate)]
     public async Task<IActionResult> PostCreate([Bind("Id,Title,HTMLText,PostTypesId,InstrumentsId,CityId")] Posts posts,
         List<IFormFile>? uploadedFiles)
     {
@@ -65,8 +65,7 @@ public class UserController : Controller
         return View(posts);
     }
     // TODO please pass PK Id not GUID : since we can use Find method to seek PK as a best practice
-    // GET: Posts/Edit/5
-    [HttpGet, Route("ilan-duzenle")]
+    [HttpGet, Route(EndpointConstants.PostEdit)]
     public async Task<IActionResult> PostEdit(Guid? id)
     {
         try
@@ -86,11 +85,10 @@ public class UserController : Controller
         }
     }
 
-    // POST: Posts/Edit/5
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [ValidateAntiForgeryToken]
-    [HttpPost,Route("ilan-duzenle")]
+    [HttpPost,Route(EndpointConstants.PostEdit)]
     public async Task<IActionResult> PostEdit(
         [Bind(
             "Guid,Title,HTMLText,PostTypesId,InstrumentsId,CityId")]
@@ -122,7 +120,7 @@ public class UserController : Controller
 
 
     //[ValidateAntiForgeryToken]
-    [HttpPost, ActionName("PostArchived")]
+    [HttpPost, ActionName(EndpointConstants.PostArchivedAction)]
     public async Task<IActionResult> PostArchived(int id)
     {
         try
@@ -136,9 +134,8 @@ public class UserController : Controller
             return BadRequest(ex.Message);
         }
     }
-    // TODO it should be POST
     //[ValidateAntiForgeryToken]
-    [HttpPost, ActionName("PostActivated")]
+    [HttpPost, ActionName(EndpointConstants.PostActivatedAction)]
     public async Task<IActionResult> PostActivated(int id)
     {
         try
@@ -155,7 +152,7 @@ public class UserController : Controller
 
 
     // TODO please pass PK Id not GUID : since we can use Find method to seek PK as a best practice
-    [HttpPost, ActionName("PostDelete")]
+    [HttpPost, ActionName(EndpointConstants.PostDeleteAction)]
     public async Task<JsonResult> DeleteConfirmed(int id)
     {
         try
@@ -170,7 +167,7 @@ public class UserController : Controller
         }
     }
 
-    [HttpPost, ActionName("AllReadNotification")]
+    [HttpPost, ActionName(EndpointConstants.AllReadNotificationAction)]
     public async Task<JsonResult> AllReadNotification()
     {
         try
@@ -186,7 +183,7 @@ public class UserController : Controller
         }
     
     }
-    [HttpGet, Route("bildirimler")]
+    [HttpGet, Route(EndpointConstants.Notifications)]
     public async Task<IActionResult> NotificationIndex(int pId=1)
     {
         var currentUser = await _controllerHelper.GetUserAsync(User);
@@ -194,7 +191,7 @@ public class UserController : Controller
         return View(result);
     }
 
-    [HttpGet, ActionName("NotificationRead")]
+    [HttpGet, ActionName(EndpointConstants.NotificationReadAction)]
     public async Task<IActionResult> NotificationRead(int id)
     {
         try

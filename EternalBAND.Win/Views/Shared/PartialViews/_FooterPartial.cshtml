@@ -1,3 +1,4 @@
+@using EternalBAND.Api
 @using EternalBAND.Common
 @using EternalBAND.DataAccess;
 @using EternalBAND.Api.Options
@@ -5,7 +6,7 @@
 @inject IOptions<SiteGeneralOptions> _siteSettings
 @inject ApplicationDbContext _context
 @{
-    var queryParamStr = "/ilanlar?s=";
+    var queryParamStr = $"/{EndpointConstants.Posts}?s=";
     var musicianText = queryParamStr + PostTypeName.Musician;
     var groupText = queryParamStr + PostTypeName.Group;
     var lessonText = queryParamStr + PostTypeName.Lesson;
@@ -30,10 +31,10 @@
                     <p class="fs-16 text-white mb-4">ANASAYFA</p>
                     <ul class="list-unstyled footer-list mb-0">
                         <li>
-                            <a href="/About"><i class="mdi mdi-chevron-right"></i> Hakkımızda</a>
+                            <a href="/@EndpointConstants.About"><i class="mdi mdi-chevron-right"></i> Hakkımızda</a>
                         </li>
                         <li>
-                            <a href="/iletisim"><i class="mdi mdi-chevron-right"></i> İletişim</a>
+                            <a href="/@EndpointConstants.Contact"><i class="mdi mdi-chevron-right"></i> İletişim</a>
                         </li>
                         <li hidden>
                             <a href="services.html"><i class="mdi mdi-chevron-right"></i> Prodüksiyon</a>
@@ -71,16 +72,16 @@
                             <a href="contact.html"><i class="mdi mdi-chevron-right"></i> S.S.S.</a>
                         </li>
                         <li>
-                            <a href="/PostRules"><i class="mdi mdi-chevron-right"></i> İlan Kuralları</a>
+                            <a href="/@EndpointConstants.PostRules"><i class="mdi mdi-chevron-right"></i> İlan Kuralları</a>
                         </li>
                          <li hidden>
                             <a href="faqs.html"><i class="mdi mdi-chevron-right"></i> Destek Birimi</a>
                         </li>
                         <li>
-                            <a href="/PrivacyPolicy" target="_blank"><i class="mdi mdi-chevron-right"></i> Gizlilik Sözleşmesi</a>
+                            <a href="/@EndpointConstants.PrivacyPolicy" target="_blank"><i class="mdi mdi-chevron-right"></i> Gizlilik Sözleşmesi</a>
                         </li>
                         <li>
-                            <a href="/KVKK" target="_blank"><i class="mdi mdi-chevron-right"></i> KVKK</a>
+                            <a href="/@EndpointConstants.Kvkk" target="_blank"><i class="mdi mdi-chevron-right"></i> KVKK</a>
                         </li>
                     </ul>
                 </div>

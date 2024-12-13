@@ -1,6 +1,4 @@
 using EternalBAND.Common;
-using EternalBAND.DomainObjects.ViewModel;
-using Microsoft.EntityFrameworkCore;
 
 namespace EternalBAND.DomainObjects;
 
@@ -21,7 +19,7 @@ public class Messages : IEntity
     public virtual MessageBox MessageBox { get; set; }
     // "mesajlar/id/postid"
     public string RedirectLink => 
-        $"{Constants.MessagesQueryParameter}/{SenderUserId}/{RelatedPostId}";
+        $"{EndpointConstants.Messages}/{SenderUserId}/{RelatedPostId}";
 
 
 }

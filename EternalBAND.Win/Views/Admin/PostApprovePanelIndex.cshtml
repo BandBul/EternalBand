@@ -1,4 +1,5 @@
 @using EternalBAND.Business;
+@using EternalBAND.Common
 @using X.PagedList
 @using X.PagedList.Mvc.Core
 @model X.PagedList.IPagedList<EternalBAND.DomainObjects.Posts>
@@ -115,7 +116,7 @@
         var city = ViewBag.CityId;
         var type = ViewBag.TypeShort;
         var inst = ViewBag.Instrument;
-        var link = $"/ilanlar?c={city}&e={inst}&s={type}&pId={pId}";
+        var link = $"/{EndpointConstants.Posts}?c={city}&e={inst}&s={type}&pId={pId}";
         return link;
     }
 

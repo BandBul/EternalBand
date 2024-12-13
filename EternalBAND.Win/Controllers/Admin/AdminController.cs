@@ -1,4 +1,4 @@
-using EternalBAND.Api.Exceptions;
+ï»¿using EternalBAND.Api.Exceptions;
 using EternalBAND.Api.Helpers;
 using EternalBAND.Api.Services;
 using EternalBAND.Common;
@@ -22,7 +22,6 @@ public class AdminController : Controller
         _controllerHelper = controllerHelper;
     }
     [HttpGet]
-    // GET: Blogs
     public async Task<IActionResult> BlogsIndex(int pId = 1)
     {
         try
@@ -37,13 +36,11 @@ public class AdminController : Controller
     }
 
     [HttpGet]
-    // GET: Blogs/Create
     public IActionResult BlogsCreate()
     {
         return View();
     }
 
-    // POST: Blogs/Create
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
@@ -64,7 +61,6 @@ public class AdminController : Controller
         }
     }
     [HttpGet]
-    // GET: Blogs/Edit/5
     public async Task<IActionResult> BlogsEdit(int? id)
     {
         try
@@ -78,7 +74,6 @@ public class AdminController : Controller
         }
     }
     // TODO please check this metod it may not work
-    // POST: Blogs/Edit/5
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
@@ -105,8 +100,6 @@ public class AdminController : Controller
         }
     }
 
-
-    // POST: Blogs/Delete/5
     [HttpPost, ActionName("BlogsDelete")]
     public async Task<IActionResult> BlogsDeleteConfirmed(int id)
     {
@@ -122,7 +115,6 @@ public class AdminController : Controller
     }
 
     [HttpGet]
-    // GET: Contacts
     public async Task<IActionResult> ContactsIndex(int pId =1)
     {
         try
@@ -499,19 +491,19 @@ public class AdminController : Controller
         if (seolink == null)
         {
             // TODO return error like post is not exist or null 
-            return RedirectToAction(nameof(Constants.MainPage));
+            return RedirectToAction(nameof(EndpointConstants.Anasayfa));
         }
         ViewBag.ApprovalPurpose = true;
         var model = await _adminService.Post(seolink);
         if (model == null)
         {
-            TempData["WarningMessage"] = $"'{seolink}' id li ilan yayýndan kaldýrýlmýþtýr";
+            TempData["WarningMessage"] = $"'{seolink}' id li ilan yayÄ±ndan kaldÄ±rÄ±lmÄ±ÅŸtÄ±r";
             return RedirectToAction(nameof(PostApprovePanelIndex));
         }
 
         if(model.Status != PostStatus.PendingApproval)
         {
-            TempData["WarningMessage"] = $"'{seolink}' id li ilan onay aþamasýnda deðildir. Status : {model.Status.ToString()}";
+            TempData["WarningMessage"] = $"'{seolink}' id li ilan onay aÅŸamasÄ±nda deÄŸildir. Status : {model.Status.ToString()}";
             return RedirectToAction(nameof(PostApprovePanelIndex));
         }
 

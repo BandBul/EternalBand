@@ -1,4 +1,4 @@
-using EternalBAND.DataAccess;
+using EternalBAND.Common;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EternalBAND.Controllers;
@@ -9,13 +9,13 @@ public class ErrorController : Controller
     {
     }
 
-    [HttpGet, Route("hata-olustu/404")]
+    [HttpGet, Route(EndpointConstants.PageNotFound)]
     public IActionResult PageNotFound()
     {
         return View();
     }
 
-    [HttpGet, Route("hata-olustu/{code}")]
+    [HttpGet, Route(EndpointConstants.ErrorRoute)]
     public IActionResult Index(int code)
     {
         //TODO: loglanacak

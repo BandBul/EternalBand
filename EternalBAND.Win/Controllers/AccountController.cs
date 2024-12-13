@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using EternalBAND.Api.Services;
-using EternalBAND.DomainObjects;
-using Microsoft.AspNetCore.Identity;
-using EternalBAND.Api;
+using EternalBAND.Common;
 
 namespace EternalBAND.Controllers
 {
@@ -21,7 +19,7 @@ namespace EternalBAND.Controllers
             this.accountService = accountService;
             this.logger = logger;
         }
-        [HttpPost, Route("externallogin")]
+        [HttpPost, Route(EndpointConstants.ExternalLogin)]
         public IActionResult ExternalLogin(string provider, string returnUrl = null)
         {
             var redirectUrl = Url.Action("GoogleResponse", "Account");
@@ -29,19 +27,19 @@ namespace EternalBAND.Controllers
             return accountService.ExernalLogin(provider, redirectUrl);
         }
 
-        [Route("googleresponse")]
+        [Route(EndpointConstants.Googleresponse)]
         public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
             if (remoteError != null)
             {
-                ModelState.AddModelError(string.Empty, $"Error from external provider: {remoteError}");
+                ModelState.AddModelError(string.Empty, $"3. parti sağlayıcıdan hata: {remoteError}");
                 return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
             var info = await accountService.GetExternalLoginInfoAsync();
             if (info == null)
             {
-                ModelState.AddModelError(string.Empty, "Error loading external login information.");
+                ModelState.AddModelError(string.Empty, "3. parti sağlayıcı ile oturum açma bilgileri yüklenirken hata oluştu.");
                 return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
             // Sign in the user with this external login provider if the user already has a login.
@@ -55,12 +53,7 @@ namespace EternalBAND.Controllers
             {
                 return RedirectToPage("./Lockout");
             }
-            // No confirm needed for external login
-            //if (result.IsNotAllowed)
-            //{
-            //    ModelState.AddModelError(string.Empty, "Lütfen mail adresinizi onaylayınız.");
-            //    return RedirectToPage("./Login");
-            //}
+            
             // failure means first login
             else
             {

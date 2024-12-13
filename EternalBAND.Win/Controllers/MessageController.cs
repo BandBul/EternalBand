@@ -1,8 +1,9 @@
-using EternalBAND.DomainObjects.ViewModel;
+﻿using EternalBAND.DomainObjects.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using EternalBAND.Api.Services;
 using EternalBAND.Api.Helpers;
 using Microsoft.AspNetCore.Authorization;
+using EternalBAND.Common;
 
 namespace EternalBAND.Controllers;
 [Authorize]
@@ -19,7 +20,7 @@ public class MessageController : Controller
     }
 
 
-    [HttpGet, Route("mesajlar/{userId?}/{postId?}")]
+    [HttpGet, Route(EndpointConstants.MessagesEndpoint)]
     // userId : message receiver userId
     // postId : mssage is being sent for related postId
     public async Task<ActionResult> ChatIndex(string? userId, int postId)
@@ -46,18 +47,18 @@ public class MessageController : Controller
     }
 
     // TODO : add logging before each return
-    [HttpPost, ActionName("SendMessage")]
+    [HttpPost, ActionName(EndpointConstants.SendMessage)]
     public async Task<ActionResult> SendMessage(Guid id, string message, int postId, int messageBoxId)
     {
         bool isUserExist = await _controllerHelper.IsUserExist(id.ToString());
         if (!isUserExist)
         {
-            return Json("Kay�t bulunamad�.");
+            return Json("Kayıt bulunamadı.");
         }
         var currentUser = await _controllerHelper.GetUserAsync(User);
         if (id.ToString().Equals(currentUser.Id))
         {
-            return Json("User can not send message to yourself");
+            return Json("Kullanıcı kendisine mesaj gönderemez.");
         }
         try
         {

@@ -115,7 +115,7 @@ namespace EternalBAND.Api.Services
                 .ToPagedListAsync(1, Constants.PageSizeForElements);
         }
 
-        public async Task<IPagedList<Posts>> NewPosts()
+        public async Task<IPagedList<Posts>> GetRecentPosts()
         {
             return await _context.Posts
                 .Include(n => n.PostTypes)
