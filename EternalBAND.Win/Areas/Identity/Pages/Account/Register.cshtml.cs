@@ -124,7 +124,7 @@ namespace EternalBAND.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
-                user.PhotoPath = "/images/user_photo/profile.png";
+                user.PhotoPath = Constants.DefaultPhotoPath;
                 user.RegistrationDate = DateTime.Now;
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);

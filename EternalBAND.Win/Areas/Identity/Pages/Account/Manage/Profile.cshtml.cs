@@ -139,12 +139,8 @@ namespace EternalBAND.Areas.Identity.Pages.Account.Manage
                 }
                 catch (Exception ex)
                 {
-                    await new LogService(_context).ErrorLogMethod(
-                        "Manage/Index fotoğraf eklenirken hata.", ex,
-                        "OnPostAsync");
+                    // TODO log and decide will it block or not
                 }
-
-
             }
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             if (Input.PhoneNumber != phoneNumber)

@@ -21,8 +21,6 @@ public class ApplicationDbContext : IdentityDbContext<Users>
     public DbSet<PostTypes> PostTypes { get; set; }
     public DbSet<Messages> Messages { get; set; }
     public DbSet<Contacts> Contacts { get; set; }
-    public DbSet<Logs> Logs { get; set; }
-    public DbSet<ErrorLogs> ErrorLogs { get; set; }
     public DbSet<Blogs> Blogs { get; set; }
     public DbSet<MessageBox> MessageBoxes { get; set; }
 
@@ -138,48 +136,38 @@ public class ApplicationDbContext : IdentityDbContext<Users>
         );
 
         builder.Entity<IdentityRole>().HasData(
-            new IdentityRole
-            {
-                Id = Constants.AdminRoleId,
-                Name = Constants.AdminRoleName,
-                NormalizedName = Constants.AdminRoleName.ToUpperInvariant(),
-            },
-            new IdentityRole
-            {
-                Id = Constants.NormalUserId,
-                Name = Constants.NormalUserRoleName,
-                NormalizedName = Constants.NormalUserRoleName.ToUpperInvariant(),
-            }
+           new IdentityRole
+           {
+               Id = Constants.AdminRoleId,
+               Name = Constants.AdminRoleName,
+               NormalizedName = Constants.AdminRoleName.ToUpperInvariant(),
+           },
+           new IdentityRole
+           {
+               Id = Constants.NormalUserRoleId,
+               Name = Constants.NormalUserRoleName,
+               NormalizedName = Constants.NormalUserRoleName.ToUpperInvariant(),
+           }
         );
-        
-        
-        builder.Entity<Users>().HasData(new Users // Pass Af9CCdzXYYxLQSXR
+
+        var admins = new List<Users>()
         {
-            Id = Constants.AdminUserId,
-            UserName = "admin@bandbul.com",
-            NormalizedUserName = "ADMIN@BANDBUL.COM",
-            Email = "admin@bandbul.com",
-            NormalizedEmail = "ADMIN@BANDBUL.COM",
-            EmailConfirmed = true,
-            PasswordHash = "AQAAAAEAACcQAAAAEKI5PN2jzhcrAOnOBDzALJvU65YuCMAKjwwQwaCnxR0UpCdXn8J4tueymis2QexFAA==",
-            SecurityStamp = "E2B3O7QZENNRGFV2LTBADCYOV7PA4BYQ",
-            ConcurrencyStamp = "936d1570-9809-4120-9359-b16af62456fd",
-            Name = "Super",
-            Surname = "Admin",
-            LockoutEnabled = true,
-            TwoFactorEnabled = false,
-            PhoneNumberConfirmed = false,
-            AccessFailedCount = 0,
-            PhoneNumber = "5000000000",
-            PhotoPath = "/images/user_photo/profile.png",
-            FullName = "Super Admin",
-        });
-        builder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
+            DefaultUserAdditionHelper.CreateAdminUser("admin.engin@bandbul.com", "YWRtaW4uZW5naW4="),
+            DefaultUserAdditionHelper.CreateAdminUser("admin.berkay@bandbul.com", "YWRtaW4uYmVya2F5"),
+            DefaultUserAdditionHelper.CreateAdminUser("admin.enis@bandbul.com", "YWRtaW4uZW5pcw==")
+        };
+
+        admins.ForEach(admin =>
         {
-            RoleId = Constants.AdminRoleId,
-            UserId = Constants.AdminUserId
+            // https://www.base64encode.org/ decoded
+            builder.Entity<Users>().HasData(admin);
+
+            builder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
+            {
+                RoleId = Constants.AdminRoleId,
+                UserId = admin.Id
+            });
         });
-        
         base.OnModelCreating(builder);
     }
 }

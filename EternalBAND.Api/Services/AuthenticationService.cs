@@ -57,7 +57,7 @@ namespace EternalBAND.Api.Services
         public async Task CreateUserAsync(SignUpInputContract signUpContract)
         {
             var user = InstentiateUser();
-            user.PhotoPath = "/images/user_photo/profile.png";
+            user.PhotoPath = Constants.DefaultPhotoPath;
             user.RegistrationDate = DateTime.Now;
             await userStore.SetUserNameAsync(user, signUpContract.Username, CancellationToken.None);
             await emailStore.SetEmailAsync(user, signUpContract.Username, CancellationToken.None);
