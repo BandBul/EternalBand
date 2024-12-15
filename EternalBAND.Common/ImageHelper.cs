@@ -1,6 +1,5 @@
+using System.Reflection;
 using System;
-using System.Globalization;
-using System.Text;
 
 namespace EternalBAND.Helpers;
 
@@ -8,11 +7,6 @@ public static class ImageHelper
 {
     private static string ImagePath = "images/ilan/";
     private static string BlogPath = "images/blog/";
-
-    private static string GeneratePhotoFileName(string fileName)
-    {
-        return $"{Guid.NewGuid().ToString()}-{new Random().Next(0, 10000)}{Path.GetExtension(fileName)}";
-    }
 
     public static string GetGeneratedAbsolutePostImagePath(int postId, string fileName)
     {
@@ -48,6 +42,8 @@ public static class ImageHelper
             return false;
         }
     }
-
-
+    private static string GeneratePhotoFileName(string fileName)
+    {
+        return $"{Guid.NewGuid().ToString()}-{new Random().Next(0, 10000)}{Path.GetExtension(fileName)}";
+    }
 }
