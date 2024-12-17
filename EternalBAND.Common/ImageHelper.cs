@@ -8,9 +8,9 @@ public static class ImageHelper
     private static string ImagePath = "images/ilan/";
     private static string BlogPath = "images/blog/";
 
-    public static string GetGeneratedAbsolutePostImagePath(int postId, string fileName)
+    public static string GetGeneratedAbsolutePostImagePath(string? seoLink, string fileName)
     {
-        return $"{ImagePath}{postId.ToString()}/{GeneratePhotoFileName(fileName)}";
+        return $"{ImagePath}{seoLink}/{GeneratePhotoFileName(fileName)}";
     }
 
     public static string GetGeneratedAbsoluteBlogImagePath(int postId, string fileName)
@@ -42,6 +42,7 @@ public static class ImageHelper
             return false;
         }
     }
+    //TODO add check for "is filename exist in folder"
     private static string GeneratePhotoFileName(string fileName)
     {
         return $"{Guid.NewGuid().ToString()}-{new Random().Next(0, 10000)}{Path.GetExtension(fileName)}";

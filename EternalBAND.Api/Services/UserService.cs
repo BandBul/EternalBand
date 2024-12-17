@@ -40,8 +40,8 @@ namespace EternalBAND.Api.Services
 
         public async Task PostCreate(Users? currentUser, Posts post, List<IFormFile>? images)
         {
+            await PostAddSeoLink(post);
             await PostAddPhoto(post, images);
-            PostAddSeoLink(post);
             post.AddedByUserId = currentUser?.Id;
             post.AddedDate = DateTime.Now;
             post.Guid = Guid.NewGuid();
@@ -94,15 +94,17 @@ namespace EternalBAND.Api.Services
                 if ((currentUser.Id == post.AddedByUserId))
                 {
                     var isAdmin = await _userManager.IsInRoleAsync(currentUser, Constants.AdminRoleName);
+
                     posts.Id = post.Id;
+                    posts.SeoLink = post.SeoLink;
                     await UpdatePhotos(posts, images, deletedFilesIndex, post.AllPhotos);
                     posts.AddedByUserId = post.AddedByUserId;
                     posts.AdminConfirmationUserId = post.AdminConfirmationUserId;
                     posts.AdminConfirmation = post.AdminConfirmation;
                     posts.AddedDate = post.AddedDate;
-                    posts.SeoLink = post.SeoLink;
                     posts.Guid = post.Guid;
                     posts.Status = isAdmin ? PostStatus.Active : PostStatus.PendingApproval;
+
                     if (!isAdmin)
                     {
                         posts.Status = PostStatus.PendingApproval;
@@ -323,7 +325,7 @@ namespace EternalBAND.Api.Services
             {
                 foreach (var image in images)
                 {
-                    var absoluteFilePath = ImageHelper.GetGeneratedAbsolutePostImagePath(posts.Id, image.FileName);
+                    var absoluteFilePath = ImageHelper.GetGeneratedAbsolutePostImagePath(posts.SeoLink, image.FileName);
                     string fulldirectoryPath = Path.Combine(_environment.WebRootPath, Path.GetDirectoryName(absoluteFilePath));
 
                     // Ensure the directory exists

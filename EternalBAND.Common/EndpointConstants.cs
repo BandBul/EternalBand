@@ -42,7 +42,7 @@ namespace EternalBAND.Common
 
         // please check app.js for usage
         public const string PostCreate = "ilanOlusturma";
-        public const string PostEdit = "ilanDüzenleme";
+        public const string PostEdit = "ilanDuzenleme";
         public const string MyPosts = "ilanlarim";
 
 

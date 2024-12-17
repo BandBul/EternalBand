@@ -50,7 +50,7 @@ function initDropzone(preloadedFiles = []) {
         dictDefaultMessage: "Dosyaları buraya sürükleyin veya yüklemek için tıklayın (Maks. 7 MB).",
         init: function () {
             const dz = this;
-
+            var maxSizeByte = dz.options.maxFilesize * 1024 * 1024;
             // Add preloaded files
             preloadedFiles.forEach(function (file) {
                 const mockFile = { name: `Image ${file.id}`, size: 12345, serverId: file.id };
@@ -63,12 +63,24 @@ function initDropzone(preloadedFiles = []) {
             // Handle file addition
             dz.on("addedfile", function (file) {
                 if (!file.isMock) {
-                    if (dz.files.length > this.options.maxFiles) {
-                        this.removeFile(file);
-                        alert("You can only upload up to 5 files.");
+                    var removeFileFlag = false;
+                    if (dz.files.length > dz.options.maxFiles)
+                    {
+                        removeFileFlag = true;
+                        alert("En fazla 5 dosya yükleyebilirsiniz.");
                     }
-                    else {
+                    if (file.size > maxSizeByte)
+                    {
+                        removeFileFlag = true;
+                        alert("Yüklemek istediğiniz dosya boyutu 7 MB'ı aşıyor. Lütfen daha küçük bir dosya seçin.");
+                    }
+                    else
+                    {
                         uploadedFiles.push(file);
+                    }
+
+                    if (removeFileFlag === true) {
+                        dz.removeFile(file);
                     }
                 }
             });
@@ -80,10 +92,19 @@ function initDropzone(preloadedFiles = []) {
                 }
             });
 
-            dz.on("maxfilesexceeded", function (file) {
-                this.removeFile(file); // Remove the extra file
-                alert("You can only upload up to 5 files.");
-            });
+            //dz.on("maxfilesexceeded", function (file) {
+            //    dz.removeFile(file); // Remove the extra file
+            //    alert("En fazla 5 dosya yükleyebilirsiniz.");
+            //});
+
+            //dz.on("error", function (file, message) {
+            //    if (file.size > dz.options.maxFilesize * 1024 * 1024) {
+            //        dz.removeFile(file); // Remove the file exceeding the size
+            //        alert("Yüklemek istediğiniz dosya boyutu 7 MB'ı aşıyor. Lütfen daha küçük bir dosya seçin.");
+            //    } else {
+            //        alert(message); // Handle other errors
+            //    }
+            //});
         }
     });
 
