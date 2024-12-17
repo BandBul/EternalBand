@@ -6,7 +6,7 @@
 @using Microsoft.EntityFrameworkCore
 @using Microsoft.Extensions.Options;
 @model X.PagedList.IPagedList<EternalBAND.DomainObjects.Posts>
-
+<link href="/Css/ImageSize.css" rel="stylesheet" type="text/css">
 @{
     foreach (var post in Model)
     {
@@ -17,7 +17,7 @@
                     <div class="col-md-2">
                         <div class="text-center mb-4 mb-md-0">
                             <a href="ilan/@post.SeoLink">
-                                <img src="@photo" alt="" class="img-fluid rounded-3">
+                                <img src="@photo" alt="" class="rounded-3 post-image-display">
                             </a>
                         </div>
                     </div>

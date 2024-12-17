@@ -6,6 +6,7 @@
 @using EternalBAND.DataAccess;
 @using EternalBAND.Business
 <link href="/Css/Post.css" rel="stylesheet" type="text/css">
+<link href="/Css/ImageSize.css" rel="stylesheet" type="text/css">
 @inject ApplicationDbContext _context
 @model EternalBAND.DomainObjects.Posts
 @{
@@ -165,9 +166,9 @@
                                         if (Model.Photo1 != null)
                                         {
                                             index++;
-                                            <div class="col-lg-4 mt-4">
+                                            <div class="col-lg-4 mt-4 image-box">
                                                 <div class="candidate-portfolio-box card border-0">
-                                                    <img src="@Url.Content("~/" + Model.Photo1)" alt="" class="img-fluid">
+                                                    <img src="@Url.Content("~/" + Model.Photo1)" alt="" class="post-image-display-mypost">
                                                     <div class="bg-overlay"></div>
                                                     <div class="zoom-icon">
                                                         <a href="@Url.Content("~/" + Model.Photo1)" class="image-popup text-white">
@@ -180,9 +181,9 @@
                                         if (Model.Photo2 != null)
                                         {
                                             index++;
-                                            <div class="col-lg-4 mt-4">
+                                            <div class="col-lg-4 mt-4 image-box">
                                                 <div class="candidate-portfolio-box card border-0">
-                                                    <img src="@Url.Content("~/" + Model.Photo2)" alt="" class="img-fluid">
+                                                    <img src="@Url.Content("~/" + Model.Photo2)" alt="" class="post-image-display-mypost">
                                                     <div class="bg-overlay"></div>
                                                     <div class="zoom-icon">
                                                         <a href="@Url.Content("~/" + Model.Photo2)" class="image-popup text-white">
@@ -195,9 +196,9 @@
                                         if (Model.Photo3 != null)
                                         {
                                             index++;
-                                            <div class="col-lg-4 mt-4">
+                                            <div class="col-lg-4 mt-4 image-box">
                                                 <div class="candidate-portfolio-box card border-0">
-                                                    <img src="@Url.Content("~/" + Model.Photo3)" alt="" class="img-fluid">
+                                                    <img src="@Url.Content("~/" + Model.Photo3)" alt="" class="post-image-display-mypost">
                                                     <div class="bg-overlay"></div>
                                                     <div class="zoom-icon">
                                                         <a href="@Url.Content("~/" + Model.Photo3)" class="image-popup text-white">
@@ -210,9 +211,9 @@
                                         if (Model.Photo4 != null)
                                         {
                                             index++;
-                                            <div class="col-lg-4 mt-4">
+                                            <div class="col-lg-4 mt-4 image-box">
                                                 <div class="candidate-portfolio-box card border-0">
-                                                    <img src="@Url.Content("~/" + Model.Photo4)" alt="" class="img-fluid">
+                                                    <img src="@Url.Content("~/" + Model.Photo4)" alt="" class="post-image-display-mypost">
                                                     <div class="bg-overlay"></div>
                                                     <div class="zoom-icon">
                                                         <a href="@Url.Content("~/" + Model.Photo4)" class="image-popup text-white">
@@ -225,9 +226,9 @@
                                         if (Model.Photo5 != null)
                                         {
                                             index++;
-                                            <div class="col-lg-4 mt-4">
+                                            <div class="col-lg-4 mt-4 image-box">
                                                 <div class="candidate-portfolio-box card border-0">
-                                                    <img src="@Url.Content("~/" + Model.Photo5)" alt="" class="img-fluid">
+                                                    <img src="@Url.Content("~/" + Model.Photo5)" alt="" class="post-image-display-mypost">
                                                     <div class="bg-overlay"></div>
                                                     <div class="zoom-icon">
                                                         <a href="@Url.Content("~/" + Model.Photo5)" class="image-popup text-white">
