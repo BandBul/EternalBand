@@ -1,11 +1,15 @@
-﻿@page
+﻿@* @page
 @model ResendEmailConfirmationModel
 @{
-    ViewData["Title"] = "Resend email confirmation";
+    ViewData["Title"] = "Doğrulama E-postasını Yeniden Gönder";
 }
 
+
+<h4 class="mt-3">E-posta adresiniz henüz doğrulanmamış. Lütfen e-postanızı kontrol ederek doğrulama bağlantısını kullanın.</h4>
+<h4 class="mt-3">Doğrulama bağlantısını yeniden göndermek için aşağıdaki butona tıklayın.</h4>
+
 <h1>@ViewData["Title"]</h1>
-<h2>Enter your email.</h2>
+<h2>Email</h2>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -18,6 +22,44 @@
             </div>
             <button type="submit" class="w-100 btn btn-lg btn-primary">Resend</button>
         </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+ *@
+
+
+@page
+@model ResendEmailConfirmationModel
+@{
+    ViewData["Title"] = "Doğrulama E-postasını Yeniden Gönder";
+}
+<link href="/Css/ResendEmailConfirmation.css" rel="stylesheet" type="text/css">
+
+<div class="resend-container">
+    <div class="resend-box">
+        <h4 class="info-text">
+            E-posta adresiniz henüz doğrulanmamış. Lütfen e-postanızı kontrol ederek doğrulama bağlantısını kullanın.
+        </h4>
+        <h4 class="info-text">
+            Doğrulama bağlantısını yeniden göndermek için aşağıdaki butona tıklayın.
+        </h4>
+
+        <hr class="divider" />
+
+        <div class="form-wrapper">
+            <form method="post" class="resend-form">
+                <div asp-validation-summary="All" class="text-danger" role="alert"></div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Email" class="form-control" aria-required="true" placeholder="name@example.com" />
+                    <label asp-for="Input.Email" class="form-label">E-posta</label>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn-submit">Gönder</button>
+            </form>
+        </div>
     </div>
 </div>
 

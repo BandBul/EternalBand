@@ -49,25 +49,29 @@ namespace EternalBAND.Areas.Identity.Pages.Account
             var user = await _userManager.FindByEmailAsync(Input.Email);
             if (user == null)
             {
-                ModelState.AddModelError(string.Empty, "Doğrulama e-postası gönderildi. Lütfen e-posta kutunuzu kontrol edin.");
+                ModelState.AddModelError(string.Empty, $"{Input.Email} e-posta adresine sahip bir kullanıcı bulunmamaktadır.");
                 return Page();
             }
 
             var userId = await _userManager.GetUserIdAsync(user);
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            var callbackUrl = Url.Page(
-                "/Account/ConfirmEmail",
-                pageHandler: null,
+            var callbackUrl = Url.Action(
+                action: null,
+                controller: null,
                 values: new { userId = userId, code = code },
-                protocol: Request.Scheme);
+                protocol: Request.Scheme
+            );
+
+            callbackUrl = $"{Request.Scheme}://{Request.Host.Value}/mail-dogrulandi?{callbackUrl.Split('?')[1]}";
+
             await _emailSender.SendEmailAsync(
                 Input.Email,
                 "E-posta adresinizi onaylayın.",
                 $"Hesabınızı doğrulamak için lütfen <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>buraya tıklayın</a>.");
 
             ModelState.AddModelError(string.Empty, "Doğrulama e-postası gönderildi. Lütfen e-posta kutunuzu kontrol edin.");
-            return Page();
+            return RedirectToPage("RegisterConfirmation", new { email = Input.Email });
         }
     }
 }

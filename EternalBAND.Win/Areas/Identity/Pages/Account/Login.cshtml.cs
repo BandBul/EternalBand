@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using EternalBAND.DomainObjects;
+using EternalBAND.Common;
 
 namespace EternalBAND.Areas.Identity.Pages.Account
 {
@@ -91,8 +92,7 @@ namespace EternalBAND.Areas.Identity.Pages.Account
 
                 if (result.IsNotAllowed)
                 {
-                    ModelState.AddModelError(string.Empty, "Lütfen mail adresinizi onaylayınız.");
-                    return Page();
+                    return Redirect($"{EndpointConstants.ErrorRoute}/{(int)ErrorCode.NotConfirmedEmail}");
                 }
 
                 else

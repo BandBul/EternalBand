@@ -15,6 +15,7 @@ namespace EternalBAND.Common
         public const string NewPosts = "NewPosts";
         public const string SendSupportMessage = "SendSupportMessage";
         public const string Error = "Error";
+        public const string ErrorIndex = "Index";
 
         public const string PostActivatedAction = "PostActivated";
         public const string PostDeleteAction = "PostDelete";
@@ -49,7 +50,8 @@ namespace EternalBAND.Common
         public const string Contact = "iletisim";
         public const string Kvkk = "KVKK";
         public const string PageNotFound = "hata-olustu/404";
-        public const string ErrorRoute = "hata-olustu/{code}";
+        public const string ErrorRouteWithCode = "hata-olustu/{code}";
+        public const string ErrorRoute = "hata-olustu";
 
 
         

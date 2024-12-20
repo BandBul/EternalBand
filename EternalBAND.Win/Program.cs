@@ -154,6 +154,7 @@ try
       
         builder.Services.AddRazorPages(options =>
         {
+            // TODO define below magic strings under a class
             options.Conventions.AddAreaPageRoute("Identity", "/Account/Manage/Profile", "/profil/{userId?}");
             options.Conventions.AddAreaPageRoute("Identity", "/Account/Manage/ChangePassword", "/sifre-sifirla");
             options.Conventions.AddAreaPageRoute("Identity", "/Account/Lockout", "/hesap-kilitlendi");
@@ -162,8 +163,10 @@ try
             options.Conventions.AddAreaPageRoute("Identity", "/Account/ForgotPassword", "/sifremi-unuttum");
             options.Conventions.AddAreaPageRoute("Identity", "/Account/Logout", "/cikis-yap");
             options.Conventions.AddAreaPageRoute("Identity", "/Account/AccessDenied", "/erisim-engellendi");
-            options.Conventions.AddAreaPageRoute("Identity", "/Account/ForgotPasswordConfirmation",
-                "/mail-gonderildi");
+            options.Conventions.AddAreaPageRoute("Identity", "/Account/ForgotPasswordConfirmation", "/mail-gonderildi");
+            options.Conventions.AddAreaPageRoute("Identity", "/Account/ResendEmailConfirmation", "/yeniden-dogrulama-maili-gonder");
+            options.Conventions.AddAreaPageRoute("Identity", "/Account/RegisterConfirmation", "/dogrulama-maili-gonderildi");
+            options.Conventions.AddAreaPageRoute("Identity", "/Account/ConfirmEmail", "/mail-dogrulandi");
         });
 
         var googleApiKey = new GoogleOptions();

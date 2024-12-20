@@ -15,7 +15,7 @@ public class ErrorController : Controller
         return View();
     }
 
-    [HttpGet, Route(EndpointConstants.ErrorRoute)]
+    [HttpGet, Route(EndpointConstants.ErrorRouteWithCode)]
     public IActionResult Index(int code)
     {
         //TODO: loglanacak

@@ -1,0 +1,93 @@
+﻿/* Ana kapsayıcı */
+.resend-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+}
+
+/* Dikdörtgen kutu */
+.resend-box {
+    max-width: 400px;
+    min-height: 250px; /* Yükseklik artırıldı */
+    padding: 30px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Bilgi yazıları */
+.info-text {
+    font-size: 0.85rem; /* Yazı tipi küçültüldü */
+    margin-bottom: 10px;
+    color: #777; /* Daha silik bir renk */
+    line-height: 1.5; /* Satır aralığı artırıldı */
+}
+
+/* Ayırıcı çizgi */
+.divider {
+    margin: 15px 0;
+    border: none;
+    border-top: 1px solid #ddd;
+}
+
+/* Form düzeni */
+.form-wrapper {
+    margin-top: 15px;
+}
+
+.resend-form {
+    text-align: left;
+}
+
+/* Form öğeleri */
+.form-floating {
+    margin-bottom: 15px;
+}
+
+.form-label {
+    font-size: 0.8rem; /* Daha küçük font */
+    color: #555; /* Silik renk */
+}
+
+.form-control {
+    font-size: 0.85rem; /* Daha küçük boyut */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Düğme stili */
+.btn-submit {
+    width: 100%;
+    padding: 12px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    background-color: #f1c40f;
+    color: #000;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    .btn-submit:hover {
+        background-color: #d4ac0d;
+    }
+
+/* Hata mesajları */
+.text-danger {
+    font-size: 0.8rem;
+    color: #e74c3c;
+}
+
+/* Responsive düzen */
+@media (max-width: 576px) {
+    .resend-box {
+        margin: 10px;
+        padding: 20px;
+    }
+}
