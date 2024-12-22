@@ -84,7 +84,6 @@
       <None Remove="Css\SiteLogo.css" />
       <None Remove="EternalBAND.zip" />
       <None Remove="Proje.zip" />
-      <None Remove="Scripts\Version-Update.ps1" />
       <None Remove="sorular.txt" />
       <None Remove="sorular.txt.bak" />
       <None Remove="Yapılacaklar.txt" />
@@ -191,10 +190,6 @@
       <ProjectReference Include="..\EternalBand.DataAccess\EternalBAND.DataAccess.csproj" />
       <ProjectReference Include="..\EternalBAND.DomainObjects\EternalBAND.DomainObjects.csproj" />
       <ProjectReference Include="..\EternalBAND.Migrations\EternalBAND.Migrations.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <TypeScriptCompile Include="Scripts\Version-Update.ps1" />
     </ItemGroup>
 
     <ItemGroup>

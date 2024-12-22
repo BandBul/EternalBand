@@ -1,33 +1,25 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
-using System.Threading;
-using System.Threading.Tasks;
 using EternalBAND.Common;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Logging;
 using EternalBAND.DomainObjects;
-using JetBrains.Annotations;
 using EternalBAND.Api.Attributes;
 using EternalBAND.Api;
+using System.Globalization;
 
 namespace EternalBAND.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
+        private const string DuplicateUserName = "DuplicateUserName";
+        private const string DuplicateEmail = "DuplicateEmail";
         private readonly SignInManager<Users> _signInManager;
         private readonly UserManager<Users> _userManager;
         private readonly IUserStore<Users> _userStore;
@@ -50,55 +42,27 @@ namespace EternalBAND.Areas.Identity.Pages.Account
             _emailSender = emailSender;
         }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         [BindProperty]
         public InputModel Input { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public string ReturnUrl { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public class InputModel
         {
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
             [Required(ErrorMessage = "{0} zorunlu alandır. Lütfen doldurunuz")]
             [EmailAddress]
             [Display(Name = "Mail Adresi",Prompt ="Mail Adresiniz" )]
             
             public string Email { get; set; }
 
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
             [Required(ErrorMessage = "{0} zorunlu alandır. Lütfen doldurunuz")]
             [StringLength(100, ErrorMessage = "{0} en az {2} ve en fazla {1} karakter uzunluğunda olmalıdır.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Parola",Prompt ="Parolanız" )]
             public string Password { get; set; }
 
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
             [DataType(DataType.Password)]
             [Display(Name = "Yeniden Parola",Prompt ="Yeniden Parolanız" )]
             [Compare("Password", ErrorMessage = "Parolalar uyuşmuyor.")]
@@ -128,8 +92,10 @@ namespace EternalBAND.Areas.Identity.Pages.Account
                 user.RegistrationDate = DateTime.Now;
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 await _userManager.AddToRoleAsync(user, Constants.NormalUserRoleName);
+
                 if (result.Succeeded)
                 {
                     _logger.LogDebug("User created a new account with password.");
@@ -159,13 +125,28 @@ namespace EternalBAND.Areas.Identity.Pages.Account
                         return LocalRedirect(returnUrl);
                     }
                 }
-                foreach (var error in result.Errors)
+                var errors = DeleteEmailDuplicationIfExistAndTranslate(result.Errors, Input.Email);
+                foreach (var error in errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
 
             return Page();
+        }
+
+        private IEnumerable<IdentityError> DeleteEmailDuplicationIfExistAndTranslate(IEnumerable<IdentityError> errors, string email) 
+        {
+            var filteredError = errors.Where(s => !s.Code.Equals(DuplicateUserName, StringComparison.InvariantCultureIgnoreCase)).ToList();
+            filteredError.ForEach(error =>
+            {
+                if(error.Code.Equals(DuplicateEmail, StringComparison.InvariantCultureIgnoreCase)) 
+                {
+                    error.Description = $"'{email}' e-posta adresi zaten kullanılıyor. Lütfen farklı bir e-posta adresi deneyin";
+                }
+            });
+
+            return filteredError;
         }
 
         private Users CreateUser()
