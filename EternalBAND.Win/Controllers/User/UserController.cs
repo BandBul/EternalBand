@@ -127,7 +127,7 @@ public class UserController : Controller
         {
             var currentUser = await _controllerHelper.GetUserAsync(User);
             await _userService.PostArchived(currentUser, id);
-            return Redirect("/ilanlarim");
+            return Redirect($"/{EndpointConstants.MyPosts}");
         }
         catch (BadRequestException ex)
         {
@@ -142,7 +142,7 @@ public class UserController : Controller
         {
             var currentUser = await _controllerHelper.GetUserAsync(User);
             await _userService.PostActivated(currentUser, id);
-            return Redirect("/ilanlarim");
+            return Redirect($"/{EndpointConstants.MyPosts}");
         }
         catch (BadRequestException ex)
         {

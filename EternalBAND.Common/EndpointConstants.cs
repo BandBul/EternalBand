@@ -1,6 +1,4 @@
-﻿
-
-namespace EternalBAND.Common
+﻿namespace EternalBAND.Common
 {
     public class EndpointConstants
     {

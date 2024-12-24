@@ -17,6 +17,7 @@ using EternalBAND.Win.Infrastructure;
 using NLog;
 using NLog.Extensions.Logging;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using EternalBAND.Common;
 
 var nlogger = LogManager.GetCurrentClassLogger();
 
@@ -159,14 +160,14 @@ try
             options.Conventions.AddAreaPageRoute("Identity", "/Account/Manage/ChangePassword", "/sifre-sifirla");
             options.Conventions.AddAreaPageRoute("Identity", "/Account/Lockout", "/hesap-kilitlendi");
             options.Conventions.AddAreaPageRoute("Identity", "/Account/Register", "/kayit-ol");
-            options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", "/giris-yap");
+            options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", $"/{UrlConstants.Login}");
             options.Conventions.AddAreaPageRoute("Identity", "/Account/ForgotPassword", "/sifremi-unuttum");
-            options.Conventions.AddAreaPageRoute("Identity", "/Account/Logout", "/cikis-yap");
-            options.Conventions.AddAreaPageRoute("Identity", "/Account/AccessDenied", "/erisim-engellendi");
+            options.Conventions.AddAreaPageRoute("Identity", "/Account/Logout", $"/{UrlConstants.Logout}");
+            options.Conventions.AddAreaPageRoute("Identity", "/Account/AccessDenied", $"/{UrlConstants.AccessDenied}");
             options.Conventions.AddAreaPageRoute("Identity", "/Account/ForgotPasswordConfirmation", "/mail-gonderildi");
             options.Conventions.AddAreaPageRoute("Identity", "/Account/ResendEmailConfirmation", "/yeniden-dogrulama-maili-gonder");
             options.Conventions.AddAreaPageRoute("Identity", "/Account/RegisterConfirmation", "/dogrulama-maili-gonderildi");
-            options.Conventions.AddAreaPageRoute("Identity", "/Account/ConfirmEmail", "/mail-dogrulandi");
+            options.Conventions.AddAreaPageRoute("Identity", "/Account/ConfirmEmail", $"/{UrlConstants.ConfirmEmail}");
         });
 
         var googleApiKey = new GoogleOptions();
@@ -189,9 +190,9 @@ try
 
         builder.Services.ConfigureApplicationCookie(options =>
         {
-            options.LoginPath = "/giris-yap";
-            options.AccessDeniedPath = "/erisim-engellendi";
-            options.LogoutPath = "/cikis-yap";
+            options.LoginPath = $"/{UrlConstants.Login}";
+            options.AccessDeniedPath = $"/{UrlConstants.AccessDenied}";
+            options.LogoutPath = $"/{UrlConstants.Logout}";
             options.ExpireTimeSpan = TimeSpan.FromHours(3);
             options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             options.Cookie.SameSite = SameSiteMode.None;

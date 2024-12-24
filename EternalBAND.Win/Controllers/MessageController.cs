@@ -42,7 +42,7 @@ public class MessageController : Controller
         }
         else
         {
-            return Redirect("/giris-yap");
+            return Redirect($"/{UrlConstants.Login}");
         }
     }
 

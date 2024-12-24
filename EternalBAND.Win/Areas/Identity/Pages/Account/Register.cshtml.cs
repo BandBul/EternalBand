@@ -110,7 +110,7 @@ namespace EternalBAND.Areas.Identity.Pages.Account
                         protocol: Request.Scheme
                     );
 
-                    callbackUrl = $"{Request.Scheme}://{Request.Host.Value}/mail-dogrulandi?{callbackUrl.Split('?')[1]}";
+                    callbackUrl = $"{Request.Scheme}://{Request.Host.Value}/{UrlConstants.ConfirmEmail}?{callbackUrl.Split('?')[1]}";
 
                     await _emailSender.SendEmailAsync(Input.Email, "E-posta adresinizi onaylayın.",
                         $"Hesabınızı doğrulamak için lütfen <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>buraya tıklayın</a>.");
