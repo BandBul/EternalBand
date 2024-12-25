@@ -11,6 +11,7 @@ using EternalBAND.Api.Exceptions;
 using JsonException = EternalBAND.Api.Exceptions.JsonException;
 using X.PagedList.EF;
 using EternalBAND.Api.Extensions;
+using EternalBAND.Api.Helpers;
 
 namespace EternalBAND.Api.Services
 {
@@ -375,16 +376,12 @@ namespace EternalBAND.Api.Services
 
         private async Task PostAddSeoLink(Posts post)
         {
-            var parsedStr = StrConvert.TRToEnDeleteAllSpacesAndToLower(post.Title);
-            string seoLink = 
-                parsedStr 
-                + new Random().Next(0, 9999999) 
-                + new Random().Next(0, 9999);
-            while (true)
+            while (true) 
             {
-                if (!_context.Posts.Any(n => n.SeoLink == seoLink))
+                var seo = SeoLinkHelper.CreateSeo(post.Title);
+                if (!await _context.Posts.AnyAsync(n => n.SeoLink.ToUpper() == seo.ToUpper()))
                 {
-                    post.SeoLink = seoLink;
+                    post.SeoLink = seo;
                     break;
                 }
             }

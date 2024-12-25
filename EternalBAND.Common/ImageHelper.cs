@@ -13,9 +13,9 @@ public static class ImageHelper
         return $"{ImagePath}{seoLink}/{GeneratePhotoFileName(fileName)}";
     }
 
-    public static string GetGeneratedAbsoluteBlogImagePath(int postId, string fileName)
+    public static string GetGeneratedAbsoluteBlogImagePath(int id, string fileName)
     {
-        return $"{BlogPath}{postId.ToString()}/{GeneratePhotoFileName(fileName)}";
+        return $"{BlogPath}{id}-{Guid.NewGuid()}/{GeneratePhotoFileName(fileName)}";
     }
 
     public static bool DeletePhotos(string rootpath, List<string>? filesToDelete)

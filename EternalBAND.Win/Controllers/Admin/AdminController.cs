@@ -5,6 +5,7 @@ using EternalBAND.Common;
 using EternalBAND.DomainObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using X.PagedList;
 
 namespace EternalBAND.Controllers.Admin;
@@ -44,21 +45,22 @@ public class AdminController : Controller
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> BlogsCreate(
         [Bind("Id,Title,SummaryText,HtmlText,Tags,SeoLink")]
         Blogs blogs,
-        List<IFormFile>? images)
+        List<IFormFile>? uploadedFiles)
     {
         if (ModelState.IsValid)
         {
-            await _adminService.BlogsCreate(blogs, images);
+            await _adminService.BlogsCreate(blogs, uploadedFiles);
             return RedirectToAction(nameof(BlogsIndex));
         }
         else
         {
-            return View(blogs);
+            Response.StatusCode = (int)HttpStatusCode.BadRequest;
+           
         }
+        return View(blogs);
     }
     [HttpGet]
     public async Task<IActionResult> BlogsEdit(int? id)
@@ -78,15 +80,17 @@ public class AdminController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> BlogsEdit(int id,
+    public async Task<IActionResult> BlogsEdit(
         [Bind("Id,Title,SummaryText,HtmlText,Tags,SeoLink")]
-        Blogs blogs, List<IFormFile?> images)
+        Blogs blogs,
+        List<IFormFile>? uploadedFiles,
+        List<string>? deletedFilesIndex)
     {
         if (ModelState.IsValid)
         {
             try
             {
-                await _adminService.BlogsEdit(id, blogs, images);
+                await _adminService.BlogsEdit(blogs, uploadedFiles, deletedFilesIndex);
                 return RedirectToAction(nameof(BlogsIndex));
             }
             catch (NotFoundException)
@@ -96,8 +100,9 @@ public class AdminController : Controller
         }
         else
         {
-            return View(blogs);
+            Response.StatusCode = (int)HttpStatusCode.BadRequest;
         }
+        return View(blogs);
     }
 
     [HttpPost, ActionName("BlogsDelete")]

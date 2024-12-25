@@ -81,6 +81,11 @@ public class Posts : IEntity
 
     public void SetPhoto(List<string> photos)
     {
+        if (photos == null || !photos.Any())
+        {
+            return;
+        }
+        //TODO enhanced this, if count is 0 we are doing unnecessary 5 conditional check
         Photo1 = photos.Count >= 1 ? photos[0] : null;
         Photo2 = photos.Count >= 2 ? photos[1] : null;
         Photo3 = photos.Count >= 3 ? photos[2] : null;

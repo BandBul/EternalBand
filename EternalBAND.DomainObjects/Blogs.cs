@@ -51,4 +51,18 @@ public class Blogs : IEntity
     {
         return SummaryText.Length > size ? SummaryText.Substring(0, size) : SummaryText;
     }
+
+    public void SetPhoto(List<string> photos)
+    {
+        if(photos == null || !photos.Any())
+        {
+            return;
+        }
+        //TODO enhanced this, if count is 0 we are doing unnecessary 5 conditional check
+        PhotoPath = photos.Count >= 1 ? photos[0] : null;
+        PhotoPath2 = photos.Count >= 2 ? photos[1] : null;
+        PhotoPath3 = photos.Count >= 3 ? photos[2] : null;
+        PhotoPath4 = photos.Count >= 4 ? photos[3] : null;
+        PhotoPath5 = photos.Count >= 5 ? photos[4] : null;
+    }
 }

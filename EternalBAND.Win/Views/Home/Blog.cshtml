@@ -39,42 +39,43 @@
                                         if (Model.PhotoPath != null)
                                         {
                                             <div class="swiper-slide">
-                                                <img src="@Model.PhotoPath" alt="" class="img-fluid rounded-3">
+                                                <img src="@Url.Content("~/" + Model.PhotoPath)" alt="" class="img-fluid rounded-3">
                                             </div>
                                         }
                                         if (Model.PhotoPath2 != null)
                                         {
                                             <div class="swiper-slide">
-                                                <img src="@Model.PhotoPath2" alt="" class="img-fluid rounded-3">
+                                                <img src="@Url.Content("~/" + Model.PhotoPath2)" alt="" class="img-fluid rounded-3">
                                             </div>
                                         }
                                         if (Model.PhotoPath3 != null)
                                         {
                                             <div class="swiper-slide">
-                                                <img src="@Model.PhotoPath3" alt="" class="img-fluid rounded-3">
+                                                <img src="@Url.Content("~/" + Model.PhotoPath3)" alt="" class="img-fluid rounded-3">
                                             </div>
                                         }
                                         if (Model.PhotoPath4 != null)
                                         {
                                             <div class="swiper-slide">
-                                                <img src="@Model.PhotoPath4" alt="" class="img-fluid rounded-3">
+                                                <img src="@Url.Content("~/" + Model.PhotoPath4)" alt="" class="img-fluid rounded-3">
                                             </div>
                                         }
                                         if (Model.PhotoPath5 != null)
                                         {
                                             <div class="swiper-slide">
-                                                <img src="@Model.PhotoPath5" alt="" class="img-fluid rounded-3">
+                                                <img src="@Url.Content("~/" + Model.PhotoPath5)" alt="" class="img-fluid rounded-3">
                                             </div>
                                         }
-                                        if (Model.PhotoPath == null && Model.PhotoPath2 == null
-                                            && Model.PhotoPath3 == null
-                                            && Model.PhotoPath4 == null
-                                            && Model.PhotoPath5 == null)
-                                        {
-                                            <div class="swiper-slide">
-                                                <img src="~/images/hazirlaniyor.jpg" alt="" class="img-fluid rounded-3">
-                                            </div>
-                                        }
+                                        // TODO if no photo then we should do nothing , ask to team
+                                        // if (Model.PhotoPath == null && Model.PhotoPath2 == null
+                                        //     && Model.PhotoPath3 == null
+                                        //     && Model.PhotoPath4 == null
+                                        //     && Model.PhotoPath5 == null)
+                                        // {
+                                        //     <div class="swiper-slide">
+                                        //         <img src="~/images/hazirlaniyor.jpg" alt="" class="img-fluid rounded-3">
+                                        //     </div>
+                                        // }
                                     }
                                 </div>
                             </div>

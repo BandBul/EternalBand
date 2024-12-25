@@ -36,7 +36,7 @@
 
                     <div class="col-12 col-lg-12">
                         <div class="card p-3" id="typography">
-                            <form asp-action="BlogsEdit" enctype="multipart/form-data" method="post">
+                            <form asp-action="BlogsEdit" enctype="multipart/form-data" method="post" id="blogEditForm">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <input type="hidden" asp-for="Id"/>
                                  <div class="form-group m-3">
@@ -65,10 +65,10 @@
                                     <input asp-for="SeoLink" class="form-control"/>
                                     <span asp-validation-for="SeoLink" class="text-danger"></span>
                                 </div>
-                                    <div class="form-group m-3">
-                                        <label class="control-label">Fotoğraflar</label>
-                                        <div class="input-images-2" style="padding-top: .5rem;"></div>
-                                    </div>
+                                <div class="form-group m-3">
+                                    <label class="control-label">Fotoğraflar</label>
+                                    <div id="image-upload" class="dropzone"></div>
+                                </div>
                                  <div class="form-group m-3">
                                     <input type="submit" value="Kaydet" class="btn btn-primary"/>
                                 </div>
@@ -83,43 +83,38 @@
    
        <partial name="PartialViews/_SwitcherAndTopPartial"/>
    </div>
-<script>
-    RunQuill("HtmlText");
-</script>>
-<script src="~/imageuploader/image-uploader.js"></script>
 
-<script>
-  let preloaded = [
-      @{
-          if (Model.PhotoPath != null)
-          {
-              @:{id: 1, src: '@Model.PhotoPath'},
-          }
-          if (Model.PhotoPath2 != null)
-          {
-              @:{id: 2, src: '@Model.PhotoPath2'},
-          }
-          if (Model.PhotoPath3 != null)
-          {
-              @:{id: 3, src: '@Model.PhotoPath3'},
-          }
-          if (Model.PhotoPath4 != null)
-          {
-              @:{id: 4, src: '@Model.PhotoPath4'},
-          }
-          if (Model.PhotoPath5 != null)
-          {
-              @:{id: 5, src: '@Model.PhotoPath5'},
-          }
-      }
-            // {id: 1, src: 'https://picsum.photos/500/500?random=1'},
+@section Scripts {
+    <script>
+        RunQuill("HtmlText");
+        const preloadedFiles = [
+            @{
+                if (Model.PhotoPath != null)
+                {
+                    @:{ id: 1, src: '@Model.PhotoPath' },
+                }
+                if (Model.PhotoPath2 != null)
+                {
+                    @:{ id: 2, src: '@Model.PhotoPath2' },
+                }
+                if (Model.PhotoPath3 != null)
+                {
+                    @:{ id: 3, src: '@Model.PhotoPath3' },
+                }
+                if (Model.PhotoPath4 != null)
+                {
+                    @:{ id: 4, src: '@Model.PhotoPath4' },
+                }
+                if (Model.PhotoPath5 != null)
+                {
+                    @:{ id: 5, src: '@Model.PhotoPath5' },
+                }
+            }
         ];
 
-        $('.input-images-2').imageUploader({
-            preloaded: preloaded,
-            imagesInputName: 'images',
-            preloadedInputName: 'old',
-            maxSize: 2 * 1024 * 1024,
-            maxFiles: 5
-        });
-</script>
+        initDropzone(preloadedFiles)
+    </script>
+}
+
+
+

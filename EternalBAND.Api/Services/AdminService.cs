@@ -12,6 +12,9 @@ using X.PagedList.EF;
 using System;
 using System.Linq.Expressions;
 using Microsoft.Extensions.Hosting;
+using EternalBAND.Api.Helpers;
+using EternalBAND.Api.Extensions;
+using System.Reflection.Metadata;
 
 namespace EternalBAND.Api.Services
 {
@@ -42,20 +45,12 @@ namespace EternalBAND.Api.Services
 
         public async Task BlogsCreate(Blogs blog, List<IFormFile>? images)
         {
-            await BlogPhotoAdd(blog, images);
             var source = blog.SeoLink == null || StrConvert.IsInjectionString(blog.SeoLink) ? blog.Title : blog.SeoLink;
-            var convertedSeoLink = StrConvert.TRToEnDeleteAllSpacesAndToLower(source);
-            var finalSeo = "";
-            var allSeos = _context.Blogs.Select(s => s.SeoLink).ToList();
-            do
-            {
-                finalSeo = convertedSeoLink + "-" + new Random().Next(0, 999999);
-            } while (allSeos.Count(s => s.Equals(finalSeo, StringComparison.InvariantCultureIgnoreCase)) != 0);
-            blog.SeoLink = finalSeo;
 
-
+            await BlogAddSeoLink(blog, source);
+            await BlogPhotoAdd(blog, images);
             blog.AddedDate = DateTime.Now;
-            // TODO check if this seoLink is unique or not 
+
             _context.Add(blog);
             await _context.SaveChangesAsync();
         }
@@ -76,34 +71,22 @@ namespace EternalBAND.Api.Services
             return blogs;
         }
 
-        public async Task BlogsEdit(int id, Blogs blogs, List<IFormFile?> images)
+        public async Task BlogsEdit(Blogs editedBlog, List<IFormFile?> images, List<string>? deletedFilesIndex)
         {
-            if (id != blogs.Id)
-            {
-                throw new NotFoundException();
-            }
-
-            await BlogPhotoAdd(blogs, images);
-            var blog = await _context.Blogs.AsNoTracking().FirstOrDefaultAsync(n => n.Id == blogs.Id);
-
-            if (images.Count == 0)
-            {
-                blogs.PhotoPath = blog.PhotoPath;
-                blogs.PhotoPath2 = blog.PhotoPath2;
-                blogs.PhotoPath3 = blog.PhotoPath3;
-                blogs.PhotoPath4 = blog.PhotoPath4;
-                blogs.PhotoPath5 = blog.PhotoPath5;
-            }
-
             try
             {
-                blogs.AddedDate = blog.AddedDate;
-                _context.Update(blogs);
+                var existingBlog = await _context.Blogs.AsNoTracking().FirstOrDefaultAsync(n => n.Id == editedBlog.Id);
+
+                UpdatePhotos(editedBlog, images, deletedFilesIndex, existingBlog.AllPhotos);
+
+                editedBlog.AddedDate = existingBlog.AddedDate;
+
+                _context.Update(editedBlog);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!BlogsExists(blogs.Id))
+                if (!BlogsExists(editedBlog.Id))
                 {
                     throw new NotFoundException();
                 }
@@ -380,7 +363,7 @@ namespace EternalBAND.Api.Services
         public async Task RejectPost(string postSeoLink, Users currentUser)
         {
             var post = await ChangePostTypeAndGetPost(postSeoLink, PostStatus.Rejected);
-            var message = $"<strong>'{post.Title}'</strong> başlıklı ilaniniz, ilan kurallarına uymadığı için onaylanmamıştır. Lütfen ilan kurallarına uygun olacak şekilde tekrar düzenleyiniz.";
+            var message = $"<strong>'{post.Title}'</strong> başlıklı ilanınız, ilan kurallarına uymadığı için onaylanmamıştır. Lütfen ilan kurallarına uygun olacak şekilde tekrar düzenleyiniz.";
             await InternalApproveRejectPost(post, currentUser, message);
         }
 
@@ -469,12 +452,19 @@ namespace EternalBAND.Api.Services
                 foreach (var image in images)
                 {
                     var absoluteFilePath = ImageHelper.GetGeneratedAbsoluteBlogImagePath(blogs.Id, image.FileName);
-                    
-                    using (var stream =
-                           new FileStream(
-                               Path.Combine(_environment.WebRootPath, absoluteFilePath),
-                               FileMode.Create))
+                    string fulldirectoryPath = Path.Combine(_environment.WebRootPath, Path.GetDirectoryName(absoluteFilePath));
+
+                    // Ensure the directory exists
+                    if (!Directory.Exists(fulldirectoryPath))
                     {
+                        Directory.CreateDirectory(fulldirectoryPath);
+                    }
+
+                    var stream = new FileStream(Path.Combine(_environment.WebRootPath, absoluteFilePath), FileMode.Create);
+
+                    try
+                    {
+                        
                         await image.CopyToAsync(stream);
                         if (blogs.PhotoPath == null)
                         {
@@ -482,9 +472,9 @@ namespace EternalBAND.Api.Services
                             continue;
                         }
 
-                        if (blogs.PhotoPath3 == null)
+                        if (blogs.PhotoPath2 == null)
                         {
-                            blogs.PhotoPath3 = absoluteFilePath;
+                            blogs.PhotoPath2 = absoluteFilePath;
                             continue;
                         }
 
@@ -506,8 +496,70 @@ namespace EternalBAND.Api.Services
                             continue;
                         }
                     }
+                    catch (Exception)
+                    {
+                        // TODO manage exception + add log
+                        throw;
+                    }
+
+                    finally
+                    {
+                        stream?.Dispose();
+                    }
                 }
             }
+        }
+
+        private async Task BlogAddSeoLink(Blogs blog, string source)
+        {
+            while (true)
+            {
+                var seo = SeoLinkHelper.CreateSeo(source);
+                if (!await _context.Blogs.AnyAsync(n => n.SeoLink.ToUpper() == seo.ToUpper()))
+                {
+                    blog.SeoLink = seo;
+                    break;
+                }
+            }
+        }
+
+        private async Task UpdatePhotos(Blogs blog, List<IFormFile>? images, List<string>? deletedFilesIndex, List<string> exPhotos)
+        {
+            blog.SetPhoto(exPhotos);
+
+            if (!deletedFilesIndex.IsNullOrEmpty())
+            {
+                var filesToDelete = new List<string?>();
+                deletedFilesIndex.ForEach(index =>
+                {
+                    switch (int.Parse(index))
+                    {
+                        case 1:
+                            filesToDelete.Add(blog.PhotoPath);
+                            blog.PhotoPath = null;
+                            break;
+                        case 2:
+                            filesToDelete.Add(blog.PhotoPath2);
+                            blog.PhotoPath2 = null;
+                            break;
+                        case 3:
+                            filesToDelete.Add(blog.PhotoPath3);
+                            blog.PhotoPath3 = null;
+                            break;
+                        case 4:
+                            filesToDelete.Add(blog.PhotoPath4);
+                            blog.PhotoPath4 = null;
+                            break;
+                        case 5:
+                            filesToDelete.Add(blog.PhotoPath5);
+                            blog.PhotoPath5 = null;
+                            break;
+                    }
+                });
+                ImageHelper.DeletePhotos(_environment.WebRootPath, filesToDelete);
+            }
+
+            await BlogPhotoAdd(blog, images);
         }
     }
 }

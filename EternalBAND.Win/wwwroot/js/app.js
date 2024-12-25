@@ -55,7 +55,7 @@ function initDropzone(preloadedFiles = []) {
             preloadedFiles.forEach(function (file) {
                 const mockFile = { name: `Image ${file.id}`, size: 12345, serverId: file.id };
                 dz.emit("addedfile", mockFile);
-                dz.emit("thumbnail", mockFile, file.src);
+                dz.emit("thumbnail", mockFile, window.location.origin + '/' + file.src);
                 dz.emit("complete", mockFile);
                 dz.files.push(mockFile);
             });
@@ -91,20 +91,6 @@ function initDropzone(preloadedFiles = []) {
                     deletedFiles.push(file.serverId);
                 }
             });
-
-            //dz.on("maxfilesexceeded", function (file) {
-            //    dz.removeFile(file); // Remove the extra file
-            //    alert("En fazla 5 dosya yükleyebilirsiniz.");
-            //});
-
-            //dz.on("error", function (file, message) {
-            //    if (file.size > dz.options.maxFilesize * 1024 * 1024) {
-            //        dz.removeFile(file); // Remove the file exceeding the size
-            //        alert("Yüklemek istediğiniz dosya boyutu 7 MB'ı aşıyor. Lütfen daha küçük bir dosya seçin.");
-            //    } else {
-            //        alert(message); // Handle other errors
-            //    }
-            //});
         }
     });
 
@@ -199,8 +185,7 @@ if (formEdit) {
 
 // image upload for post create
 const formCreate = document.getElementById('musicFormCreate');
-if (formCreate)
-{
+if (formCreate) {
     document.getElementById('musicFormCreate').addEventListener('submit', function (e) {
         e.preventDefault();
 
@@ -231,6 +216,110 @@ if (formCreate)
                     const form = document.createElement('form');
                     form.method = 'POST';
                     form.action = '/ilanOlusturma'; // Server endpoint
+
+                    // Add form data fields to the hidden form
+                    for (const [key, value] of formData.entries()) {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = key;
+                        input.value = value;
+                        form.appendChild(input);
+                    }
+
+                    document.body.appendChild(form); // Append to body
+                    form.submit(); // Submit the form 
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    });
+}
+
+
+    // image upload for post create
+const blogCreateForm = document.getElementById('blogCreateForm');
+if (blogCreateForm) {
+    document.getElementById('blogCreateForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        // Append uploaded files
+        uploadedFiles.forEach(file => {
+            formData.append('uploadedFiles', file);
+        });
+
+        // Add deleted files as a separate parameter
+        deletedFiles.forEach(index => {
+            formData.append('deletedFilesIndex', index);
+        });
+
+        fetch('BlogsCreate', {
+            method: 'POST',
+            body: formData,
+        })
+            .then(response => {
+                if (response.ok) {
+                    console.info('Changes saved successfully.');
+                    window.location.href = "BlogsIndex";
+
+                } else {
+                    console.info('Error saving changes.');
+                    // Create a hidden form to simulate a POST redirect
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = 'BlogsCreate'; // Server endpoint
+
+                    // Add form data fields to the hidden form
+                    for (const [key, value] of formData.entries()) {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = key;
+                        input.value = value;
+                        form.appendChild(input);
+                    }
+
+                    document.body.appendChild(form); // Append to body
+                    form.submit(); // Submit the form 
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    });
+
+}
+
+
+const blogEditForm = document.getElementById('blogEditForm');
+if (blogEditForm) {
+    document.getElementById('blogEditForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        // Append uploaded files
+        uploadedFiles.forEach(file => {
+            formData.append('uploadedFiles', file);
+        });
+
+        // Add deleted files as a separate parameter
+        deletedFiles.forEach(index => {
+            formData.append('deletedFilesIndex', index);
+        });
+
+        fetch('BlogsEdit', {
+            method: 'POST',
+            body: formData,
+        })
+            .then(response => {
+                if (response.ok) {
+                    console.info('Changes saved successfully.');
+                    window.location.href = "/Admin/BlogsIndex";
+
+                } else {
+                    console.info('Error saving changes.');
+                    // Create a hidden form to simulate a POST redirect
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = 'BlogsEdit'; // Server endpoint
 
                     // Add form data fields to the hidden form
                     for (const [key, value] of formData.entries()) {
