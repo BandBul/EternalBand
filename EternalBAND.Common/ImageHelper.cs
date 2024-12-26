@@ -1,25 +1,27 @@
 using System.Reflection;
 using System;
+using System.Security.Cryptography.X509Certificates;
 
 namespace EternalBAND.Helpers;
 
 public static class ImageHelper
 {
-    private static string ImagePath = "images/ilan/";
-    private static string BlogPath = "images/blog/";
+    private static string PostImagePath = @"images\ilan\";
+    private static string BlogImagePath = @"images\blog\";
 
     public static string GetGeneratedAbsolutePostImagePath(string? seoLink, string fileName)
     {
-        return $"{ImagePath}{seoLink}/{GeneratePhotoFileName(fileName)}";
+        return @$"{PostImagePath}{seoLink}\{GeneratePhotoFileName(fileName)}";
     }
 
-    public static string GetGeneratedAbsoluteBlogImagePath(int id, string fileName)
+    public static string GetGeneratedAbsoluteBlogImagePath(string folderName, string fileName)
     {
-        return $"{BlogPath}{id}-{Guid.NewGuid()}/{GeneratePhotoFileName(fileName)}";
+        return @$"{BlogImagePath}{folderName}\{GeneratePhotoFileName(fileName)}";
     }
-
-    public static bool DeletePhotos(string rootpath, List<string>? filesToDelete)
+    // TODO delete folder if all images deleted
+    public static int DeletePhotos(string rootpath, List<string>? filesToDelete, bool deleteFolderFlag = false)
     {
+        int deletedImageCount = 0;
         try
         {
             if (filesToDelete != null && filesToDelete.Count > 0)
@@ -30,18 +32,41 @@ public static class ImageHelper
                     if (File.Exists(filePath))
                     {
                         File.Delete(filePath);
-                        return true;
+                        deletedImageCount++;
                     }
-                    return false;
                 }
+                var fullPath = Path.Combine(rootpath, filesToDelete.First());
+                if (deleteFolderFlag && IsDirectoryEmpty(Path.GetDirectoryName(fullPath)))
+                {
+                    Directory.Delete(fullPath);
+                }
+
             }
-            return false;
+            return deletedImageCount;
         }
         catch (Exception)
         {
-            return false;
+            return deletedImageCount;
         }
     }
+
+    public static void CleanUpBlogDirectory(string rootpath,string relativePath )
+    {
+        var fullPath = Path.Combine(rootpath, BlogImagePath, relativePath);
+        Directory.Delete(fullPath,true);
+    }
+
+    public static void CleanUpPostDirectory(string rootpath, string relativePath)
+    {
+        var fullPath = Path.Combine(rootpath, PostImagePath, relativePath);
+        Directory.Delete(fullPath,true);
+    }
+
+    private static bool IsDirectoryEmpty(string path)
+    {
+        return Directory.GetFiles(path).Length == 0 && Directory.GetDirectories(path).Length == 0;
+    }
+
     //TODO add check for "is filename exist in folder"
     private static string GeneratePhotoFileName(string fileName)
     {

@@ -198,7 +198,7 @@ namespace EternalBAND.Api.Services
                     mb.IsPostDeleted = true;
                 }
                 await _context.SaveChangesAsync();
-
+                ImageHelper.CleanUpPostDirectory(_environment.WebRootPath, posts.SeoLink);
 
                 return "İlan silindi.";
             }

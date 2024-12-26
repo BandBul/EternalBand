@@ -152,9 +152,9 @@ public class ApplicationDbContext : IdentityDbContext<Users>
 
         var admins = new List<Users>()
         {
-            DefaultUserAdditionHelper.CreateAdminUser("admin.engin@bandbul.com", "YWRtaW4uZW5naW4="),
-            DefaultUserAdditionHelper.CreateAdminUser("admin.berkay@bandbul.com", "YWRtaW4uYmVya2F5"),
-            DefaultUserAdditionHelper.CreateAdminUser("admin.enis@bandbul.com", "YWRtaW4uZW5pcw==")
+            DefaultUserAdditionHelper.CreateAdminUser("admin.engin@bandbul.com", Constants.PasswordHashed_engin, Constants.Admin_Engin_Id),
+            DefaultUserAdditionHelper.CreateAdminUser("admin.berkay@bandbul.com", Constants.PasswordHashed_berkay, Constants.Admin_Berkay_Id),
+            DefaultUserAdditionHelper.CreateAdminUser("admin.enis@bandbul.com", Constants.PasswordHashed_enis, Constants.Admin_Enis_Id)
         };
 
         admins.ForEach(admin =>
@@ -168,6 +168,8 @@ public class ApplicationDbContext : IdentityDbContext<Users>
                 UserId = admin.Id
             });
         });
+
+        
         base.OnModelCreating(builder);
     }
 }

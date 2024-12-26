@@ -9,12 +9,9 @@ using Microsoft.EntityFrameworkCore;
 using X.PagedList;
 using EternalBAND.Api.Exceptions;
 using X.PagedList.EF;
-using System;
 using System.Linq.Expressions;
-using Microsoft.Extensions.Hosting;
 using EternalBAND.Api.Helpers;
 using EternalBAND.Api.Extensions;
-using System.Reflection.Metadata;
 
 namespace EternalBAND.Api.Services
 {
@@ -22,13 +19,11 @@ namespace EternalBAND.Api.Services
     {
         private readonly BroadCastingManager _broadcastingManager;
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<Users> _userManager;
         private readonly IWebHostEnvironment _environment;
 
-        public AdminService(ApplicationDbContext context, UserManager<Users> userManager, IWebHostEnvironment environment, BroadCastingManager broadcastingManager)
+        public AdminService(ApplicationDbContext context, IWebHostEnvironment environment, BroadCastingManager broadcastingManager)
         {
             _context = context;
-            _userManager = userManager;
             _environment = environment;
             _broadcastingManager = broadcastingManager;
         }
@@ -46,10 +41,11 @@ namespace EternalBAND.Api.Services
         public async Task BlogsCreate(Blogs blog, List<IFormFile>? images)
         {
             var source = blog.SeoLink == null || StrConvert.IsInjectionString(blog.SeoLink) ? blog.Title : blog.SeoLink;
-
+            blog.Guid = Guid.NewGuid();
             await BlogAddSeoLink(blog, source);
             await BlogPhotoAdd(blog, images);
             blog.AddedDate = DateTime.Now;
+            
 
             _context.Add(blog);
             await _context.SaveChangesAsync();
@@ -103,14 +99,17 @@ namespace EternalBAND.Api.Services
             {
                 throw new JsonException("Kayıt bulunamadı.");
             }
+           
 
             var blogs = await _context.Blogs.FindAsync(id);
+            var blogRelativePath = blogs.PhotoFolder;
             if (blogs != null)
             {
                 _context.Blogs.Remove(blogs);
             }
 
             await _context.SaveChangesAsync();
+            ImageHelper.CleanUpBlogDirectory(_environment.WebRootPath, blogRelativePath);
             return "Blog yazısı silindi.";
         }
 
@@ -122,22 +121,6 @@ namespace EternalBAND.Api.Services
             }
 
             return await _context.Contacts.OrderByDescending(n => n.Id).ToPagedListAsync(pId, 10);
-        }
-
-        public async Task<Contacts> ContactsDetails(int? id)
-        {
-            if (id == null || _context.Contacts == null)
-            {
-                throw new NotFoundException();
-            }
-
-            var contacts = await _context.Contacts.FindAsync(id);
-            if (contacts == null)
-            {
-                throw new NotFoundException();
-            }
-
-            return contacts;
         }
 
         public async Task<Contacts> GetContacts(int? id)
@@ -430,20 +413,6 @@ namespace EternalBAND.Api.Services
         {
             return (_context.Blogs?.Any(e => e.Id == id)).GetValueOrDefault();
         }
-        private async Task Physical_Delete_Photos(List<string>? filesToDelete)
-        {
-            if (filesToDelete != null && filesToDelete.Count > 0)
-            {
-                foreach (var fileName in filesToDelete)
-                {
-                    var filePath = Path.Combine(_environment.WebRootPath, fileName);
-                    if (File.Exists(filePath))
-                    {
-                        File.Delete(filePath);
-                    }
-                }
-            }
-        }
 
         private async Task BlogPhotoAdd(Blogs blogs, List<IFormFile?> images)
         {
@@ -451,7 +420,7 @@ namespace EternalBAND.Api.Services
             {
                 foreach (var image in images)
                 {
-                    var absoluteFilePath = ImageHelper.GetGeneratedAbsoluteBlogImagePath(blogs.Id, image.FileName);
+                    var absoluteFilePath = ImageHelper.GetGeneratedAbsoluteBlogImagePath(blogs.PhotoFolder, image.FileName);
                     string fulldirectoryPath = Path.Combine(_environment.WebRootPath, Path.GetDirectoryName(absoluteFilePath));
 
                     // Ensure the directory exists

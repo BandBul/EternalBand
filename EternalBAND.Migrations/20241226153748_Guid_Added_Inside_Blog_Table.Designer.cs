@@ -4,6 +4,7 @@ using EternalBAND.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EternalBAND.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241226153748_Guid_Added_Inside_Blog_Table")]
+    partial class Guid_Added_Inside_Blog_Table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -71,7 +74,7 @@ namespace EternalBAND.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Blogs", (string)null);
+                    b.ToTable("Blogs");
                 });
 
             modelBuilder.Entity("EternalBAND.DomainObjects.Contacts", b =>
@@ -109,7 +112,7 @@ namespace EternalBAND.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Contacts", (string)null);
+                    b.ToTable("Contacts");
                 });
 
             modelBuilder.Entity("EternalBAND.DomainObjects.Instruments", b =>
@@ -132,7 +135,7 @@ namespace EternalBAND.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Instruments", (string)null);
+                    b.ToTable("Instruments");
 
                     b.HasData(
                         new
@@ -233,7 +236,7 @@ namespace EternalBAND.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("MessageBoxes", (string)null);
+                    b.ToTable("MessageBoxes");
                 });
 
             modelBuilder.Entity("EternalBAND.DomainObjects.Messages", b =>
@@ -276,7 +279,7 @@ namespace EternalBAND.Migrations
 
                     b.HasIndex("SenderUserId");
 
-                    b.ToTable("Messages", (string)null);
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("EternalBAND.DomainObjects.Notification", b =>
@@ -321,7 +324,7 @@ namespace EternalBAND.Migrations
 
                     b.HasIndex("SenderUserId");
 
-                    b.ToTable("Notification", (string)null);
+                    b.ToTable("Notification");
                 });
 
             modelBuilder.Entity("EternalBAND.DomainObjects.PostTypes", b =>
@@ -354,7 +357,7 @@ namespace EternalBAND.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PostTypes", (string)null);
+                    b.ToTable("PostTypes");
 
                     b.HasData(
                         new
@@ -466,7 +469,7 @@ namespace EternalBAND.Migrations
 
                     b.HasIndex("PostTypesId");
 
-                    b.ToTable("Posts", (string)null);
+                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("EternalBAND.DomainObjects.UserProfileControl", b =>
@@ -491,7 +494,7 @@ namespace EternalBAND.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("UserProfileControl", (string)null);
+                    b.ToTable("UserProfileControl");
                 });
 
             modelBuilder.Entity("EternalBAND.DomainObjects.Users", b =>
