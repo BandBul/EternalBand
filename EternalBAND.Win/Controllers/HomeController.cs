@@ -7,6 +7,7 @@ using EternalBAND.Api.Services;
 using EternalBAND.Api.Helpers;
 using EternalBAND.Common;
 using EternalBAND.Api;
+using Newtonsoft.Json.Linq;
 
 namespace EternalBAND.Controllers;
 
@@ -57,7 +58,7 @@ public class HomeController : Controller
     }
 
     // TODO change parameter names as understandable strings
-    [HttpPost,Route(EndpointConstants.Posts)]
+    [Route(EndpointConstants.Posts)]
     public async Task<IActionResult> Posts(int pId = 1, string? s = "0", int c = 0, string? e = "0")
     {
         ViewBag.CityId = c;
@@ -76,12 +77,6 @@ public class HomeController : Controller
             }
         };
         return View(model);
-    }
-
-    [HttpGet, Route(EndpointConstants.Posts)]
-    public async Task<IActionResult> Posts(string? s)
-    {
-        return await Posts(1, s);
     }
 
     [HttpGet, Route(EndpointConstants.Post)]
