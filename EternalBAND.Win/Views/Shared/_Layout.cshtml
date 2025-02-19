@@ -11,6 +11,16 @@
     <meta property="og:title" content="@(_siteSettings.Value.Name) - @ViewData["Title"]" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZL805T1RRH"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-ZL805T1RRH');
+    </script>
+
     <partial name="PartialViews/_GetSiteFavicon"/>
     <partial name="PartialViews/_GetMetaTags"/>
     <link rel="stylesheet" href="~/libs/choices.js/public/assets/styles/choices.min.css">

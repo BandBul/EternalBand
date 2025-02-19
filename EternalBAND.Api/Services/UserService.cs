@@ -322,7 +322,7 @@ namespace EternalBAND.Api.Services
 
         private async Task PostAddPhoto(Posts posts, List<IFormFile>? images)
         {
-            if (images != null)
+            if (!images.IsNullOrEmpty())
             {
                 foreach (var image in images)
                 {
