@@ -65,17 +65,6 @@ try
         {
             options.ServiceName = "BandBul.Api";
         });
-        if (builder.Environment.IsDevelopment())
-        {
-            builder.WebHost.UseKestrel((context, serverOptions) =>
-            {
-                serverOptions.Configure(context.Configuration.GetSection("Kestrel"))
-                .Endpoint("HTTPS", listenOptions =>
-                {
-                    listenOptions.HttpsOptions.SslProtocols = SslProtocols.Tls12;
-                });
-            });
-        }
 
         // Add services to the container.
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
@@ -119,14 +108,6 @@ try
         builder.Services.AddWindowsService(options =>
         {
             options.ServiceName = "BandBul.Api";
-        });
-        builder.WebHost.UseKestrel((context, serverOptions) =>
-        {
-            serverOptions.Configure(context.Configuration.GetSection("Kestrel"))
-            .Endpoint("HTTPS", listenOptions =>
-            {
-                listenOptions.HttpsOptions.SslProtocols = SslProtocols.Tls12;
-            });
         });
 
         // Add services to the container.
