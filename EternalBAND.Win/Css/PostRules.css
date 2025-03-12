@@ -1,3 +1,15 @@
 ﻿.popup {
-    padding: 100px 50px 50px 50px;
+    padding: 50px 50px 50px 50px;
+}
+
+.underline {
+    text-decoration: underline !important;
+}
+
+p {
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    color: #666;
+    margin-top: 10px;
+    text-align: center;
 }

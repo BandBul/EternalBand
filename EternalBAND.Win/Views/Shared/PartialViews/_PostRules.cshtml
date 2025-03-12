@@ -1,10 +1,11 @@
 ﻿<link href="/Css/PostRulesPopup.css" rel="stylesheet" type="text/css">
-<div>
+<body>
     <div id="popup" class="popup">
         <div class="text-content">
-            <h2>İlan Kuralları</h2>
-            <hr />
-            <h1><span style="color: #ff0000;">Dikkat! L&uuml;tfen ilan vermeden &ouml;nce oku!</span></h1>
+            <div class="icon">
+                <img src="https://img.icons8.com/plasticine/100/saving-book.png" alt="saving-book" />
+            </div>
+            <h2>İLAN KURALLARI</h2>
             <partial name="PartialViews/_BasePostRules" />
         </div>
         <div>
@@ -12,7 +13,7 @@
         </div>
     </div>
     <div id="overlay" class="overlay"></div>
-</div>
+</body>
 
 <script>
     function showPopup() {
