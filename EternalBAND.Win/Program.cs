@@ -149,6 +149,7 @@ try
             options.Conventions.AddAreaPageRoute("Identity", "/Account/ResendEmailConfirmation", "/yeniden-dogrulama-maili-gonder");
             options.Conventions.AddAreaPageRoute("Identity", "/Account/RegisterConfirmation", "/dogrulama-maili-gonderildi");
             options.Conventions.AddAreaPageRoute("Identity", "/Account/ConfirmEmail", $"/{UrlConstants.ConfirmEmail}");
+            options.Conventions.AddAreaPageRoute("Identity", "/Account/Manage/ProfileEdit", $"/profilGüncelle");
         });
 
         var googleApiKey = new GoogleOptions();
