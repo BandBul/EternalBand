@@ -91,24 +91,6 @@ namespace EternalBAND.Areas.Identity.Pages.Account.Manage
                 await _userManager.UpdateAsync(user);
             }
 
-            if (user.Email != Input.Email)
-            {
-                user.NormalizedEmail = Input.Email.ToUpper();
-                user.NormalizedUserName = Input.Email.ToUpper();
-                user.UserName = Input.Email;
-                user.EmailConfirmed = true;
-                await _userManager.UpdateAsync(user);
-                var code = await _userManager.GenerateChangeEmailTokenAsync(user, Input.Email);
-                var result = await _userManager.ChangeEmailAsync(user, Input.Email, code);
-                if (!result.Succeeded)
-                {
-                    StatusMessage =
-                        $"Hata: Bu mail kullanılamaz.";
-
-                    await LoadAsync(user);
-                    return Page();
-                }
-            }
             if (Input.Photo != null)
             {
                 try
