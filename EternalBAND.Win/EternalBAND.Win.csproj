@@ -211,6 +211,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Update="Css\Login.css">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
       <None Update="Css\Login-page.css">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
