@@ -11,13 +11,14 @@
     foreach (var post in Model)
     {
         var photo = post.GetTopPhoto() ?? "/images/bandbul-logo.png";
+        var photoClass = post.GetTopPhoto() == null ? "post-image-display-default" : "post-image-display";
         <div class="job-box card mt-4">
             <div class="p-4">
                 <div class="row align-items-center">
                     <div class="col-md-2">
                         <div class="text-center mb-4 mb-md-0">
                             <a href="ilan/@post.SeoLink">
-                                <img src="@photo" alt="" class="rounded-3 post-image-display">
+                                <img src="@photo" alt="" class="rounded-3 @photoClass">
                             </a>
                         </div>
                     </div>

@@ -3,6 +3,10 @@
     height: 60px !important;
 }
 
+.post-image-display-default {
+    width: 60px !important
+}
+
 .post-image-display-mypost {
     height: 100px !important;
     width: 100px !important;
