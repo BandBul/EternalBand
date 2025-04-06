@@ -2,6 +2,7 @@
 using EternalBAND.Api.Services;
 using EternalBAND.DomainObjects.ViewModel;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +10,7 @@ namespace EternalBAND.Win.Controllers.WebApi
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = "RequireUserRole")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "RequireUserRole")]
     public class MessageWebController : ControllerBase
     {
         private readonly MessageService _messageService;

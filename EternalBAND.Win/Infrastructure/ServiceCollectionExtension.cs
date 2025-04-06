@@ -1,7 +1,11 @@
 ﻿using EternalBAND.Api.Options;
+using EternalBAND.Common;
 using EternalBAND.DataAccess;
 using EternalBAND.DomainObjects;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -10,7 +14,29 @@ namespace EternalBAND.Win.Infrastructure
 {
     public static class ServiceCollectionExtension
     {
-        private const string Bearer = "Bearer";
+
+        public static IServiceCollection AddConfiguration(this IServiceCollection services, ConfigurationManager configuration)
+        {
+            services.Configure<SmtpOptions>(configuration.GetSection(SmtpOptions.SmtpOptionKey));
+            services.Configure<SiteGeneralOptions>(configuration.GetSection(SiteGeneralOptions.SiteGeneralOptionKey));
+            services.Configure<JwtTokenOptions>(configuration.GetSection(JwtTokenOptions.JwtOptionKey));
+            services.Configure<NotificationOptions>(configuration.GetSection(NotificationOptions.NotificationOptionKey));
+            services.Configure<GoogleOptions>(configuration.GetSection(GoogleOptions.GoogleOptionsKey));
+
+            return services;
+        }
+
+        public static IServiceCollection AddDatabase(this IServiceCollection services, ConfigurationManager configuration)
+        {
+            // Add services to the container.
+            var connectionString = configuration.GetConnectionString("DefaultConnection") ??
+                                   throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString, x => x.MigrationsAssembly("EternalBAND.Migrations")));
+            services.AddDatabaseDeveloperPageExceptionFilter();
+
+            return services;
+        }
+
         public static IServiceCollection AddSwagger(this IServiceCollection services)
         {
             var info = new OpenApiInfo()
@@ -25,11 +51,11 @@ namespace EternalBAND.Win.Infrastructure
             {
                 c.SwaggerDoc("v1", info);
 
-                c.AddSecurityDefinition(Bearer, new OpenApiSecurityScheme
+                c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
                 {
                     Name = "Authorization",
                     Type = SecuritySchemeType.Http,
-                    Scheme = Bearer,
+                    Scheme = JwtBearerDefaults.AuthenticationScheme,
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
                     Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\""
@@ -42,7 +68,7 @@ namespace EternalBAND.Win.Infrastructure
                             Reference = new OpenApiReference
                             {
                                 Type = ReferenceType.SecurityScheme,
-                                Id = Bearer
+                                Id = JwtBearerDefaults.AuthenticationScheme
                             }
                         },
                         new string[] {}
@@ -82,10 +108,11 @@ namespace EternalBAND.Win.Infrastructure
         {
             services.AddAuthentication(options =>
             {
-                options.DefaultAuthenticateScheme = Bearer;
-                options.DefaultChallengeScheme = Bearer;
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                //options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                //options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             })
-            .AddJwtBearer(options =>
+            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
             {
                 options.RequireHttpsMetadata = false;
                 options.SaveToken = true;
@@ -104,9 +131,18 @@ namespace EternalBAND.Win.Infrastructure
             {
                 opt.ClientId = googleSettings.ClientId;
                 opt.ClientSecret = googleSettings.ClientSecret;
+                opt.SignInScheme = IdentityConstants.ExternalScheme;
             });
 
-           
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = $"/{UrlConstants.Login}";
+                options.AccessDeniedPath = $"/{UrlConstants.AccessDenied}";
+                options.LogoutPath = $"/{UrlConstants.Logout}";
+                options.ExpireTimeSpan = TimeSpan.FromHours(3);
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.None;
+            });
 
             return services;
         }

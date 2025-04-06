@@ -6,12 +6,14 @@ namespace EternalBAND.Win.Infrastructure
 {
     public static class WebApplicationExtension
     {
-        public static void UseApplication(this WebApplication app, string rootPath)
+        public static void UseApplication(this WebApplication app, WebApplicationBuilder builder)
         {
+            var rootPath = builder.Environment.ContentRootPath;
             app.UseMiddleware<ErrorHandlingMiddleware>();
-            // Configure the HTTP request pipeline.
+
             if (app.Environment.IsDevelopment())
             {
+                app.UseDeveloperExceptionPage();
                 app.UseSwagger(u =>
                 {
                     u.RouteTemplate = "swagger/{documentName}/swagger.json";
@@ -26,15 +28,17 @@ namespace EternalBAND.Win.Infrastructure
             }
             else
             {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
+            app.UseStatusCodePagesWithRedirects("/{ErrorEndpoint}/{0}");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(
-                       Path.Combine(rootPath, "Css")),
+                   Path.Combine(builder.Environment.ContentRootPath, "Css")),
                 RequestPath = "/Css"
             });
 
@@ -46,10 +50,7 @@ namespace EternalBAND.Win.Infrastructure
                 name: "default",
                 pattern: "{controller=Home}/{action=Anasayfa}/{id?}");
             app.MapControllers();
-            if (!app.Environment.IsDevelopment())
-            {
-                app.MapRazorPages();
-            }
+            app.MapRazorPages();
             app.MapHub<ChatHub>("/chatHub");
 
             app.Run();
