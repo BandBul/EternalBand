@@ -10,8 +10,9 @@
 @{
     foreach (var post in Model)
     {
-        var photo = post.GetTopPhoto() ?? "/images/bandbul-logo.png";
-        var photoClass = post.GetTopPhoto() == null ? "post-image-display-default" : "post-image-display";
+        var topPhoto = post.GetTopPhoto();
+        var photo = topPhoto ?? "/images/bandbul-logo.png";
+        var photoClass = topPhoto == null ? "post-image-display-default" : "post-image-display";
         <div class="job-box card mt-4">
             <div class="p-4">
                 <div class="row align-items-center">

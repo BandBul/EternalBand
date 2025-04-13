@@ -18,5 +18,10 @@ namespace EternalBAND.Api.Extensions
         {
             return collection == null || !collection.Any();
         }
+
+        public static string ToJsSuitablePath(this string str)
+        {
+            return str.Replace("\\", "/");
+        }
     }
 }

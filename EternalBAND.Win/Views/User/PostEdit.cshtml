@@ -1,3 +1,4 @@
+@using EternalBAND.Api.Extensions
 @model EternalBAND.DomainObjects.Posts
 
 @{
@@ -64,23 +65,23 @@
         @{
             if (Model.Photo1 != null)
             {
-                            @:{ id: 1, src: '@Model.Photo1' },
+                @:{ id: 1, src: '@Model.Photo1.ToJsSuitablePath()' },
             }
             if (Model.Photo2 != null)
             {
-                            @:{ id: 2, src: '@Model.Photo2' },
+                @:{ id: 2, src: '@Model.Photo2.ToJsSuitablePath()' },
             }
             if (Model.Photo3 != null)
             {
-                            @:{ id: 3, src: '@Model.Photo3' },
+                @:{ id: 3, src: '@Model.Photo3.ToJsSuitablePath()' },
             }
             if (Model.Photo4 != null)
             {
-                            @:{ id: 4, src: '@Model.Photo4' },
+                @:{ id: 4, src: '@Model.Photo4.ToJsSuitablePath()' },
             }
             if (Model.Photo5 != null)
             {
-                            @:{ id: 5, src: '@Model.Photo5' },
+                @:{ id: 5, src: '@Model.Photo5.ToJsSuitablePath()' },
             }
         }
     ];

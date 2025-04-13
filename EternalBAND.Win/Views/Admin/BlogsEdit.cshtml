@@ -1,3 +1,4 @@
+@using EternalBAND.Api.Extensions
 @model EternalBAND.DomainObjects.Blogs
 
 @{
@@ -91,23 +92,23 @@
             @{
                 if (Model.PhotoPath != null)
                 {
-                    @:{ id: 1, src: '@Model.PhotoPath' },
+                    @:{ id: 1, src: '@Model.PhotoPath.ToJsSuitablePath()' },
                 }
                 if (Model.PhotoPath2 != null)
                 {
-                    @:{ id: 2, src: '@Model.PhotoPath2' },
+                    @:{ id: 2, src: '@Model.PhotoPath2.ToJsSuitablePath()' },
                 }
                 if (Model.PhotoPath3 != null)
                 {
-                    @:{ id: 3, src: '@Model.PhotoPath3' },
+                    @:{ id: 3, src: '@Model.PhotoPath3.ToJsSuitablePath()' },
                 }
                 if (Model.PhotoPath4 != null)
                 {
-                    @:{ id: 4, src: '@Model.PhotoPath4' },
+                    @:{ id: 4, src: '@Model.PhotoPath4.ToJsSuitablePath()' },
                 }
                 if (Model.PhotoPath5 != null)
                 {
-                    @:{ id: 5, src: '@Model.PhotoPath5' },
+                    @:{ id: 5, src: '@Model.PhotoPath5.ToJsSuitablePath()' },
                 }
             }
         ];

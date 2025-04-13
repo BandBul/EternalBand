@@ -76,7 +76,7 @@ public class Posts : IEntity
 
     public string? GetTopPhoto()
     {
-        return AllPhotos.FirstOrDefault(photo => photo != null);
+        return AllPhotos.FirstOrDefault(photo => IsImage(photo));
     }
 
     public void SetPhoto(List<string> photos)
@@ -91,5 +91,18 @@ public class Posts : IEntity
         Photo3 = photos.Count >= 3 ? photos[2] : null;
         Photo4 = photos.Count >= 4 ? photos[3] : null;
         Photo5 = photos.Count >= 5 ? photos[4] : null;
+    }
+
+    private static string[] ImageExtensions = new string[]
+    {
+        ".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg", ".bmp", ".ico", ".avif"
+    };
+
+    private bool IsImage(string fileName)
+    {
+        if (string.IsNullOrWhiteSpace(fileName))
+            return false;
+        string extension = Path.GetExtension(fileName);
+        return ImageExtensions.Contains(extension);
     }
 }
