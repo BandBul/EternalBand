@@ -17,5 +17,7 @@
         public string Twitter { get; set; }
         public string MetaKeywords { get; set; }
         public string BottomFooterText { get; set; }
+        public IEnumerable<SeoTag> SeoTags { get; set; }
+        public IEnumerable<string> CanonicalUrls { get; set; }
     }
 }

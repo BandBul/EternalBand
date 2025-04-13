@@ -1,31 +1,40 @@
 <!DOCTYPE html>
 <html lang="tr">
-@using EternalBAND.DataAccess;
-@using Microsoft.EntityFrameworkCore
-@using Microsoft.Extensions.Options
-@using EternalBAND.Api.Options
+    @using EternalBAND.DataAccess;
+    @using Microsoft.EntityFrameworkCore
+    @using Microsoft.Extensions.Options
+    @using EternalBAND.Api.Options
 
-@inject IOptions<SiteGeneralOptions> siteSettings
+    @inject IOptions<SiteGeneralOptions> siteSettings
 
-@{
-    var siteKeywords = siteSettings.Value.MetaKeywords;
-    var keywords = siteKeywords?.Split(',') ?? Array.Empty<string>();
-    var index = 1;
-}
+    @{
+        var siteKeywords = siteSettings.Value.MetaKeywords;
+        var seoTags = siteSettings.Value.SeoTags;
+        var canonicalUrls = siteSettings.Value.CanonicalUrls;
+    }
+    @* keywords *@
+    <meta name="keywords" content="@siteKeywords" />
 
-@foreach (var keyword in keywords)
-{
-    var trimmedKeyword = keyword.Trim();
-    <meta name="keyword_@index" content="@trimmedKeyword" />
-    index++;
-}
+    @* seoTags *@
+    @foreach (var seoTag in seoTags)
+    {
+        <meta name="@seoTag.Name" content="@seoTag.Value" />
+    }
 
-<meta name="robots" content="index">
+    @* Canonical urls *@
+    @foreach (var url in canonicalUrls)
+    {
+        <link rel="canonical" href="@url" />
+    }
 
-<link rel="apple-touch-icon-precomposed" href="@(siteSettings.Value.Logo.Trim())" />
-<meta property="og:image" content="@(siteSettings.Value.Logo.Trim())" />
 
-<meta property="og:image:width" content="1200"/>
-<meta property="og:image:height" content="630"/>
-<meta property="og:locale" content="tr_TR"/>
-<link rel="shortcut icon" href="@(siteSettings.Value.Logo.Trim())">
+    <meta name="robots" content="index">
+
+    <link rel="apple-touch-icon-precomposed" href="@(siteSettings.Value.Logo.Trim())" />
+    <meta property="og:image" content="@(siteSettings.Value.Logo.Trim())" />
+
+    <meta property="og:image:width" content="1200"/>
+    <meta property="og:image:height" content="630"/>
+    <meta property="og:locale" content="tr_TR"/>
+    <link rel="shortcut icon" href="@(siteSettings.Value.Logo.Trim())">
+</html>
