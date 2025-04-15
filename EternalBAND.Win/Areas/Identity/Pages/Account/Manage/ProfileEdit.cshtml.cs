@@ -4,6 +4,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using EternalBAND.Business;
+using EternalBAND.Common;
 using EternalBAND.DataAccess;
 using EternalBAND.DomainObjects;
 using Microsoft.AspNetCore.Authorization;
@@ -116,6 +117,10 @@ namespace EternalBAND.Areas.Identity.Pages.Account.Manage
                 {
                     // TODO log and decide will it block or not
                 }
+            }
+            else
+            {
+                user.PhotoPath = Constants.DefaultPhotoPath;
             }
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             if (Input.PhoneNumber != phoneNumber)

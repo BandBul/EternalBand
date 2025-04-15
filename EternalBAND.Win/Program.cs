@@ -1,22 +1,13 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using EternalBAND.DataAccess;
-using EternalBAND.Api.Hubs;
-using EternalBAND.DomainObjects;
 using EternalBAND.Api.Options;
-using Microsoft.Extensions.FileProviders;
 using EternalBAND.Api.Infrastructure;
 using EternalBAND.DataAccess.Infrastructure;
-using System.Security.Authentication;
 using Microsoft.Extensions.Hosting.WindowsServices;
-using Microsoft.OpenApi.Models;
 using System.Reflection;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using EternalBAND.Win.Infrastructure;
 using NLog;
 using NLog.Extensions.Logging;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using EternalBAND.Common;
 
 var nlogger = LogManager.GetCurrentClassLogger();
@@ -69,7 +60,7 @@ try
         options.Conventions.AddAreaPageRoute("Identity", "/Account/ResendEmailConfirmation", "/yeniden-dogrulama-maili-gonder");
         options.Conventions.AddAreaPageRoute("Identity", "/Account/RegisterConfirmation", "/dogrulama-maili-gonderildi");
         options.Conventions.AddAreaPageRoute("Identity", "/Account/ConfirmEmail", $"/{UrlConstants.ConfirmEmail}");
-        options.Conventions.AddAreaPageRoute("Identity", "/Account/Manage/ProfileEdit", $"/profilGüncelle");
+        options.Conventions.AddAreaPageRoute("Identity", "/Account/Manage/ProfileEdit", $"/{UrlConstants.ProfileEdit}");
     });
 
     builder.Services

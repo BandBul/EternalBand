@@ -1,3 +1,4 @@
+@using EternalBAND.Common
 @using EternalBAND.DataAccess;
 @inject ApplicationDbContext _context
 @using Microsoft.AspNetCore.Identity
@@ -5,14 +6,17 @@
 @inject SignInManager<Users> SignInManager 
 @inject UserManager<Users> UserManager
 
-@if (SignInManager.IsSignedIn(User))
-{
-  var user = await UserManager.GetUserAsync(User);
-  if (user != null && !_context.UserProfileControl.Any(n => n.UsersId == user.Id && n.Completed))
-  {
-    <script>
-    if (!window.location.href.includes("profil"))
-        window.location.href ="/profil";
-    </script>
-  }
+@{
+    var profileEditUrl = UrlConstants.ProfileEdit;
+    if (SignInManager.IsSignedIn(User))
+    {
+      var user = await UserManager.GetUserAsync(User);
+      if (user != null && !_context.UserProfileControl.Any(n => n.UsersId == user.Id && n.Completed))
+      {
+        <script>
+            if (!window.location.href.includes("@profileEditUrl"))
+                    window.location.href = "/@profileEditUrl";
+        </script>
+      }
+    }
 }

@@ -60,7 +60,7 @@
                                         <img src="@user.PhotoPath" alt="" class="avatar-lg rounded-circle">
                                         <h6 class="fs-18 mb-0 mt-4">@user.Name @user.Surname</h6>
                                     </a>
-                                    <ul class="candidate-detail-social-menu list-inline mb-0 mt-3">
+@*                                     <ul class="candidate-detail-social-menu list-inline mb-0 mt-3">
                                         <li class="list-inline-item">
                                             <a href="javascript:void(0)" class="social-link">
                                                 <i class="uil uil-twitter-alt"></i>
@@ -76,7 +76,7 @@
                                                 <i class="uil uil-phone-alt"></i>
                                             </a>
                                         </li>
-                                    </ul>
+                                    </ul> *@
                                         @{
                                             user = await _userManager.GetUserAsync(User);
                                             if ((user == null ) || (user.Id != Model.AddedByUserId))
