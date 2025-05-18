@@ -5,8 +5,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using EternalBAND.Api.Extensions;
 using Microsoft.AspNetCore.Authentication;
-using AuthenticationService = EternalBAND.Api.Services.AuthenticationService;
+using IBandBulAuthenticationService = EternalBAND.Api.Services.IAuthenticationService;
 using System.Runtime.ConstrainedExecution;
+using EternalBAND.Common;
 
 namespace EternalBAND.Win.Controllers.WebApi
 {
@@ -15,14 +16,14 @@ namespace EternalBAND.Win.Controllers.WebApi
     public class AuthenticationWebController : ControllerBase
     {
         private readonly SignInManager<Users> signInManager;
-        private readonly AuthenticationService authenticationService;
+        private readonly IBandBulAuthenticationService authenticationService;
         private readonly ILogger<AuthenticationWebController> logger;
 
         // TODO create an AuthenticationService to separate logic
         public AuthenticationWebController(
             ILogger<AuthenticationWebController> logger, 
             SignInManager<Users> signInManager,
-            AuthenticationService authenticationService
+            IBandBulAuthenticationService authenticationService
             )
         {
             this.logger = logger;
@@ -63,12 +64,23 @@ namespace EternalBAND.Win.Controllers.WebApi
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
-            // Sign out of the standard user-password Identity
-            await signInManager.SignOutAsync();
-            // Sign out of the External authentication scheme
-            await HttpContext.SignOutAsync();
+            try
+            {
+                // Sign out of the standard user-password Identity
+                await signInManager.SignOutAsync();
+                // Sign out of the External authentication scheme
+                await HttpContext.SignOutAsync();
+                return RedirectToAction(EndpointConstants.Anasayfa, "Home");
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                Response.Cookies.Delete(Constants.AccessTokenCookieName);
+            }
 
-            return Ok();
         }
     }
 }

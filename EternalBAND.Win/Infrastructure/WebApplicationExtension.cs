@@ -44,6 +44,7 @@ namespace EternalBAND.Win.Infrastructure
 
             app.UseRouting();
             app.UseCors("AllowAnyOrigin");
+            app.UseMiddleware<JwtHandlingMiddleware>();
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllerRoute(

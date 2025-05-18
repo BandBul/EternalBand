@@ -18,5 +18,7 @@
         public static string PasswordHashed_engin = "AQAAAAIAAYagAAAAEGSxNCu4wMt6kEDKflsB4iDuKt2yS7sT6hJkDPGcErKguUVkZfUrVAfG9k5fJ0UmWg==";
         public static string PasswordHashed_berkay = "AQAAAAIAAYagAAAAEK+AcmaaI8WodUj1b5Xy1b5+hqiuMgKZZ3p9wYV9zLYYgH5a1iFjTtDrLEItiOEbXg==";
         public static string PasswordHashed_enis = "AQAAAAIAAYagAAAAEGO/WArxg5ovBMlRGIQnnEEfmuvZHhPq2g7hS2WSnZzD1kIUxYCremYES+B1wY4uHg==";
+
+        public static string AccessTokenCookieName = "access_token";
     }
 }

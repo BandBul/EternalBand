@@ -54,7 +54,6 @@ try
         options.Conventions.AddAreaPageRoute("Identity", "/Account/Register", "/kayit-ol");
         options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", $"/{UrlConstants.Login}");
         options.Conventions.AddAreaPageRoute("Identity", "/Account/ForgotPassword", "/sifremi-unuttum");
-        options.Conventions.AddAreaPageRoute("Identity", "/Account/Logout", $"/{UrlConstants.Logout}");
         options.Conventions.AddAreaPageRoute("Identity", "/Account/AccessDenied", $"/{UrlConstants.AccessDenied}");
         options.Conventions.AddAreaPageRoute("Identity", "/Account/ForgotPasswordConfirmation", "/mail-gonderildi");
         options.Conventions.AddAreaPageRoute("Identity", "/Account/ResendEmailConfirmation", "/yeniden-dogrulama-maili-gonder");

@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using EternalBAND.DomainObjects;
 using EternalBAND.Common;
+using BandAuthenticationService = EternalBAND.Api.Services.IAuthenticationService;
+using EternalBAND.Api.Services;
 
 namespace EternalBAND.Areas.Identity.Pages.Account
 {
@@ -14,11 +16,13 @@ namespace EternalBAND.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<Users> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly BandAuthenticationService authenticationService;
 
-        public LoginModel(SignInManager<Users> signInManager, ILogger<LoginModel> logger, UserManager<Users> userManager)
+        public LoginModel(SignInManager<Users> signInManager, ILogger<LoginModel> logger, UserManager<Users> userManager, BandAuthenticationService authenticationService)
         {
             _signInManager = signInManager;
             _logger = logger;
+            this.authenticationService = authenticationService;
         }
 
         [BindProperty]
@@ -72,34 +76,29 @@ namespace EternalBAND.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
-                {
-                    _logger.LogInformation("Kullanıcı zaten giriş yapmış.");
-                    return LocalRedirect(returnUrl);
-                }
-                if (result.RequiresTwoFactor)
-                {
-                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-                }
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning("Kullanıcı kilitlendi.");
-                    return RedirectToPage("./Lockout");
-                }
 
-                if (result.IsNotAllowed)
-                {
-                    return Redirect($"{EndpointConstants.ErrorRoute}/{(int)ErrorCode.NotConfirmedEmail}");
-                }
+                var user = await authenticationService.ValidateLogin(Input.Email, Input.Password);
 
-                else
+                if (user == null) 
                 {
                     ModelState.AddModelError(string.Empty, "Hatalı giriş işlemi. Lütfen kullanıcı adınızı ve şifrenizi kontrol ediniz.");
                     return Page();
                 }
+
+                if (!user.EmailConfirmed)
+                {
+                    //return Forbid("Email not confirmed");
+                    return Redirect($"{EndpointConstants.ErrorRoute}/{(int)ErrorCode.NotConfirmedEmail}");
+                }
+
+                var token = await authenticationService.CreateTokenAsync(Input.Email);
+                Response.Cookies.Append(Constants.AccessTokenCookieName, token, new CookieOptions
+                {
+                    HttpOnly = true,  // Makes it inaccessible to JavaScript
+                    Secure = true,    // Only sent over HTTPS (for production)
+                    SameSite = SameSiteMode.None,  // Prevent CSRF
+                });
+                return LocalRedirect(returnUrl);
             }
 
             return Page();

@@ -13,9 +13,9 @@ namespace EternalBAND.Win.Controllers.WebApi
     {
         private readonly ILogger<AccountController> logger;
         private readonly AccountService accountService;
-        private readonly AuthenticationService authenticationService;
+        private readonly IAuthenticationService authenticationService;
 
-        public AccountWebController(ILogger<AccountController> logger, AccountService accountService, AuthenticationService authenticationService)
+        public AccountWebController(ILogger<AccountController> logger, AccountService accountService, IAuthenticationService authenticationService)
         {
             this.accountService = accountService;
             this.logger = logger;
