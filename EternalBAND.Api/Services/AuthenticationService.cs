@@ -2,23 +2,18 @@
 using EternalBAND.Common;
 using EternalBAND.DomainObjects;
 using EternalBAND.DomainObjects.ApiContract;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Text.Encodings.Web;
 
 namespace EternalBAND.Api.Services
 {
-    public class AuthenticationService
+    public class AuthenticationService : IAuthenticationService
     {
         private readonly JwtTokenOptions jwtTokenSettings;
         private readonly UserManager<Users> userManager;
@@ -76,6 +71,47 @@ namespace EternalBAND.Api.Services
             }
         }
 
+        // TODO : Make this static and move to some common class
+        public bool IsTokenInCookie(IRequestCookieCollection cookies)
+        {
+            //TODO : if token exist but expired then need to return back to login page + deleting cookie
+            return cookies.ContainsKey(Constants.AccessTokenCookieName);
+        }
+
+        public ClaimsPrincipal? ValidateToken(string token, out SecurityToken validatedToken)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtTokenSettings.Secret)),
+                ValidateIssuer = true,
+                ValidIssuer = jwtTokenSettings.Issuer,
+                ValidateAudience = true,
+                ValidAudience = jwtTokenSettings.Audience,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
+            };
+
+            return tokenHandler.ValidateToken(token, validationParameters, out validatedToken);
+        }
+
+        public async Task<Users> ValidateLogin(string email, string pass)
+        {
+            var user = await userManager.FindByEmailAsync(email);
+            if (user == null) 
+            {
+                return null;
+            }
+
+            var isValid = await userManager.CheckPasswordAsync(user, pass);
+            if (!isValid)
+            {
+                return null;
+            }
+            logger.LogInformation("'{user}' is logged in via basic authentication", email);
+            return user;
+        }
         private IUserEmailStore<Users> GetEmailStore()
         {
             if (!userManager.SupportsUserEmail)
@@ -118,8 +154,7 @@ namespace EternalBAND.Api.Services
                 Subject = new ClaimsIdentity(claims),
                 Issuer = jwtTokenSettings.Issuer,
                 Audience = jwtTokenSettings.Audience,
-                // TODO add  this to appsettings
-                Expires = DateTime.UtcNow.AddHours(1),
+                Expires = DateTime.UtcNow.AddSeconds(jwtTokenSettings.ExpireSeconds),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 

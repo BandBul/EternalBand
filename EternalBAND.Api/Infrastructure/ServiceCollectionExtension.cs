@@ -16,11 +16,10 @@ namespace EternalBAND.Api.Infrastructure
             services.AddScoped<AccountService>();
             services.AddScoped<MessageService>();
             services.AddSingleton<JwtSecurityTokenHandler>();
-            services.AddScoped<AuthenticationService>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<HubController>();
             services.AddScoped<ControllerHelper>();
             services.AddScoped<BroadCastingManager>();
-
             return services;
         }
     }

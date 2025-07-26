@@ -1,9 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<Users> SignInManager 
 @inject UserManager<Users> UserManager
+@inject EternalBAND.Api.Services.IAuthenticationService authenticationService
 
 <ul class="navbar-nav ms-auto">
-    @if (SignInManager.IsSignedIn(User))
+    @if (authenticationService.IsTokenInCookie(Context.Request.Cookies))
     {
         var user = await UserManager.GetUserAsync(User);
         <ul class="header-menu list-inline d-flex align-items-center mb-0">

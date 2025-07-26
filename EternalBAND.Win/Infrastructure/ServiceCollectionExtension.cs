@@ -108,7 +108,7 @@ namespace EternalBAND.Win.Infrastructure
         {
             services.AddAuthentication(options =>
             {
-                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 //options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 //options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             })
@@ -138,7 +138,6 @@ namespace EternalBAND.Win.Infrastructure
             {
                 options.LoginPath = $"/{UrlConstants.Login}";
                 options.AccessDeniedPath = $"/{UrlConstants.AccessDenied}";
-                options.LogoutPath = $"/{UrlConstants.Logout}";
                 options.ExpireTimeSpan = TimeSpan.FromHours(3);
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.Cookie.SameSite = SameSiteMode.None;
