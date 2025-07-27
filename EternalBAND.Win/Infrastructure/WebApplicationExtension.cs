@@ -47,6 +47,8 @@ namespace EternalBAND.Win.Infrastructure
             app.UseMiddleware<JwtHandlingMiddleware>();
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.MapReverseProxy();
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Anasayfa}/{id?}");

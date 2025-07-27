@@ -94,7 +94,7 @@ namespace EternalBAND.Areas.Identity.Pages.Account
                 var token = await authenticationService.CreateTokenAsync(Input.Email);
                 Response.Cookies.Append(Constants.AccessTokenCookieName, token, new CookieOptions
                 {
-                    HttpOnly = true,  // Makes it inaccessible to JavaScript
+                    HttpOnly = false,  // Makes it accessible to JavaScript
                     Secure = true,    // Only sent over HTTPS (for production)
                     SameSite = SameSiteMode.None,  // Prevent CSRF
                 });

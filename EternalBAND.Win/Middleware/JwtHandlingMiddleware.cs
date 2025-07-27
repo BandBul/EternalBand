@@ -25,7 +25,8 @@ namespace EternalBAND.Win.Middleware
         // second is for MVC/Razor requests which will be controlled by cookie ( delete/add/update cookie)
         public async Task InvokeAsync(HttpContext context)
         {
-            var excludedPaths = new[] { UrlConstants.Login, UrlConstants.Logout };
+
+            var excludedPaths = new[] { UrlConstants.Login, UrlConstants.Logout, UrlConstants.React, UrlConstants.StaticPath };
             var requestPath = context.Request.Path;
 
             if (excludedPaths.Any(p => requestPath != null && (requestPath.Value.StartsWith(p) || requestPath.Value.EndsWith(p))))

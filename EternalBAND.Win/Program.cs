@@ -1,4 +1,4 @@
-using EternalBAND.Api.Options;
+﻿using EternalBAND.Api.Options;
 using EternalBAND.Api.Infrastructure;
 using EternalBAND.DataAccess.Infrastructure;
 using Microsoft.Extensions.Hosting.WindowsServices;
@@ -9,6 +9,9 @@ using EternalBAND.Win.Infrastructure;
 using NLog;
 using NLog.Extensions.Logging;
 using EternalBAND.Common;
+using System.Diagnostics.Metrics;
+using Yarp.ReverseProxy.Configuration;
+using Yarp.ReverseProxy;
 
 var nlogger = LogManager.GetCurrentClassLogger();
 
@@ -69,8 +72,9 @@ try
         .AddAuthentication(googleSettings, jwtTokenOptions)
         .AddSwagger()
         .AddDataAccessInfrastructure()
-        .AddApiInfrastructure();
-
+        .AddApiInfrastructure()
+        .AddReverseProxy()
+        .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
     builder.Services.AddCors(options =>
     {
         options.AddPolicy("AllowAnyOrigin",
@@ -81,6 +85,33 @@ try
                        .AllowAnyHeader();
             });
     });
+        
+    //builder.Services.AddReverseProxy()
+    //.LoadFromMemory(
+    //    new[]
+    //    {
+    //        new RouteConfig()
+    //        {
+    //            RouteId = "react-route",
+    //            ClusterId = "react-cluster",
+    //            Match = new RouteMatch()
+    //            {
+    //                Path = "/react/{**catch-all}"   // /react altındaki tüm istekler proxy'lenir
+    //            }
+    //        }
+    //    },
+    //    new[]
+    //    {
+    //        new ClusterConfig()
+    //        {
+    //            ClusterId = "react-cluster",
+    //            Destinations = new Dictionary<string, DestinationConfig>()
+    //            {
+    //                { "react-destination", new DestinationConfig() { Address = "http://localhost:3000/" } }
+    //            }
+    //        }
+    //    });
+
 
     builder
         .Build()

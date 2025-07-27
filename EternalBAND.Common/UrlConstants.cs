@@ -7,5 +7,7 @@
         public const string Login = "giris-yap";
         public const string Logout = "cikis-yap";
         public const string ProfileEdit = "profilGuncelle";
+        public const string React = "/react";
+        public const string StaticPath = "/static";
     }
 }
